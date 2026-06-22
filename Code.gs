@@ -8,6 +8,34 @@
 const SPREADSHEET_ID  = '1VGlF1S1jibVzUEU8J_O84G9o1N0lkBWTfIPANNfZPXQ';
 const DRIVE_FOLDER_ID = '1meSkKAKj1sj8_5u6aMTZR1MISbSIv9Mf';
 
+// ── เรียก function นี้ 1 ครั้งเพื่อเพิ่มคอลัมน์ที่ขาดใน Properties sheet ─────
+function addMissingColumns() {
+  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const sh = ss.getSheetByName(S.PROPERTIES);
+  const headers = sh.getRange(1, 1, 1, sh.getLastColumn()).getValues()[0];
+
+  // คอลัมน์ที่ต้องการทั้งหมด ตามลำดับใหม่
+  const required = [
+    'id','property_code','title','property_type','property_subtype',
+    'province','district','village_project','zone','nearby_places',
+    'sale_price','appraisal_price','min_acceptable_price',
+    'commission_rate','commission_amount','transfer_fee_condition',
+    'bedrooms','bathrooms','area','floor',
+    'status','agent_name','owner_id',
+    'highlights','drawbacks','structure','internal_note',
+    'images','property_details','marketing_data','created_at'
+  ];
+
+  required.forEach(col => {
+    if (!headers.includes(col)) {
+      const nextCol = sh.getLastColumn() + 1;
+      sh.getRange(1, nextCol).setValue(col);
+      Logger.log('เพิ่มคอลัมน์: ' + col);
+    }
+  });
+  Logger.log('เสร็จสิ้น — คอลัมน์ครบแล้ว');
+}
+
 // ── Sheet names ───────────────────────────────────────────────
 const S = {
   CUSTOMERS    : 'Customers',

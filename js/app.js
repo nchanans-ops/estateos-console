@@ -213,7 +213,7 @@ function navigate(page, params = {}) {
   // Scroll to top เมื่อเปลี่ยนหน้า
   const mc = $('main-content');
   if (mc) mc.scrollTop = 0;
-  mc.innerHTML = '<div class="flex items-center justify-center py-20"><div class="animate-spin w-8 h-8 border-2 border-navy-700 border-t-transparent rounded-full"></div></div>';
+  mc.innerHTML = '<div class="flex items-center justify-center py-20"><div class="animate-spin w-8 h-8 border-2 border-purple-500 border-t-transparent rounded-full"></div></div>';
   p.render(params);
 }
 
@@ -246,8 +246,8 @@ function pageHeader(title, subtitle, actionsHtml = '') {
   <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:24px">
     <div>
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px">
-        <div style="width:4px;height:28px;background:linear-gradient(180deg,#1B4FD8,#1339A8);border-radius:4px;flex-shrink:0"></div>
-        <h2 style="font-size:26px;font-weight:800;color:#0B1220;letter-spacing:-0.5px;line-height:1">${title}</h2>
+        <div style="width:4px;height:28px;background:linear-gradient(180deg,#7B61FF,#5B3FE8);border-radius:4px;flex-shrink:0"></div>
+        <h2 style="font-size:26px;font-weight:800;color:#1A1A3A;letter-spacing:-0.5px;line-height:1">${title}</h2>
       </div>
       <p style="font-size:13px;color:#94A3B8;margin-left:14px">${subtitle}</p>
     </div>
@@ -264,10 +264,10 @@ async function renderDashboard() {
       ${pageHeader('Dashboard', 'ภาพรวมธุรกิจวันนี้')}
       <!-- KPI Cards -->
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        ${kpiCard('ลูกค้าใหม่วันนี้', s.customers_new_today, 'ทั้งหมด '+fmtNum(s.customers_total)+' ราย', '#1B4FD8', `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>`)}
-        ${kpiCard('นัดหมายวันนี้', s.appointments_today, 'ต้องติดตาม '+s.customers_followup_today+' ราย', '#1B4FD8', `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>`)}
-        ${kpiCard('ดีลเปิดอยู่', s.deals_active, 'ปิดสำเร็จ '+s.deals_closed+' | หลุด '+s.deals_lost, '#1B4FD8', `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>`)}
-        ${kpiCard('รายได้เดือนนี้', fmtNum(s.commission_this_month)+' ฿', 'รวมทั้งหมด '+fmtNum(s.commission_received)+' ฿', '#1B4FD8', `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>`)}
+        ${kpiCard('ลูกค้าใหม่วันนี้', s.customers_new_today, 'ทั้งหมด '+fmtNum(s.customers_total)+' ราย', '#7B61FF', `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>`)}
+        ${kpiCard('นัดหมายวันนี้', s.appointments_today, 'ต้องติดตาม '+s.customers_followup_today+' ราย', '#7B61FF', `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>`)}
+        ${kpiCard('ดีลเปิดอยู่', s.deals_active, 'ปิดสำเร็จ '+s.deals_closed+' | หลุด '+s.deals_lost, '#7B61FF', `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>`)}
+        ${kpiCard('รายได้เดือนนี้', fmtNum(s.commission_this_month)+' ฿', 'รวมทั้งหมด '+fmtNum(s.commission_received)+' ฿', '#7B61FF', `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>`)}
       </div>
 
       <!-- Charts Row -->
@@ -287,7 +287,7 @@ async function renderDashboard() {
         <div class="bg-white rounded-xl p-5 border border-gray-100">
           <h3 class="text-sm font-semibold text-gray-700 mb-3">ทรัพย์สินในระบบ</h3>
           <div class="space-y-2">
-            ${[['พร้อมขาย',s.properties_available,'#1B4FD8'],['จองแล้ว',s.properties_reserved,'#6B9AF0'],['ขายแล้ว',s.properties_sold,'#CBD5E1']].map(([l,v,c])=>`
+            ${[['พร้อมขาย',s.properties_available,'#7B61FF'],['จองแล้ว',s.properties_reserved,'#AFA9EC'],['ขายแล้ว',s.properties_sold,'#CBD5E1']].map(([l,v,c])=>`
               <div class="flex items-center justify-between">
                 <div class="flex items-center gap-2"><div class="w-3 h-3 rounded-full" style="background:${c}"></div><span class="text-xs text-gray-600">${l}</span></div>
                 <span class="text-sm font-bold" style="color:${c}">${v}</span>
@@ -303,11 +303,11 @@ async function renderDashboard() {
         </div>
         <div class="bg-white rounded-xl p-5 border border-gray-100">
           <h3 class="text-sm font-semibold text-gray-700 mb-3">รายได้ที่คาดการณ์</h3>
-          <div class="text-2xl font-bold text-navy-700">${fmtNum(s.commission_potential)} ฿</div>
+          <div class="text-2xl font-bold font-semibold">${fmtNum(s.commission_potential)} ฿</div>
           <div class="text-xs text-gray-400 mb-4">จาก ${s.deals_active} ดีลที่กำลังดำเนินการ</div>
           <div class="space-y-3">
-            <div class="flex justify-between text-xs"><span class="text-gray-500">ได้รับแล้ว</span><span class="font-semibold" style="color:#1B4FD8">${fmtNum(s.commission_received)} ฿</span></div>
-            <div class="w-full bg-gray-100 rounded-full h-2"><div class="h-2 rounded-full" style="background:#1B4FD8;width:${s.commission_potential?Math.min(100,Math.round(s.commission_received/s.commission_potential*100)):100}%"></div></div>
+            <div class="flex justify-between text-xs"><span class="text-gray-500">ได้รับแล้ว</span><span class="font-semibold" style="color:#7B61FF">${fmtNum(s.commission_received)} ฿</span></div>
+            <div class="w-full bg-gray-100 rounded-full h-2"><div class="h-2 rounded-full" style="background:#7B61FF;width:${s.commission_potential?Math.min(100,Math.round(s.commission_received/s.commission_potential*100)):100}%"></div></div>
           </div>
         </div>
       </div>
@@ -337,17 +337,17 @@ async function renderDashboard() {
   const commLabels = data.monthly_commission.map(r=>r.month).reverse();
   const commData = data.monthly_commission.map(r=>r.total).reverse();
   state.charts.commission = new Chart($('chart-commission'), {
-    type:'bar', data:{ labels: commLabels.length ? commLabels : ['ยังไม่มีข้อมูล'], datasets:[{ label:'ค่านายหน้า (฿)', data: commData.length ? commData : [0], backgroundColor:'rgba(27,79,216,0.82)', borderRadius:6 }] },
+    type:'bar', data:{ labels: commLabels.length ? commLabels : ['ยังไม่มีข้อมูล'], datasets:[{ label:'ค่านายหน้า (฿)', data: commData.length ? commData : [0], backgroundColor:'rgba(123,97,255,0.82)', borderRadius:6 }] },
     options:{ plugins:{ legend:{ display:false } }, scales:{ y:{ ticks:{ callback:v=>fmtNum(v) } } }, responsive:true }
   });
   const srcLabels = data.source_stats.map(r=>r.source);
   state.charts.source = new Chart($('chart-source'), {
-    type:'doughnut', data:{ labels: srcLabels.length ? srcLabels : ['ยังไม่มี'], datasets:[{ data: srcLabels.length ? data.source_stats.map(r=>r.count):[1], backgroundColor:['#1B4FD8','#3B6FE8','#6B9AF0','#94B5F5','#BDD1FA','#D6E4FD'], borderWidth:0 }] },
+    type:'doughnut', data:{ labels: srcLabels.length ? srcLabels : ['ยังไม่มี'], datasets:[{ data: srcLabels.length ? data.source_stats.map(r=>r.count):[1], backgroundColor:['#7B61FF','#9B81FF','#AFA9EC','#C5C0F5','#DDD9FF','#EEEAFF'], borderWidth:0 }] },
     options:{ plugins:{ legend:{ position:'bottom', labels:{ font:{size:11}, boxWidth:10, color:'#64748B' } } }, responsive:true }
   });
   const plLabels = data.pipeline_stats.map(r=>r.status);
   state.charts.pipeline = new Chart($('chart-pipeline'), {
-    type:'bar', data:{ labels: plLabels.length ? plLabels : ['ยังไม่มี'], datasets:[{ label:'จำนวน', data: plLabels.length ? data.pipeline_stats.map(r=>r.count):[0], backgroundColor:'rgba(27,79,216,0.15)', borderColor:'rgba(27,79,216,0.6)', borderWidth:1, borderRadius:4 }] },
+    type:'bar', data:{ labels: plLabels.length ? plLabels : ['ยังไม่มี'], datasets:[{ label:'จำนวน', data: plLabels.length ? data.pipeline_stats.map(r=>r.count):[0], backgroundColor:'rgba(123,97,255,0.15)', borderColor:'rgba(123,97,255,0.6)', borderWidth:1, borderRadius:4 }] },
     options:{ indexAxis:'y', plugins:{ legend:{display:false} }, responsive:true, scales:{ x:{ ticks:{stepSize:1} } } }
   });
 }
@@ -397,7 +397,7 @@ async function renderCustomers(params = {}) {
         <thead><tr><th>รหัส / ชื่อ</th><th>ช่องทางติดต่อ</th><th>แหล่งที่มา</th><th>ประเภท / งบ</th><th>สถานะ</th><th>ติดตาม</th><th>ผู้ดูแล</th><th></th></tr></thead>
         <tbody>${data.map(c=>`
           <tr style="cursor:pointer" onclick="navigate('customer-detail',{id:${c.id}})">
-            <td><div class="font-semibold text-sm text-navy-700">${esc(c.customer_code)}</div><div class="font-medium">${esc(c.full_name)}</div></td>
+            <td><div class="font-semibold text-sm font-semibold">${esc(c.customer_code)}</div><div class="font-medium">${esc(c.full_name)}</div></td>
             <td><div class="text-xs">${esc(c.phone||'')}</div><div class="text-xs text-gray-400">${esc(c.line_id||'')}</div></td>
             <td><span class="badge badge-gray">${esc(c.source||'-')}</span></td>
             <td><div class="text-xs font-medium">${esc(c.property_type_interest||'-')}</div><div class="text-xs text-gray-400">${fmtNum(c.budget_min)}-${fmtNum(c.budget_max)} ฿</div></td>
@@ -436,7 +436,7 @@ function showAddCustomerModal() {
     showModal(`
       <div class="p-6">
         <div class="flex items-center justify-between mb-5">
-          <h2 class="text-lg font-bold text-navy-700">เพิ่มลูกค้าใหม่</h2>
+          <h2 class="text-lg font-bold font-semibold">เพิ่มลูกค้าใหม่</h2>
           <button onclick="hideModal()" class="text-gray-400 hover:text-gray-600 text-xl">&times;</button>
         </div>
         <div class="grid grid-cols-2 gap-4">
@@ -502,7 +502,7 @@ async function renderCustomerDetail(params) {
           <div class="bg-white rounded-xl border p-5">
             <div class="flex items-start justify-between mb-4">
               <div>
-                <h2 class="text-xl font-bold text-navy-700">${esc(c.full_name)}</h2>
+                <h2 class="text-xl font-bold font-semibold">${esc(c.full_name)}</h2>
                 <div class="text-sm text-gray-500 mt-1">${esc(c.phone||'')} ${c.line_id?'· LINE: '+c.line_id:''}</div>
               </div>
               <button onclick="showEditCustomerModal()" class="btn btn-outline btn-sm">แก้ไข</button>
@@ -562,12 +562,12 @@ async function renderCustomerDetail(params) {
               <div class="p-3 rounded-xl mb-2 cursor-pointer border border-transparent hover:border-primary-200 hover:bg-primary-50 transition-all"
                 style="background:#F8FAFC" onclick="showDealDetail(${d.id})">
                 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
-                  <span style="font-size:11px;font-weight:700;color:#1B4FD8">${esc(d.deal_code)}</span>
+                  <span style="font-size:11px;font-weight:700;color:#7B61FF">${esc(d.deal_code)}</span>
                   ${custBadge(d.status)}
                 </div>
                 <div style="font-size:11px;color:#64748B">${esc(d.property_title||'-')}</div>
                 <div style="font-size:13px;font-weight:700;color:#0F172A;margin-top:4px">${fmtNum(d.sale_price)} ฿</div>
-              </div>`).join('') : '<p class="text-xs text-gray-400">ยังไม่มีดีล — <button onclick="navigate(\'pipeline\')" style="background:none;border:none;color:#1B4FD8;cursor:pointer;font-size:12px;padding:0">สร้างดีลใน Pipeline</button></p>'}
+              </div>`).join('') : '<p class="text-xs text-gray-400">ยังไม่มีดีล — <button onclick="navigate(\'pipeline\')" style="background:none;border:none;color:#7B61FF;cursor:pointer;font-size:12px;padding:0">สร้างดีลใน Pipeline</button></p>'}
           </div>
 
           <!-- Matched Properties -->
@@ -576,11 +576,11 @@ async function renderCustomerDetail(params) {
             ${matches.matches.slice(0,5).map(p=>`
               <div class="p-3 bg-gray-50 rounded-lg mb-2 cursor-pointer hover:bg-blue-50" onclick="navigate('property-detail',{id:${p.id}})">
                 <div class="flex items-center justify-between mb-1">
-                  <span class="text-xs font-semibold text-navy-700">${esc(p.property_code)}</span>
+                  <span class="text-xs font-semibold font-semibold">${esc(p.property_code)}</span>
                   <span class="badge ${p.match_level==='ตรงมาก'?'score-high':p.match_level==='ตรงปานกลาง'?'score-mid':'score-low'}">${p.score}%</span>
                 </div>
                 <div class="text-xs text-gray-700">${esc(p.title)}</div>
-                <div class="text-xs font-bold text-navy-700 mt-1">${fmtNum(p.sale_price)} ฿</div>
+                <div class="text-xs font-bold font-semibold mt-1">${fmtNum(p.sale_price)} ฿</div>
               </div>`).join('') || '<p class="text-xs text-gray-400">ไม่พบทรัพย์ที่ตรง</p>'}
           </div>
 
@@ -616,7 +616,7 @@ function showFollowUpModal(custId) {
   showModal(`
     <div class="p-6">
       <div class="flex items-center justify-between mb-4">
-        <h2 class="text-lg font-bold text-navy-700">บันทึกการติดต่อ</h2>
+        <h2 class="text-lg font-bold font-semibold">บันทึกการติดต่อ</h2>
         <button onclick="hideModal()" class="text-gray-400 text-xl">&times;</button>
       </div>
       <div class="form-group"><label class="form-label">ช่องทางการติดต่อ</label>
@@ -642,7 +642,7 @@ function showEditCustomerModal() {
   showModal(`
     <div class="p-6">
       <div class="flex items-center justify-between mb-5">
-        <h2 class="text-lg font-bold text-navy-700">แก้ไขข้อมูลลูกค้า</h2>
+        <h2 class="text-lg font-bold font-semibold">แก้ไขข้อมูลลูกค้า</h2>
         <button onclick="hideModal()" class="text-gray-400 text-xl">&times;</button>
       </div>
       <div class="grid grid-cols-2 gap-4">
@@ -731,7 +731,7 @@ async function renderProperties() {
       <div class="bg-white rounded-xl border p-3">
         <div class="flex items-center justify-between mb-2">
           <div class="text-xs font-semibold text-gray-500">เลือกโซน</div>
-          <button onclick="navigate('settings')" class="text-xs text-navy-700 hover:underline" style="background:none;border:none;cursor:pointer;font-family:inherit">+ จัดการโซน</button>
+          <button onclick="navigate('settings')" class="text-xs font-semibold hover:underline" style="background:none;border:none;cursor:pointer;font-family:inherit">+ จัดการโซน</button>
         </div>
         <div class="zone-chips-row" id="zone-chips-row">
           <button class="zone-chip active" data-zone="" onclick="selectZone('')">
@@ -845,7 +845,7 @@ function quickStatusProp(id, e) {
   const statuses = ['พร้อมขาย','จองแล้ว','ขายแล้ว','ระงับขาย'];
   showModal(`
     <div class="p-5">
-      <div class="flex items-center justify-between mb-4"><h3 class="font-bold text-navy-700">เปลี่ยนสถานะทรัพย์</h3><button onclick="hideModal()" class="text-gray-400 text-xl">&times;</button></div>
+      <div class="flex items-center justify-between mb-4"><h3 class="font-bold font-semibold">เปลี่ยนสถานะทรัพย์</h3><button onclick="hideModal()" class="text-gray-400 text-xl">&times;</button></div>
       <div class="grid grid-cols-2 gap-3">${statuses.map(s=>`<button onclick="api.patch('/api/properties/${id}/status',{status:'${s}'}).then(()=>{hideModal();toast('อัปเดตสถานะ: ${s}');navigate('properties')})" class="btn btn-outline">${s}</button>`).join('')}</div>
     </div>`);
 }
@@ -1375,12 +1375,12 @@ async function renderPropertyDetail(params) {
           <div class="bg-white rounded-xl border p-5">
             <div class="flex items-start justify-between mb-2">
               <div>
-                <h2 class="text-xl font-bold text-navy-700">${esc(p.title)}</h2>
+                <h2 class="text-xl font-bold font-semibold">${esc(p.title)}</h2>
                 <div class="text-sm text-gray-500 mt-1">${esc(p.property_type)} · ${esc(p.property_subtype||'')} · ${esc(p.province||'')} ${esc(p.district||'')}</div>
                 ${p.village_project?`<div class="text-xs text-gray-400 mt-0.5">หมู่บ้าน/โครงการ: ${esc(p.village_project)}</div>`:''}
                 ${p.nearby_places?`<div class="text-xs text-gray-400 mt-0.5">ใกล้เคียง: ${esc(p.nearby_places)}</div>`:''}
               </div>
-              <div class="text-2xl font-bold text-navy-700">${fmtPrice(p.sale_price)}</div>
+              <div class="text-2xl font-bold font-semibold">${fmtPrice(p.sale_price)}</div>
             </div>
             ${p.highlights?`<div class="p-2 bg-yellow-50 rounded text-xs text-gray-700 mb-2"><strong>จุดเด่น:</strong> ${esc(p.highlights)}</div>`:''}
             ${p.drawbacks?`<div class="p-2 bg-red-50 rounded text-xs text-gray-700 mb-2"><strong>จุดด้อย:</strong> ${esc(p.drawbacks)}</div>`:''}
@@ -1504,7 +1504,7 @@ function showCreateDealModal(propId) {
   api.get('/api/customers').then(customers => {
     showModal(`
       <div class="p-6">
-        <div class="flex items-center justify-between mb-4"><h3 class="text-lg font-bold text-navy-700">สร้างดีลใหม่</h3><button onclick="hideModal()" class="text-gray-400 text-xl">&times;</button></div>
+        <div class="flex items-center justify-between mb-4"><h3 class="text-lg font-bold font-semibold">สร้างดีลใหม่</h3><button onclick="hideModal()" class="text-gray-400 text-xl">&times;</button></div>
         <div class="form-group"><label class="form-label">ลูกค้า *</label><select id="nd-customer" class="form-control"><option value="">-- เลือกลูกค้า --</option>${customers.map(c=>`<option value="${c.id}">${c.full_name} (${c.phone||''})</option>`).join('')}</select></div>
         <div class="form-group"><label class="form-label">หมายเหตุ</label><textarea id="nd-note" class="form-control" rows="2"></textarea></div>
         <div class="flex justify-end gap-3 mt-4"><button onclick="hideModal()" class="btn btn-outline">ยกเลิก</button><button onclick="submitCreateDeal(${propId})" class="btn btn-primary">สร้างดีล</button></div>
@@ -1531,7 +1531,7 @@ async function renderPipeline() {
   const SHOW_STAGES = ['เสนอทรัพย์','นัดชมทรัพย์','ต่อรองราคา','วางมัดจำ','ยื่นสินเชื่อ','นัดวันโอน','ปิดการขายสำเร็จ','ปิดการขายไม่สำเร็จ'];
   // สีแค่ accent dot — header text เป็น dark
   const STAGE_DOTS = {
-    'เสนอทรัพย์':'#1B4FD8','นัดชมทรัพย์':'#7C3AED','ต่อรองราคา':'#D97706','วางมัดจำ':'#EA580C','ยื่นสินเชื่อ':'#0891B2','นัดวันโอน':'#059669','ปิดการขายสำเร็จ':'#16A34A','ปิดการขายไม่สำเร็จ':'#DC2626',
+    'เสนอทรัพย์':'#7B61FF','นัดชมทรัพย์':'#7C3AED','ต่อรองราคา':'#D97706','วางมัดจำ':'#EA580C','ยื่นสินเชื่อ':'#0891B2','นัดวันโอน':'#059669','ปิดการขายสำเร็จ':'#16A34A','ปิดการขายไม่สำเร็จ':'#DC2626',
   };
 
   $('main-content').innerHTML = `
@@ -1562,7 +1562,7 @@ async function renderPipeline() {
                   onclick="showDealDetail(${d.id})">
                   <button onclick="event.stopPropagation();navigate('customer-detail',{id:${d.customer_id}})"
                     style="background:none;border:none;padding:0;cursor:pointer;font-family:inherit;text-align:left;width:100%">
-                    <div class="deal-card-title" style="color:#1B4FD8;text-decoration:underline;text-underline-offset:2px">${esc(d.customer_name||'-')}</div>
+                    <div class="deal-card-title" style="color:#7B61FF;text-decoration:underline;text-underline-offset:2px">${esc(d.customer_name||'-')}</div>
                   </button>
                   <div class="deal-card-sub" style="color:#94A3B8">${esc(d.property_code||'')} · ${esc(d.property_type||'')}</div>
                   <div style="font-size:11px;color:#64748B;margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(d.property_title||'')}</div>
@@ -1606,7 +1606,7 @@ async function showDealDetail(id) {
   showModal(`
     <div class="p-6">
       <div class="flex items-center justify-between mb-4">
-        <h2 class="text-lg font-bold text-navy-700">${esc(d.deal_code)}</h2>
+        <h2 class="text-lg font-bold font-semibold">${esc(d.deal_code)}</h2>
         <button onclick="hideModal()" class="text-gray-400 text-xl">&times;</button>
       </div>
       <div class="grid grid-cols-2 gap-3 mb-4">
@@ -1641,7 +1641,7 @@ function showRecordCommission(dealId, amount) {
   hideModal();
   showModal(`
     <div class="p-5">
-      <div class="flex items-center justify-between mb-4"><h3 class="font-bold text-navy-700">บันทึกรับค่านายหน้า</h3><button onclick="hideModal()" class="text-gray-400 text-xl">&times;</button></div>
+      <div class="flex items-center justify-between mb-4"><h3 class="font-bold font-semibold">บันทึกรับค่านายหน้า</h3><button onclick="hideModal()" class="text-gray-400 text-xl">&times;</button></div>
       <div class="form-group"><label class="form-label">จำนวนเงิน (฿)</label><input id="rc-amount" type="number" class="form-control" value="${amount}"></div>
       <div class="form-group"><label class="form-label">วันที่รับ</label><input id="rc-date" type="date" class="form-control" value="${new Date().toISOString().split('T')[0]}"></div>
       <div class="form-group"><label class="form-label">หมายเหตุ</label><input id="rc-note" class="form-control"></div>
@@ -1653,7 +1653,7 @@ async function showCreateDealFromPipeline() {
   const [customers, properties] = await Promise.all([api.get('/api/customers'), api.get('/api/properties?status=พร้อมขาย')]);
   showModal(`
     <div class="p-6">
-      <div class="flex items-center justify-between mb-4"><h3 class="text-lg font-bold text-navy-700">สร้างดีลใหม่</h3><button onclick="hideModal()" class="text-gray-400 text-xl">&times;</button></div>
+      <div class="flex items-center justify-between mb-4"><h3 class="text-lg font-bold font-semibold">สร้างดีลใหม่</h3><button onclick="hideModal()" class="text-gray-400 text-xl">&times;</button></div>
       <div class="form-group"><label class="form-label">ลูกค้า *</label><select id="pnd-cust" class="form-control"><option value="">-- เลือก --</option>${customers.map(c=>`<option value="${c.id}">${c.full_name}</option>`).join('')}</select></div>
       <div class="form-group"><label class="form-label">ทรัพย์สิน *</label><select id="pnd-prop" class="form-control"><option value="">-- เลือก --</option>${properties.map(p=>`<option value="${p.id}">${p.property_code} - ${p.title}</option>`).join('')}</select></div>
       <div class="form-group"><label class="form-label">หมายเหตุ</label><textarea id="pnd-note" class="form-control" rows="2"></textarea></div>
@@ -1684,7 +1684,7 @@ async function renderAppointments() {
       </div>
       <!-- Today -->
       <div class="bg-white rounded-xl border overflow-hidden">
-        <div class="px-5 py-3 bg-navy-700 text-white text-sm font-semibold">นัดหมายวันนี้ (${today})</div>
+        <div class="px-5 py-3 style="background:linear-gradient(135deg,#7B61FF,#5B3FE8)" text-white text-sm font-semibold">นัดหมายวันนี้ (${today})</div>
         <div id="appt-today"></div>
       </div>
       <!-- Upcoming -->
@@ -1750,7 +1750,7 @@ function showAddAppointmentModal() {
   const today = new Date().toISOString().split('T')[0];
   showModal(`
     <div class="p-6">
-      <div class="flex items-center justify-between mb-4"><h2 class="text-lg font-bold text-navy-700">เพิ่มนัดหมาย</h2><button onclick="hideModal()" class="text-gray-400 text-xl">&times;</button></div>
+      <div class="flex items-center justify-between mb-4"><h2 class="text-lg font-bold font-semibold">เพิ่มนัดหมาย</h2><button onclick="hideModal()" class="text-gray-400 text-xl">&times;</button></div>
       <div class="grid grid-cols-2 gap-4">
         <div class="form-group col-span-2"><label class="form-label">ประเภทนัด *</label>
           <select id="na-type" class="form-control">${['นัดชมทรัพย์','นัดโทรกลับ','นัดส่งข้อมูล','นัดเจ้าของทรัพย์','นัดเซ็นสัญญา','นัดยื่นกู้','นัดโอนกรรมสิทธิ์'].map(s=>`<option>${s}</option>`).join('')}</select></div>
@@ -1780,9 +1780,9 @@ async function renderReports() {
       ${pageHeader('รายงานค่านายหน้า', 'สรุปรายได้และดีลที่ปิดสำเร็จ')}
       <!-- Summary Cards -->
       <div class="grid grid-cols-3 gap-4">
-        ${kpiCard('ดีลปิดสำเร็จ', data.summary.count+' ดีล', 'ทั้งหมดที่บันทึก', '#1B4FD8', `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>`)}
-        ${kpiCard('รายได้ค่านายหน้ารวม', fmtNum(data.summary.total)+' ฿', 'จากดีลที่ปิดแล้ว', '#1B4FD8', `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>`)}
-        ${kpiCard('รายได้เฉลี่ยต่อดีล', fmtNum(data.summary.count?Math.round(data.summary.total/data.summary.count):0)+' ฿', 'ค่าเฉลี่ย', '#1B4FD8', `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>`)}
+        ${kpiCard('ดีลปิดสำเร็จ', data.summary.count+' ดีล', 'ทั้งหมดที่บันทึก', '#7B61FF', `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>`)}
+        ${kpiCard('รายได้ค่านายหน้ารวม', fmtNum(data.summary.total)+' ฿', 'จากดีลที่ปิดแล้ว', '#7B61FF', `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>`)}
+        ${kpiCard('รายได้เฉลี่ยต่อดีล', fmtNum(data.summary.count?Math.round(data.summary.total/data.summary.count):0)+' ฿', 'ค่าเฉลี่ย', '#7B61FF', `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>`)}
       </div>
 
       <!-- By Agent -->
@@ -1796,7 +1796,7 @@ async function renderReports() {
         <div class="px-5 py-3 border-b text-sm font-semibold text-gray-700">รายการดีลที่ปิดสำเร็จ</div>
         ${data.deals.length ? `<table><thead><tr><th>รหัสดีล</th><th>ลูกค้า</th><th>ทรัพย์</th><th>ราคาขาย</th><th>ค่านายหน้า</th><th>วันที่รับเงิน</th><th>นายหน้า</th></tr></thead><tbody>${data.deals.map(d=>`
           <tr>
-            <td class="font-semibold text-xs text-navy-700">${esc(d.deal_code)}</td>
+            <td class="font-semibold text-xs font-semibold">${esc(d.deal_code)}</td>
             <td>${esc(d.customer_name||'-')}</td>
             <td class="text-xs">${esc(d.property_title||'-')}</td>
             <td class="font-bold text-sm">${fmtNum(d.sale_price)} ฿</td>
@@ -1830,7 +1830,7 @@ async function renderSettings() {
       <div class="bg-white rounded-xl border p-5">
         <div class="flex items-center justify-between mb-4">
           <div>
-            <h3 class="font-bold text-navy-700">จัดการโซนพื้นที่</h3>
+            <h3 class="font-bold font-semibold">จัดการโซนพื้นที่</h3>
             <div class="text-xs text-gray-400 mt-1">โซนเหล่านี้จะแสดงในฟอร์มเพิ่มทรัพย์และหน้ากรองทรัพย์</div>
           </div>
           <span class="badge badge-navy">${zones.length} โซน</span>
@@ -1883,7 +1883,7 @@ async function init() {
   // แสดง loading screen ขณะ prefetch
   $('main-content').innerHTML = `
     <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:60vh;gap:16px">
-      <div class="animate-spin w-10 h-10 border-2 border-t-transparent rounded-full" style="border-color:#1B4FD8;border-top-color:transparent"></div>
+      <div class="animate-spin w-10 h-10 border-2 border-t-transparent rounded-full" style="border-color:#7B61FF;border-top-color:transparent"></div>
       <div style="font-size:13px;color:#94A3B8">กำลังโหลดข้อมูล...</div>
     </div>`;
 

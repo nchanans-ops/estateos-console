@@ -1,19 +1,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Prompt:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --primary: #1B4FD8;
-  --primary-light: #EBF0FB;
-  --primary-dark: #1339A8;
-  --bg: #F0F4FA;
+  --primary: #7B61FF;
+  --primary-light: #EEE9FF;
+  --primary-dark: #5B3FE8;
+  --bg: #F0F0F8;
   --card: #FFFFFF;
-  --text: #1E293B;
+  --text: #1A1A3A;
   --text-2: #64748B;
-  --text-3: #94A3B8;
-  --border: #E2E8F0;
-  --shadow: 0 2px 16px rgba(0,0,0,0.07);
+  --text-3: #A0A0BF;
+  --border: #EBEBF5;
+  --shadow: 0 2px 16px rgba(123,97,255,0.08);
   --shadow-sm: 0 1px 6px rgba(0,0,0,0.05);
-  --radius: 14px;
-  --radius-sm: 10px;
+  --radius: 16px;
+  --radius-sm: 12px;
 }
 
 * { box-sizing: border-box; }
@@ -35,19 +35,19 @@ body {
   align-items: center;
   justify-content: center;
   border-radius: 12px;
-  color: rgba(255,255,255,0.35);
+  color: #B0AECF;
   text-decoration: none;
   transition: all 0.15s;
   position: relative;
 }
 .nav-icon-btn:hover {
-  background: rgba(255,255,255,0.08);
-  color: rgba(255,255,255,0.75);
+  background: #F3F0FF;
+  color: #7B61FF;
 }
 .nav-icon-btn.active {
-  background: #1B4FD8;
+  background: linear-gradient(135deg, #7B61FF, #5B3FE8);
   color: #fff;
-  box-shadow: 0 4px 14px rgba(27,79,216,0.45);
+  box-shadow: 0 4px 14px rgba(123,97,255,0.45);
 }
 
 /* Tooltip on hover */
@@ -57,7 +57,7 @@ body {
   left: 56px;
   top: 50%;
   transform: translateY(-50%);
-  background: #1E293B;
+  background: #1A1A3A;
   color: #fff;
   font-size: 11px;
   font-weight: 500;
@@ -102,7 +102,7 @@ body {
 }
 .stat-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 12px 32px rgba(27,79,216,0.12);
+  box-shadow: 0 12px 32px rgba(123,97,255,0.14);
 }
 
 .stat-icon-box {
@@ -128,17 +128,17 @@ body {
   font-weight: 600;
   white-space: nowrap;
 }
-/* badge palette: 3 tones only */
-.badge-blue    { background: #EBF0FB; color: #1B4FD8; }
-.badge-navy    { background: #E0E7F7; color: #1339A8; }
-.badge-gray    { background: #F1F5F9; color: #475569; }
-/* muted aliases — map everything to the 3 above */
-.badge-green   { background: #E0E7F7; color: #1339A8; }
-.badge-purple  { background: #EBF0FB; color: #1B4FD8; }
-.badge-indigo  { background: #EBF0FB; color: #1B4FD8; }
-.badge-orange  { background: #F1F5F9; color: #475569; }
-.badge-gold    { background: #F1F5F9; color: #64748B; }
-.badge-yellow  { background: #F1F5F9; color: #64748B; }
+/* badge palette */
+.badge-blue    { background: #EEE9FF; color: #7B61FF; }
+.badge-navy    { background: #E5E0FF; color: #5B3FE8; }
+.badge-gray    { background: #F1F5F9; color: #64748B; }
+/* muted aliases */
+.badge-green   { background: #E0FBF0; color: #059669; }
+.badge-purple  { background: #EEE9FF; color: #7B61FF; }
+.badge-indigo  { background: #EEE9FF; color: #7B61FF; }
+.badge-orange  { background: #FFF4E5; color: #D97706; }
+.badge-gold    { background: #FFF4E5; color: #D97706; }
+.badge-yellow  { background: #FEF9C3; color: #A16207; }
 .badge-red     { background: #FEE2E2; color: #B91C1C; }
 
 /* ─── Tables ──────────────────────────────────────────────────────────────────── */
@@ -217,7 +217,7 @@ textarea.form-control { min-height: 80px; resize: vertical; }
 }
 .btn:disabled { opacity: 0.45; cursor: not-allowed; }
 .btn-primary { background: var(--primary); color: #fff; }
-.btn-primary:hover:not(:disabled) { background: var(--primary-dark); box-shadow: 0 4px 12px rgba(79,70,229,0.3); }
+.btn-primary:hover:not(:disabled) { background: var(--primary-dark); box-shadow: 0 4px 12px rgba(123,97,255,0.35); }
 .btn-gold { background: #F59E0B; color: #fff; }
 .btn-gold:hover:not(:disabled) { background: #D97706; }
 .btn-success { background: #10B981; color: #fff; }
@@ -279,9 +279,9 @@ textarea.form-control { min-height: 80px; resize: vertical; }
 
 /* Drag-over highlight on column */
 .kanban-col.drag-over {
-  background: rgba(27,79,216,0.05);
-  border-color: #1B4FD8;
-  outline: 2px dashed #1B4FD8;
+  background: rgba(123,97,255,0.05);
+  border-color: #7B61FF;
+  outline: 2px dashed #7B61FF;
   outline-offset: -2px;
 }
 .deal-card-title { font-size: 12px; font-weight: 600; color: var(--text); line-height: 1.4; margin-bottom: 4px; }
@@ -352,7 +352,7 @@ textarea.form-control { min-height: 80px; resize: vertical; }
 
 /* ─── Score ───────────────────────────────────────────────────────────────────── */
 .score-high { background: #DCFCE7; color: #15803D; }
-.score-mid  { background: #EEF2FF; color: #4338CA; }
+.score-mid  { background: #EEE9FF; color: #7B61FF; }
 .score-low  { background: #FEF9C3; color: #A16207; }
 
 /* ─── Modal ───────────────────────────────────────────────────────────────────── */
@@ -450,14 +450,14 @@ textarea.form-control { min-height: 80px; resize: vertical; }
   flex-direction: column;
 }
 .prop-card:hover {
-  box-shadow: 0 12px 36px rgba(27,79,216,0.13);
+  box-shadow: 0 12px 36px rgba(123,97,255,0.16);
   transform: translateY(-3px);
 }
 
 .prop-card-img {
   position: relative;
   height: 190px;
-  background: linear-gradient(135deg, #D6E1F7 0%, #EBF0FB 100%);
+  background: linear-gradient(135deg, #E5E0FF 0%, #EEE9FF 100%);
   flex-shrink: 0;
   overflow: hidden;
 }
@@ -468,7 +468,7 @@ textarea.form-control { min-height: 80px; resize: vertical; }
   align-items: center;
   justify-content: center;
   height: 100%;
-  color: #84A5E7;
+  color: #AFA9EC;
   gap: 8px;
 }
 .prop-card-placeholder svg { width: 40px; height: 40px; opacity: 0.5; }
