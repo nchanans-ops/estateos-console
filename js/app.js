@@ -191,6 +191,7 @@ const PAGES = {
   'properties': { title: 'จัดการทรัพย์สิน', subtitle: 'ทรัพย์สินทั้งหมดในระบบ', render: renderProperties },
   'add-property': { title: 'เพิ่มทรัพย์ใหม่', subtitle: 'บันทึกข้อมูลทรัพย์สิน', render: renderAddProperty },
   'property-detail': { title: 'รายละเอียดทรัพย์', subtitle: 'ข้อมูลทรัพย์สินและดีลที่เกี่ยวข้อง', render: renderPropertyDetail },
+  'edit-property': { title: 'แก้ไขทรัพย์', subtitle: 'แก้ไขข้อมูลทรัพย์สิน', render: renderEditProperty },
   'pipeline': { title: 'Sales Pipeline', subtitle: 'ติดตามสถานะดีลทั้งหมด', render: renderPipeline },
   'appointments': { title: 'นัดหมาย', subtitle: 'ตารางนัดหมายและงานที่ต้องทำ', render: renderAppointments },
   'reports': { title: 'รายงานค่านายหน้า', subtitle: 'สรุปรายได้และผลการดำเนินงาน', render: renderReports },
@@ -795,6 +796,7 @@ async function renderProperties() {
         </div>
         <div class="prop-card-actions" onclick="event.stopPropagation()">
           <button onclick="navigate('property-detail',{id:${p.id}})" class="btn btn-primary btn-sm">ดูรายละเอียด</button>
+          <button onclick="navigate('edit-property',{id:${p.id}})" class="btn btn-outline btn-sm">แก้ไข</button>
           <button onclick="quickStatusProp(${p.id},event)" class="btn btn-outline btn-sm">เปลี่ยนสถานะ</button>
         </div>
       </div>`).join('')}</div>`;
@@ -1160,6 +1162,168 @@ async function submitAddProperty(save = true) {
   navigate('property-detail', { id: r.id });
 }
 
+// ─── EDIT PROPERTY ────────────────────────────────────────────────────────────
+async function renderEditProperty(params) {
+  const [p, owners, users, zones] = await Promise.all([
+    api.get('/api/properties/'+(params.id||1)),
+    api.get('/api/owners'),
+    api.get('/api/users'),
+    api.get('/api/zones'),
+  ]);
+  const d = p.property_details || {};
+  const m = p.marketing_data || {};
+
+  $('main-content').innerHTML = `
+    <div class="max-w-4xl">
+      <div class="flex items-center gap-3 mb-4">
+        <button onclick="navigate('property-detail',{id:${p.id}})" class="btn btn-outline btn-sm">← กลับ</button>
+        <span class="text-sm text-gray-500">${esc(p.property_code)}</span>
+      </div>
+      <div class="bg-white rounded-xl border p-6">
+        <div class="tab-bar mb-0" id="ep-tab-bar">
+          <button class="tab-btn active" data-tab="ep-general">ข้อมูลทั่วไป</button>
+          <button class="tab-btn" data-tab="ep-price">ราคา & การเงิน</button>
+          <button class="tab-btn" data-tab="ep-details">รายละเอียด</button>
+          <button class="tab-btn" data-tab="ep-owner">เจ้าของทรัพย์</button>
+          <button class="tab-btn" data-tab="ep-marketing">การตลาด</button>
+        </div>
+
+        <!-- Tab: General -->
+        <div id="tab-ep-general" class="tab-content pt-5">
+          <div class="grid grid-cols-2 gap-4">
+            <div class="form-group col-span-2"><label class="form-label">ชื่อทรัพย์ / ชื่อประกาศ *</label><input id="ep-title" class="form-control" value="${esc(p.title||'')}"></div>
+            <div class="form-group">
+              <label class="form-label">ประเภทหลัก *</label>
+              <select id="ep-type" class="form-control">
+                ${['บ้าน','คอนโด','ที่ดิน','อาคารพาณิชย์','อสังหาริมทรัพย์เพื่อธุรกิจ','ทรัพย์ให้เช่า'].map(s=>`<option${p.property_type===s?' selected':''}>${s}</option>`).join('')}
+              </select>
+            </div>
+            <div class="form-group"><label class="form-label">ประเภทย่อย</label><input id="ep-subtype" class="form-control" value="${esc(p.property_subtype||'')}"></div>
+            <div class="form-group"><label class="form-label">จังหวัด</label><input id="ep-province" class="form-control" value="${esc(p.province||'')}"></div>
+            <div class="form-group"><label class="form-label">อำเภอ</label><input id="ep-district" class="form-control" value="${esc(p.district||'')}"></div>
+            <div class="form-group col-span-2"><label class="form-label">หมู่บ้าน / โครงการ</label><input id="ep-village" class="form-control" value="${esc(p.village_project||'')}"></div>
+            <div class="form-group col-span-2"><label class="form-label">โซนพื้นที่</label>
+              <select id="ep-zone" class="form-control">
+                <option value="">-- เลือกโซน --</option>
+                ${zones.map(z=>`<option value="${esc(z.name)}"${p.zone===z.name?' selected':''}>${esc(z.name)}</option>`).join('')}
+              </select>
+            </div>
+            <div class="form-group col-span-2"><label class="form-label">สถานที่ใกล้เคียง</label><input id="ep-nearby" class="form-control" value="${esc(p.nearby_places||'')}"></div>
+            <div class="form-group">
+              <label class="form-label">ผู้ดูแลทรัพย์</label>
+              <select id="ep-agent" class="form-control">
+                <option value="">-- เลือก --</option>
+                ${users.map(u=>`<option value="${u.id}"${p.agent_name===u.name?' selected':''}>${u.name}</option>`).join('')}
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">สถานะทรัพย์</label>
+              <select id="ep-status" class="form-control">${['พร้อมขาย','จองแล้ว','ขายแล้ว','ระงับขาย'].map(s=>`<option${p.status===s?' selected':''}>${s}</option>`).join('')}</select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab: Price -->
+        <div id="tab-ep-price" class="tab-content pt-5 hidden">
+          <div class="grid grid-cols-2 gap-4">
+            <div class="form-group"><label class="form-label">ราคาขาย (฿) *</label><input id="ep-price" type="number" class="form-control" value="${p.sale_price||0}"></div>
+            <div class="form-group"><label class="form-label">ราคาประเมิน (฿)</label><input id="ep-appraisal" type="number" class="form-control" value="${p.appraisal_price||0}"></div>
+            <div class="form-group"><label class="form-label">ราคาต่ำสุดที่รับได้ (฿)</label><input id="ep-minprice" type="number" class="form-control" value="${p.min_acceptable_price||0}"></div>
+            <div class="form-group"><label class="form-label">ค่านายหน้า (%)</label><input id="ep-commrate" type="number" class="form-control" value="${p.commission_rate||3}"></div>
+            <div class="form-group col-span-2"><label class="form-label">เงื่อนไขค่าใช้จ่ายโอน</label>
+              <select id="ep-transfer" class="form-control">${['ออกคนละครึ่ง','ผู้ขายออก','ผู้ซื้อออก'].map(s=>`<option${p.transfer_fee_condition===s?' selected':''}>${s}</option>`).join('')}</select>
+            </div>
+            <div class="form-group col-span-2"><label class="form-label">จุดขายด้านราคา</label><input id="ep-pricesell" class="form-control" value="${esc(m.price_highlight||'')}"></div>
+          </div>
+        </div>
+
+        <!-- Tab: Details -->
+        <div id="tab-ep-details" class="tab-content pt-5 hidden">
+          <div class="grid grid-cols-2 gap-4">
+            <div class="form-group"><label class="form-label">ห้องนอน</label><input id="ep-bedrooms" type="number" class="form-control" value="${d.bedrooms||0}"></div>
+            <div class="form-group"><label class="form-label">ห้องน้ำ</label><input id="ep-bathrooms" type="number" class="form-control" value="${d.bathrooms||0}"></div>
+            <div class="form-group"><label class="form-label">ขนาดที่ดิน (ตร.ว.)</label><input id="ep-land_sqw" type="number" class="form-control" value="${d.land_sqw||0}"></div>
+            <div class="form-group"><label class="form-label">พื้นที่ใช้สอย (ตร.ม.)</label><input id="ep-usable_area" type="number" class="form-control" value="${d.usable_area||0}"></div>
+            <div class="form-group"><label class="form-label">จำนวนชั้น</label><input id="ep-floor" type="number" class="form-control" value="${d.floor||0}"></div>
+            <div class="form-group"><label class="form-label">ที่จอดรถ</label><input id="ep-parking" type="number" class="form-control" value="${d.parking||0}"></div>
+          </div>
+        </div>
+
+        <!-- Tab: Owner -->
+        <div id="tab-ep-owner" class="tab-content pt-5 hidden">
+          <div class="form-group"><label class="form-label">เลือกเจ้าของทรัพย์</label>
+            <select id="ep-owner" class="form-control">
+              <option value="">-- เลือกเจ้าของที่มีในระบบ --</option>
+              ${owners.map(o=>`<option value="${o.id}"${p.owner_id==o.id?' selected':''}>${o.owner_name} (${o.phone||''})</option>`).join('')}
+            </select>
+          </div>
+        </div>
+
+        <!-- Tab: Marketing -->
+        <div id="tab-ep-marketing" class="tab-content pt-5 hidden">
+          <div class="grid grid-cols-1 gap-4">
+            <div class="form-group"><label class="form-label">จุดเด่น</label><textarea id="ep-highlights" class="form-control" rows="2">${esc(p.highlights||'')}</textarea></div>
+            <div class="form-group"><label class="form-label">จุดด้อย</label><textarea id="ep-drawbacks" class="form-control" rows="2">${esc(p.drawbacks||'')}</textarea></div>
+            <div class="form-group">
+              <label class="form-label">สิ่งปลูกสร้าง</label>
+              <select id="ep-structure" class="form-control">
+                <option value="">-- ยังไม่ระบุ --</option>
+                <option value="มีสิ่งปลูกสร้าง"${p.structure==='มีสิ่งปลูกสร้าง'?' selected':''}>มีสิ่งปลูกสร้าง</option>
+                <option value="ไม่มีสิ่งปลูกสร้าง"${p.structure==='ไม่มีสิ่งปลูกสร้าง'?' selected':''}>ไม่มีสิ่งปลูกสร้าง</option>
+              </select>
+            </div>
+            <div class="form-group"><label class="form-label">Caption สำหรับ Facebook</label><textarea id="ep-caption" class="form-control" rows="3">${esc(m.caption||'')}</textarea></div>
+            <div class="form-group"><label class="form-label">Script สำหรับ TikTok</label><textarea id="ep-tiktok" class="form-control" rows="3">${esc(m.tiktok||'')}</textarea></div>
+            <div class="form-group"><label class="form-label">Hashtag</label><input id="ep-hashtag" class="form-control" value="${esc(m.hashtag||'')}"></div>
+            <div class="form-group"><label class="form-label">หมายเหตุภายในทีม</label><textarea id="ep-note" class="form-control" rows="2">${esc(p.internal_note||'')}</textarea></div>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex justify-between items-center mt-6 pt-4 border-t">
+          <button onclick="navigate('property-detail',{id:${p.id}})" class="btn btn-outline">ยกเลิก</button>
+          <button onclick="submitEditProperty(${p.id})" class="btn btn-primary">บันทึกการแก้ไข</button>
+        </div>
+      </div>
+    </div>`;
+
+  document.querySelectorAll('#ep-tab-bar .tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#ep-tab-bar .tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('[id^="tab-ep-"]').forEach(c => c.classList.add('hidden'));
+      btn.classList.add('active');
+      $('tab-'+btn.dataset.tab).classList.remove('hidden');
+    });
+  });
+}
+
+async function submitEditProperty(id) {
+  const title = $('ep-title').value;
+  if (!title) { toast('กรุณากรอกชื่อทรัพย์','error'); return; }
+  const getVal = elId => $(elId)?.value || null;
+  const getNum = elId => parseFloat($(elId)?.value || 0);
+
+  const data = {
+    title,
+    property_type: getVal('ep-type'), property_subtype: getVal('ep-subtype'),
+    province: getVal('ep-province'), district: getVal('ep-district'),
+    village_project: getVal('ep-village'), zone: getVal('ep-zone'), nearby_places: getVal('ep-nearby'),
+    status: getVal('ep-status'), assigned_agent_id: getVal('ep-agent'), owner_id: getVal('ep-owner'),
+    sale_price: getNum('ep-price'), appraisal_price: getNum('ep-appraisal'), min_acceptable_price: getNum('ep-minprice'),
+    commission_rate: getNum('ep-commrate'), transfer_fee_condition: getVal('ep-transfer'),
+    highlights: getVal('ep-highlights'), drawbacks: getVal('ep-drawbacks'), structure: getVal('ep-structure'),
+    internal_note: getVal('ep-note'),
+    property_details: { bedrooms: getNum('ep-bedrooms'), bathrooms: getNum('ep-bathrooms'), land_sqw: getNum('ep-land_sqw'), usable_area: getNum('ep-usable_area'), floor: getNum('ep-floor'), parking: getNum('ep-parking') },
+    marketing_data: { caption: getVal('ep-caption'), tiktok: getVal('ep-tiktok'), hashtag: getVal('ep-hashtag'), price_highlight: getVal('ep-pricesell') }
+  };
+
+  await api.put('/api/properties/'+id, data);
+  _memDel('prop/full/'+id);
+  _lsDel('prop/full/'+id);
+  toast('บันทึกการแก้ไขสำเร็จ');
+  navigate('property-detail', { id });
+}
+
 // ─── PROPERTY DETAIL ──────────────────────────────────────────────────────────
 async function renderPropertyDetail(params) {
   const p = await api.get('/api/properties/'+(params.id||1));
@@ -1175,6 +1339,7 @@ async function renderPropertyDetail(params) {
     <div class="space-y-4">
       <div class="flex items-center gap-3 mb-2">
         <button onclick="navigate('properties')" class="btn btn-outline btn-sm">← กลับ</button>
+        <button onclick="navigate('edit-property',{id:${p.id}})" class="btn btn-primary btn-sm">แก้ไข</button>
         <span class="badge badge-navy">${esc(p.property_code)}</span>
         ${propBadge(p.status)}
         ${p.zone ? `<span class="badge badge-gold">${esc(p.zone)}</span>` : ''}
