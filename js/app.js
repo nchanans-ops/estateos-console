@@ -213,7 +213,7 @@ function navigate(page, params = {}) {
   // Scroll to top เมื่อเปลี่ยนหน้า
   const mc = $('main-content');
   if (mc) mc.scrollTop = 0;
-  mc.innerHTML = '<div class="flex items-center justify-center py-20"><div class="animate-spin w-8 h-8 border-2 border-purple-500 border-t-transparent rounded-full"></div></div>';
+  mc.innerHTML = '<div class="flex items-center justify-center py-20"><div class="animate-spin w-8 h-8 border-2 border-navy-700 border-t-transparent rounded-full"></div></div>';
   p.render(params);
 }
 
@@ -246,7 +246,7 @@ function pageHeader(title, subtitle, actionsHtml = '') {
   <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:24px">
     <div>
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px">
-        <div style="width:4px;height:28px;background:linear-gradient(180deg,#7B61FF,#5B3FE8);border-radius:4px;flex-shrink:0"></div>
+        <div style="width:4px;height:28px;background:linear-gradient(180deg,#1B4FD8,#1339A8);border-radius:4px;flex-shrink:0"></div>
         <h2 style="font-size:26px;font-weight:800;color:#1A1A3A;letter-spacing:-0.5px;line-height:1">${title}</h2>
       </div>
       <p style="font-size:13px;color:#94A3B8;margin-left:14px">${subtitle}</p>
@@ -264,10 +264,10 @@ async function renderDashboard() {
       ${pageHeader('Dashboard', 'ภาพรวมธุรกิจวันนี้')}
       <!-- KPI Cards -->
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        ${kpiCard('ลูกค้าใหม่วันนี้', s.customers_new_today, 'ทั้งหมด '+fmtNum(s.customers_total)+' ราย', '#7B61FF', `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>`)}
-        ${kpiCard('นัดหมายวันนี้', s.appointments_today, 'ต้องติดตาม '+s.customers_followup_today+' ราย', '#7B61FF', `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>`)}
-        ${kpiCard('ดีลเปิดอยู่', s.deals_active, 'ปิดสำเร็จ '+s.deals_closed+' | หลุด '+s.deals_lost, '#7B61FF', `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>`)}
-        ${kpiCard('รายได้เดือนนี้', fmtNum(s.commission_this_month)+' ฿', 'รวมทั้งหมด '+fmtNum(s.commission_received)+' ฿', '#7B61FF', `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>`)}
+        ${kpiCard('ลูกค้าใหม่วันนี้', s.customers_new_today, 'ทั้งหมด '+fmtNum(s.customers_total)+' ราย', '#1B4FD8', `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>`)}
+        ${kpiCard('นัดหมายวันนี้', s.appointments_today, 'ต้องติดตาม '+s.customers_followup_today+' ราย', '#1B4FD8', `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>`)}
+        ${kpiCard('ดีลเปิดอยู่', s.deals_active, 'ปิดสำเร็จ '+s.deals_closed+' | หลุด '+s.deals_lost, '#1B4FD8', `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>`)}
+        ${kpiCard('รายได้เดือนนี้', fmtNum(s.commission_this_month)+' ฿', 'รวมทั้งหมด '+fmtNum(s.commission_received)+' ฿', '#1B4FD8', `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>`)}
       </div>
 
       <!-- Charts Row -->
@@ -287,7 +287,7 @@ async function renderDashboard() {
         <div class="bg-white rounded-xl p-5 border border-gray-100">
           <h3 class="text-sm font-semibold text-gray-700 mb-3">ทรัพย์สินในระบบ</h3>
           <div class="space-y-2">
-            ${[['พร้อมขาย',s.properties_available,'#7B61FF'],['จองแล้ว',s.properties_reserved,'#AFA9EC'],['ขายแล้ว',s.properties_sold,'#CBD5E1']].map(([l,v,c])=>`
+            ${[['พร้อมขาย',s.properties_available,'#1B4FD8'],['จองแล้ว',s.properties_reserved,'#6B9AF0'],['ขายแล้ว',s.properties_sold,'#CBD5E1']].map(([l,v,c])=>`
               <div class="flex items-center justify-between">
                 <div class="flex items-center gap-2"><div class="w-3 h-3 rounded-full" style="background:${c}"></div><span class="text-xs text-gray-600">${l}</span></div>
                 <span class="text-sm font-bold" style="color:${c}">${v}</span>
@@ -306,8 +306,8 @@ async function renderDashboard() {
           <div class="text-2xl font-bold font-semibold">${fmtNum(s.commission_potential)} ฿</div>
           <div class="text-xs text-gray-400 mb-4">จาก ${s.deals_active} ดีลที่กำลังดำเนินการ</div>
           <div class="space-y-3">
-            <div class="flex justify-between text-xs"><span class="text-gray-500">ได้รับแล้ว</span><span class="font-semibold" style="color:#7B61FF">${fmtNum(s.commission_received)} ฿</span></div>
-            <div class="w-full bg-gray-100 rounded-full h-2"><div class="h-2 rounded-full" style="background:#7B61FF;width:${s.commission_potential?Math.min(100,Math.round(s.commission_received/s.commission_potential*100)):100}%"></div></div>
+            <div class="flex justify-between text-xs"><span class="text-gray-500">ได้รับแล้ว</span><span class="font-semibold" style="color:#1B4FD8">${fmtNum(s.commission_received)} ฿</span></div>
+            <div class="w-full bg-gray-100 rounded-full h-2"><div class="h-2 rounded-full" style="background:#1B4FD8;width:${s.commission_potential?Math.min(100,Math.round(s.commission_received/s.commission_potential*100)):100}%"></div></div>
           </div>
         </div>
       </div>
@@ -337,17 +337,17 @@ async function renderDashboard() {
   const commLabels = data.monthly_commission.map(r=>r.month).reverse();
   const commData = data.monthly_commission.map(r=>r.total).reverse();
   state.charts.commission = new Chart($('chart-commission'), {
-    type:'bar', data:{ labels: commLabels.length ? commLabels : ['ยังไม่มีข้อมูล'], datasets:[{ label:'ค่านายหน้า (฿)', data: commData.length ? commData : [0], backgroundColor:'rgba(123,97,255,0.82)', borderRadius:6 }] },
+    type:'bar', data:{ labels: commLabels.length ? commLabels : ['ยังไม่มีข้อมูล'], datasets:[{ label:'ค่านายหน้า (฿)', data: commData.length ? commData : [0], backgroundColor:'rgba(27,79,216,0.82)', borderRadius:6 }] },
     options:{ plugins:{ legend:{ display:false } }, scales:{ y:{ ticks:{ callback:v=>fmtNum(v) } } }, responsive:true }
   });
   const srcLabels = data.source_stats.map(r=>r.source);
   state.charts.source = new Chart($('chart-source'), {
-    type:'doughnut', data:{ labels: srcLabels.length ? srcLabels : ['ยังไม่มี'], datasets:[{ data: srcLabels.length ? data.source_stats.map(r=>r.count):[1], backgroundColor:['#7B61FF','#9B81FF','#AFA9EC','#C5C0F5','#DDD9FF','#EEEAFF'], borderWidth:0 }] },
+    type:'doughnut', data:{ labels: srcLabels.length ? srcLabels : ['ยังไม่มี'], datasets:[{ data: srcLabels.length ? data.source_stats.map(r=>r.count):[1], backgroundColor:['#1B4FD8','#3B6FE8','#6B9AF0','#94B5F5','#BDD1FA','#D6E4FD'], borderWidth:0 }] },
     options:{ plugins:{ legend:{ position:'bottom', labels:{ font:{size:11}, boxWidth:10, color:'#64748B' } } }, responsive:true }
   });
   const plLabels = data.pipeline_stats.map(r=>r.status);
   state.charts.pipeline = new Chart($('chart-pipeline'), {
-    type:'bar', data:{ labels: plLabels.length ? plLabels : ['ยังไม่มี'], datasets:[{ label:'จำนวน', data: plLabels.length ? data.pipeline_stats.map(r=>r.count):[0], backgroundColor:'rgba(123,97,255,0.15)', borderColor:'rgba(123,97,255,0.6)', borderWidth:1, borderRadius:4 }] },
+    type:'bar', data:{ labels: plLabels.length ? plLabels : ['ยังไม่มี'], datasets:[{ label:'จำนวน', data: plLabels.length ? data.pipeline_stats.map(r=>r.count):[0], backgroundColor:'rgba(27,79,216,0.15)', borderColor:'rgba(27,79,216,0.6)', borderWidth:1, borderRadius:4 }] },
     options:{ indexAxis:'y', plugins:{ legend:{display:false} }, responsive:true, scales:{ x:{ ticks:{stepSize:1} } } }
   });
 }
@@ -562,12 +562,12 @@ async function renderCustomerDetail(params) {
               <div class="p-3 rounded-xl mb-2 cursor-pointer border border-transparent hover:border-primary-200 hover:bg-primary-50 transition-all"
                 style="background:#F8FAFC" onclick="showDealDetail(${d.id})">
                 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
-                  <span style="font-size:11px;font-weight:700;color:#7B61FF">${esc(d.deal_code)}</span>
+                  <span style="font-size:11px;font-weight:700;color:#1B4FD8">${esc(d.deal_code)}</span>
                   ${custBadge(d.status)}
                 </div>
                 <div style="font-size:11px;color:#64748B">${esc(d.property_title||'-')}</div>
                 <div style="font-size:13px;font-weight:700;color:#0F172A;margin-top:4px">${fmtNum(d.sale_price)} ฿</div>
-              </div>`).join('') : '<p class="text-xs text-gray-400">ยังไม่มีดีล — <button onclick="navigate(\'pipeline\')" style="background:none;border:none;color:#7B61FF;cursor:pointer;font-size:12px;padding:0">สร้างดีลใน Pipeline</button></p>'}
+              </div>`).join('') : '<p class="text-xs text-gray-400">ยังไม่มีดีล — <button onclick="navigate(\'pipeline\')" style="background:none;border:none;color:#1B4FD8;cursor:pointer;font-size:12px;padding:0">สร้างดีลใน Pipeline</button></p>'}
           </div>
 
           <!-- Matched Properties -->
@@ -1531,7 +1531,7 @@ async function renderPipeline() {
   const SHOW_STAGES = ['เสนอทรัพย์','นัดชมทรัพย์','ต่อรองราคา','วางมัดจำ','ยื่นสินเชื่อ','นัดวันโอน','ปิดการขายสำเร็จ','ปิดการขายไม่สำเร็จ'];
   // สีแค่ accent dot — header text เป็น dark
   const STAGE_DOTS = {
-    'เสนอทรัพย์':'#7B61FF','นัดชมทรัพย์':'#7C3AED','ต่อรองราคา':'#D97706','วางมัดจำ':'#EA580C','ยื่นสินเชื่อ':'#0891B2','นัดวันโอน':'#059669','ปิดการขายสำเร็จ':'#16A34A','ปิดการขายไม่สำเร็จ':'#DC2626',
+    'เสนอทรัพย์':'#1B4FD8','นัดชมทรัพย์':'#7C3AED','ต่อรองราคา':'#D97706','วางมัดจำ':'#EA580C','ยื่นสินเชื่อ':'#0891B2','นัดวันโอน':'#059669','ปิดการขายสำเร็จ':'#16A34A','ปิดการขายไม่สำเร็จ':'#DC2626',
   };
 
   $('main-content').innerHTML = `
@@ -1562,7 +1562,7 @@ async function renderPipeline() {
                   onclick="showDealDetail(${d.id})">
                   <button onclick="event.stopPropagation();navigate('customer-detail',{id:${d.customer_id}})"
                     style="background:none;border:none;padding:0;cursor:pointer;font-family:inherit;text-align:left;width:100%">
-                    <div class="deal-card-title" style="color:#7B61FF;text-decoration:underline;text-underline-offset:2px">${esc(d.customer_name||'-')}</div>
+                    <div class="deal-card-title" style="color:#1B4FD8;text-decoration:underline;text-underline-offset:2px">${esc(d.customer_name||'-')}</div>
                   </button>
                   <div class="deal-card-sub" style="color:#94A3B8">${esc(d.property_code||'')} · ${esc(d.property_type||'')}</div>
                   <div style="font-size:11px;color:#64748B;margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(d.property_title||'')}</div>
@@ -1684,7 +1684,7 @@ async function renderAppointments() {
       </div>
       <!-- Today -->
       <div class="bg-white rounded-xl border overflow-hidden">
-        <div class="px-5 py-3 style="background:linear-gradient(135deg,#7B61FF,#5B3FE8)" text-white text-sm font-semibold">นัดหมายวันนี้ (${today})</div>
+        <div class="px-5 py-3 style="background:linear-gradient(135deg,#1B4FD8,#1339A8)" text-white text-sm font-semibold">นัดหมายวันนี้ (${today})</div>
         <div id="appt-today"></div>
       </div>
       <!-- Upcoming -->
@@ -1780,9 +1780,9 @@ async function renderReports() {
       ${pageHeader('รายงานค่านายหน้า', 'สรุปรายได้และดีลที่ปิดสำเร็จ')}
       <!-- Summary Cards -->
       <div class="grid grid-cols-3 gap-4">
-        ${kpiCard('ดีลปิดสำเร็จ', data.summary.count+' ดีล', 'ทั้งหมดที่บันทึก', '#7B61FF', `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>`)}
-        ${kpiCard('รายได้ค่านายหน้ารวม', fmtNum(data.summary.total)+' ฿', 'จากดีลที่ปิดแล้ว', '#7B61FF', `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>`)}
-        ${kpiCard('รายได้เฉลี่ยต่อดีล', fmtNum(data.summary.count?Math.round(data.summary.total/data.summary.count):0)+' ฿', 'ค่าเฉลี่ย', '#7B61FF', `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>`)}
+        ${kpiCard('ดีลปิดสำเร็จ', data.summary.count+' ดีล', 'ทั้งหมดที่บันทึก', '#1B4FD8', `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>`)}
+        ${kpiCard('รายได้ค่านายหน้ารวม', fmtNum(data.summary.total)+' ฿', 'จากดีลที่ปิดแล้ว', '#1B4FD8', `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>`)}
+        ${kpiCard('รายได้เฉลี่ยต่อดีล', fmtNum(data.summary.count?Math.round(data.summary.total/data.summary.count):0)+' ฿', 'ค่าเฉลี่ย', '#1B4FD8', `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>`)}
       </div>
 
       <!-- By Agent -->
@@ -1883,7 +1883,7 @@ async function init() {
   // แสดง loading screen ขณะ prefetch
   $('main-content').innerHTML = `
     <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:60vh;gap:16px">
-      <div class="animate-spin w-10 h-10 border-2 border-t-transparent rounded-full" style="border-color:#7B61FF;border-top-color:transparent"></div>
+      <div class="animate-spin w-10 h-10 border-2 border-t-transparent rounded-full" style="border-color:#1B4FD8;border-top-color:transparent"></div>
       <div style="font-size:13px;color:#94A3B8">กำลังโหลดข้อมูล...</div>
     </div>`;
 
