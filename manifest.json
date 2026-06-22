@@ -1,0 +1,22 @@
+{
+  "name": "JD Property",
+  "short_name": "JD Property",
+  "description": "ระบบนายหน้าอสังหาริมทรัพย์",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "landscape",
+  "background_color": "#0B1220",
+  "theme_color": "#0B1220",
+  "icons": [
+    {
+      "src": "https://via.placeholder.com/192x192/1B4FD8/ffffff?text=JD",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://via.placeholder.com/512x512/1B4FD8/ffffff?text=JD",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
