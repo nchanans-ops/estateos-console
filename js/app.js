@@ -1054,6 +1054,7 @@ const DYN_FORMS = {
       <div class="form-group"><label class="form-label">เฟอร์นิเจอร์</label><select id="df-furniture" class="form-control">${['ไม่มีเฟอร์นิเจอร์','เฟอร์บางส่วน','เฟอร์ครบ'].map(s=>`<option>${s}</option>`).join('')}</select></div>
       <div class="form-group"><label class="form-label">ทิศหน้าบ้าน</label><select id="df-direction" class="form-control">${['เหนือ','ใต้','ออก','ตก'].map(s=>`<option>${s}</option>`).join('')}</select></div>
       ${numField('df-monthly_fee','ค่าส่วนกลาง (฿/เดือน)',0)}
+      <div class="form-group"><label class="form-label">ประเภทเอกสารสิทธิ์</label><select id="df-title_deed" class="form-control">${['-- ยังไม่ระบุ --','โฉนดที่ดิน (น.ส.4 จ.)','น.ส.4 ข.','น.ส.4 ค.','น.ส.3 ก. (รังวัดแล้ว)','น.ส.3 ข.','น.ส.3','น.ส.2 (ใบจอง)','ส.ค.1','ภ.บ.ท.5','สทก.','คทช.','ที่ดินมือเปล่า','อื่นๆ'].map(s=>`<option>${s}</option>`).join('')}</select></div>
     </div>`,
   'คอนโด': () => `
     <div class="grid grid-cols-3 gap-4">
@@ -1072,7 +1073,7 @@ const DYN_FORMS = {
       <div class="form-group"><label class="form-label">รูปแปลง</label><select id="df-shape" class="form-control">${['สี่เหลี่ยม','หน้าแคบหลังลึก','แปลงมุม'].map(s=>`<option>${s}</option>`).join('')}</select></div>
       ${numField('df-road_width','ถนนหน้าแปลง (เมตร)',0)}
       <div class="form-group"><label class="form-label">ประเภทถนน</label><select id="df-road_type" class="form-control">${['ถนนคอนกรีต','ถนนลาดยาง','ถนนลูกรัง'].map(s=>`<option>${s}</option>`).join('')}</select></div>
-      <div class="form-group"><label class="form-label">เอกสารสิทธิ์</label><select id="df-title_deed" class="form-control">${['โฉนด','น.ส.3 ก','ส.ป.ก.','อื่นๆ'].map(s=>`<option>${s}</option>`).join('')}</select></div>
+      <div class="form-group"><label class="form-label">ประเภทเอกสารสิทธิ์</label><select id="df-title_deed" class="form-control">${['-- ยังไม่ระบุ --','โฉนดที่ดิน (น.ส.4 จ.)','น.ส.4 ข.','น.ส.4 ค.','น.ส.3 ก. (รังวัดแล้ว)','น.ส.3 ข.','น.ส.3','น.ส.2 (ใบจอง)','ส.ค.1','ภ.บ.ท.5','สทก. (สิทธิทำกิน)','คทช.','ที่ดินมือเปล่า','อื่นๆ'].map(s=>`<option>${s}</option>`).join('')}</select></div>
     </div>`,
   'อาคารพาณิชย์': () => `
     <div class="grid grid-cols-3 gap-4">
@@ -1081,6 +1082,7 @@ const DYN_FORMS = {
       ${numField('df-parking','ที่จอดรถ',0)}
       <div class="form-group"><label class="form-label">สภาพอาคาร</label><select id="df-building_condition" class="form-control">${['ดีมาก','ดี','ปานกลาง','ต้องซ่อม'].map(s=>`<option>${s}</option>`).join('')}</select></div>
       <div class="form-group"><label class="form-label">ทำเล</label><input id="df-location_type" class="form-control" placeholder="ติดถนนใหญ่, ใกล้ตลาด"></div>
+      <div class="form-group"><label class="form-label">ประเภทเอกสารสิทธิ์</label><select id="df-title_deed" class="form-control">${['-- ยังไม่ระบุ --','โฉนดที่ดิน (น.ส.4 จ.)','น.ส.4 ข.','น.ส.4 ค.','น.ส.3 ก. (รังวัดแล้ว)','น.ส.3 ข.','น.ส.3','น.ส.2 (ใบจอง)','ส.ค.1','ภ.บ.ท.5','สทก.','คทช.','ที่ดินมือเปล่า','อื่นๆ'].map(s=>`<option>${s}</option>`).join('')}</select></div>
     </div>`,
   'อสังหาริมทรัพย์เพื่อธุรกิจ': () => `
     <div class="grid grid-cols-2 gap-4">
@@ -1141,7 +1143,9 @@ async function submitAddProperty(save = true) {
     village_project: getVal('ap-village'), zone: getVal('ap-zone'), nearby_places: getVal('ap-nearby'),
     sale_price: getNum('ap-price'), appraisal_price: getNum('ap-appraisal'), min_acceptable_price: getNum('ap-minprice'),
     commission_rate: getNum('ap-commrate'), transfer_fee_condition: getVal('ap-transfer'),
-    highlights: getVal('ap-highlights'), drawbacks: getVal('ap-drawbacks'), structure: getVal('ap-structure'), internal_note: getVal('ap-note'),
+    highlights: getVal('ap-highlights'), drawbacks: getVal('ap-drawbacks'), structure: getVal('ap-structure'),
+    title_deed: (document.getElementById('df-title_deed') ? document.getElementById('df-title_deed').value : '') || '',
+    internal_note: getVal('ap-note'),
     assigned_agent_id: getVal('ap-agent'), owner_id: getVal('ap-owner'),
     property_details: details,
     marketing_data: { caption: getVal('ap-caption'), tiktok: getVal('ap-tiktok'), hashtag: getVal('ap-hashtag'), price_highlight: getVal('ap-pricesell') }
@@ -1385,6 +1389,7 @@ async function renderPropertyDetail(params) {
             ${p.highlights?`<div class="p-2 bg-yellow-50 rounded text-xs text-gray-700 mb-2"><strong>จุดเด่น:</strong> ${esc(p.highlights)}</div>`:''}
             ${p.drawbacks?`<div class="p-2 bg-red-50 rounded text-xs text-gray-700 mb-2"><strong>จุดด้อย:</strong> ${esc(p.drawbacks)}</div>`:''}
             ${p.structure?`<div class="p-2 bg-blue-50 rounded text-xs text-gray-700 mb-2"><strong>สิ่งปลูกสร้าง:</strong> ${esc(p.structure)}</div>`:''}
+            ${p.title_deed&&p.title_deed!=='-- ยังไม่ระบุ --'?`<div class="p-2 bg-green-50 rounded text-xs text-gray-700 mb-2"><strong>เอกสารสิทธิ์:</strong> ${esc(p.title_deed)}</div>`:''}
             <div class="grid grid-cols-2 gap-3 mt-2">
               ${infoRow('ราคาขาย', fmtPrice(p.sale_price))}
               ${infoRow('ราคาประเมิน', fmtPrice(p.appraisal_price))}
