@@ -1402,7 +1402,7 @@ async function renderPropertyDetail(params) {
     <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">${icon}</svg>${label}</button>`;
 
   $('main-content').innerHTML = `
-  <div style="max-width:900px">
+  <div style="max-width:100%">
 
     <!-- Header row -->
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
@@ -1431,7 +1431,7 @@ async function renderPropertyDetail(params) {
     </div>
 
     <!-- 2-column layout -->
-    <div style="display:grid;grid-template-columns:1fr 268px;gap:14px;align-items:start">
+    <div style="display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:14px;align-items:start">
 
       <!-- LEFT -->
       <div style="display:flex;flex-direction:column;gap:12px">
@@ -1457,14 +1457,14 @@ async function renderPropertyDetail(params) {
           </div>
 
           <!-- Upload row -->
-          <div style="display:flex;gap:6px;padding:10px 14px 0;flex-wrap:wrap">
-            <div class="img-gallery" id="img-gallery-${p.id}" style="display:flex;flex-wrap:wrap;gap:6px;width:100%">
+          <div style="padding:10px 14px 0">
+            <div class="img-gallery" id="img-gallery-${p.id}">
               ${images.map((img,i)=>{ const src=img.url||img.dataUrl||''; return `
                 <div class="img-thumb">
                   <img src="${src}" alt="${esc(img.caption||'')}" onclick="previewImg('${src}')">
                   <button class="img-del" onclick="deletePropImage(${p.id},${i})" title="ลบรูปนี้">&times;</button>
                 </div>`; }).join('')}
-              <label class="img-add-btn cursor-pointer" style="font-size:10px">
+              <label class="img-add-btn cursor-pointer">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
                 เพิ่มรูป
                 <input type="file" accept="image/*" multiple style="display:none" onchange="uploadPropImages(${p.id},this)">
