@@ -1333,41 +1333,138 @@ async function renderPropertyDetail(params) {
   const p = await api.get('/api/properties/'+(params.id||1));
   const d = p.property_details || {};
 
-  const detailItems = Object.entries(d).filter(([k,v])=>v).map(([k,v])=>`
-    <div><div class="text-xs text-gray-400">${k.replace(/_/g,' ')}</div><div class="font-medium text-sm">${Array.isArray(v)?v.join(', '):v}</div></div>`).join('');
-
   let images = p.images || [];
   if (typeof images === 'string') { try { images = JSON.parse(images); } catch(e) { images = []; } }
 
-  $('main-content').innerHTML = `
-    <div class="space-y-4">
-      <div class="flex items-center gap-3 mb-2">
-        <button onclick="navigate('properties')" class="btn btn-outline btn-sm">← กลับ</button>
-        <button onclick="navigate('edit-property',{id:${p.id}})" class="btn btn-primary btn-sm">แก้ไข</button>
-        <span class="badge badge-navy">${esc(p.property_code)}</span>
-        ${propBadge(p.status)}
-        ${p.zone ? `<span class="badge badge-gold">${esc(p.zone)}</span>` : ''}
-      </div>
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <div class="lg:col-span-2 space-y-4">
+  // Specs จาก property_details
+  const bedrooms  = d.bedrooms  || d.ห้องนอน  || '';
+  const bathrooms = d.bathrooms || d.ห้องน้ำ  || '';
+  const parking   = d.parking   || d.จอดรถ    || '';
+  const floorArea = d.floor_area|| d.พื้นที่ใช้สอย || '';
+  const landArea  = d.land_area || d.ที่ดิน    || '';
+  const floors    = d.floors    || d.ชั้น      || '';
+  const age       = d.age       || d.อายุ     || '';
+  const furniture = d.furniture || d.เฟอร์นิเจอร์ || '';
+  const condition = d.condition || d.สภาพ     || '';
 
-          <!-- Image Gallery -->
-          <div class="bg-white rounded-xl border p-5">
-            <div class="flex items-center justify-between mb-3">
-              <h3 class="text-sm font-semibold">รูปภาพทรัพย์ <span class="text-gray-400 font-normal">(${images.length} รูป)</span></h3>
-              <label class="btn btn-outline btn-sm cursor-pointer">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                อัปโหลดรูป
-                <input type="file" accept="image/*" multiple style="display:none" onchange="uploadPropImages(${p.id},this)">
-              </label>
-            </div>
-            <div class="img-gallery" id="img-gallery-${p.id}">
+  const sqmPrice = (p.sale_price && floorArea) ? Math.round(Number(p.sale_price)/Number(floorArea)).toLocaleString('th-TH') : '';
+
+  // สถานะ badge inline style
+  const statusColor = {
+    'พร้อมขาย': '#22C55E', 'ขาย': '#22C55E',
+    'จองแล้ว':  '#F59E0B',
+    'ขายแล้ว':  '#64748B',
+    'ระงับขาย': '#EF4444',
+    'ให้เช่า':  '#3B82F6',
+  };
+  const sColor = statusColor[p.status] || '#94A3B8';
+
+  // spec chip helper
+  const specChip = (icon, val, lbl) => val ? `
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;padding:10px 6px;gap:3px;border-right:0.5px solid #F1F5F9">
+      <div style="width:28px;height:28px;border-radius:7px;background:#F8FAFC;display:flex;align-items:center;justify-content:center">
+        <svg width="13" height="13" fill="none" stroke="#64748B" stroke-width="1.8" viewBox="0 0 24 24">${icon}</svg>
+      </div>
+      <div style="font-size:14px;font-weight:700;color:#1E293B">${esc(String(val))}</div>
+      <div style="font-size:9px;color:#94A3B8;text-align:center">${lbl}</div>
+    </div>` : '';
+
+  const specsHtml = [
+    specChip('<path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>', bedrooms, 'ห้องนอน'),
+    specChip('<path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>', bathrooms, 'ห้องน้ำ'),
+    specChip('<path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>', parking, 'จอดรถ'),
+    specChip('<rect x="3" y="3" width="18" height="18" rx="2" stroke-linecap="round"/><path stroke-linecap="round" d="M3 9h18M9 21V9"/>', floorArea ? floorArea+' ตร.ม.' : '', 'พื้นที่ใช้สอย'),
+    specChip('<path stroke-linecap="round" stroke-linejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/>', landArea ? landArea+' ตร.วา' : '', 'ที่ดิน'),
+  ].filter(Boolean).join('');
+
+  // kv row helper
+  const kv = (l, v) => v ? `
+    <div style="padding:9px 12px;border-bottom:0.5px solid #F1F5F9;border-right:0.5px solid #F1F5F9">
+      <div style="font-size:9px;color:#94A3B8;text-transform:uppercase;letter-spacing:0.3px;margin-bottom:2px">${l}</div>
+      <div style="font-size:12px;font-weight:500;color:#1E293B">${esc(String(v))}</div>
+    </div>` : `<div style="padding:9px 12px;border-bottom:0.5px solid #F1F5F9;border-right:0.5px solid #F1F5F9"><div style="font-size:9px;color:#94A3B8;text-transform:uppercase;letter-spacing:0.3px;margin-bottom:2px">${l}</div><div style="font-size:12px;color:#CBD5E1">-</div></div>`;
+
+  const kvGreen = (l, v) => v ? `
+    <div style="padding:9px 12px;border-bottom:0.5px solid #F1F5F9;border-right:0.5px solid #F1F5F9">
+      <div style="font-size:9px;color:#94A3B8;text-transform:uppercase;letter-spacing:0.3px;margin-bottom:2px">${l}</div>
+      <div style="font-size:12px;font-weight:500;color:#16A34A">${esc(String(v))}</div>
+    </div>` : '';
+
+  // location chips
+  const locChip = v => v ? `<span style="display:inline-flex;align-items:center;gap:4px;padding:5px 10px;border-radius:8px;background:#F8FAFC;border:0.5px solid #E2E8F0;font-size:11px;color:#475569">${esc(v)}</span>` : '';
+
+  // action button helpers
+  const btnP = (icon, label, onclick) => `<button onclick="${onclick}" style="display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:9px 14px;border-radius:10px;background:#5DB85C;color:#fff;font-size:12px;font-weight:500;border:none;cursor:pointer;margin-bottom:7px">
+    <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">${icon}</svg>${label}</button>`;
+  const btnO = (icon, label, onclick) => `<button onclick="${onclick}" style="display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:9px 14px;border-radius:10px;background:#fff;color:#374151;font-size:12px;font-weight:500;border:0.5px solid #E2E8F0;cursor:pointer;margin-bottom:7px">
+    <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">${icon}</svg>${label}</button>`;
+  const btnR = (icon, label, onclick) => `<button onclick="${onclick}" style="display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:9px 14px;border-radius:10px;background:#FEF2F2;color:#DC2626;font-size:12px;font-weight:500;border:0.5px solid #FECACA;cursor:pointer">
+    <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">${icon}</svg>${label}</button>`;
+
+  $('main-content').innerHTML = `
+  <div style="max-width:900px">
+
+    <!-- Header row -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+      <div>
+        <div style="font-size:11px;color:#94A3B8;margin-bottom:3px">
+          <span style="cursor:pointer;color:#5DB85C" onclick="navigate('properties')">ทรัพย์สิน</span>
+          / ${esc(p.property_type||'')}
+          / <span style="color:#5DB85C">${esc(p.property_code||'')}</span>
+        </div>
+        <div style="font-size:16px;font-weight:700;color:#1E293B">รายละเอียดทรัพย์</div>
+      </div>
+      <div style="display:flex;gap:7px">
+        <button onclick="navigate('properties')" style="display:flex;align-items:center;gap:5px;padding:7px 13px;border-radius:9px;background:#fff;border:0.5px solid #E2E8F0;color:#374151;font-size:11px;font-weight:500;cursor:pointer">
+          <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+          กลับ
+        </button>
+        <button onclick="navigate('edit-property',{id:${p.id}})" style="display:flex;align-items:center;gap:5px;padding:7px 13px;border-radius:9px;background:#fff;border:0.5px solid #E2E8F0;color:#374151;font-size:11px;font-weight:500;cursor:pointer">
+          <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+          แก้ไข
+        </button>
+        <button onclick="showCreateDealModal(${p.id})" style="display:flex;align-items:center;gap:5px;padding:7px 13px;border-radius:9px;background:#5DB85C;border:none;color:#fff;font-size:11px;font-weight:500;cursor:pointer">
+          <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+          สร้างดีล
+        </button>
+      </div>
+    </div>
+
+    <!-- 2-column layout -->
+    <div style="display:grid;grid-template-columns:1fr 268px;gap:14px;align-items:start">
+
+      <!-- LEFT -->
+      <div style="display:flex;flex-direction:column;gap:12px">
+
+        <!-- Hero + Title card -->
+        <div style="background:#fff;border-radius:14px;border:0.5px solid #E2E8F0;overflow:hidden">
+
+          <!-- Hero / gallery -->
+          <div style="position:relative;height:${images.length?'220px':'160px'};background:#1E293B;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px">
+            ${images.length ? `
+              <div id="hero-img-wrap" style="position:absolute;inset:0;overflow:hidden">
+                <img id="hero-img" src="${esc(images[0].url||images[0].dataUrl||'')}" style="width:100%;height:100%;object-fit:cover;cursor:pointer" onclick="previewImg('${esc(images[0].url||images[0].dataUrl||'')}')">
+              </div>
+              <div style="position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:5px">
+                ${images.map((_,i)=>`<div onclick="(function(){var im=document.getElementById('hero-img');im.src='${esc(_.url||_.dataUrl||'')}';im.onclick=function(){previewImg('${esc(_.url||_.dataUrl||'')}')}})()" style="width:${i===0?'16px':'6px'};height:6px;border-radius:3px;background:${i===0?'#fff':'rgba(255,255,255,0.4)'};cursor:pointer"></div>`).join('')}
+              </div>` : `
+              <div style="width:40px;height:40px;border-radius:10px;background:rgba(255,255,255,0.07);display:flex;align-items:center;justify-content:center">
+                <svg width="22" height="22" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+              </div>
+              <div style="font-size:11px;color:rgba(255,255,255,0.25)">ยังไม่มีรูปภาพ</div>`}
+            <span style="position:absolute;top:12px;left:12px;background:${sColor};color:#fff;font-size:10px;font-weight:600;padding:3px 10px;border-radius:20px">${esc(p.status||'')}</span>
+            <span style="position:absolute;top:12px;right:12px;background:rgba(0,0,0,0.4);backdrop-filter:blur(4px);color:rgba(255,255,255,0.8);font-size:10px;padding:3px 10px;border-radius:20px">${images.length} รูป</span>
+          </div>
+
+          <!-- Upload row -->
+          <div style="display:flex;gap:6px;padding:10px 14px 0;flex-wrap:wrap">
+            <div class="img-gallery" id="img-gallery-${p.id}" style="display:flex;flex-wrap:wrap;gap:6px;width:100%">
               ${images.map((img,i)=>{ const src=img.url||img.dataUrl||''; return `
                 <div class="img-thumb">
                   <img src="${src}" alt="${esc(img.caption||'')}" onclick="previewImg('${src}')">
                   <button class="img-del" onclick="deletePropImage(${p.id},${i})" title="ลบรูปนี้">&times;</button>
                 </div>`; }).join('')}
-              <label class="img-add-btn cursor-pointer">
+              <label class="img-add-btn cursor-pointer" style="font-size:10px">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
                 เพิ่มรูป
                 <input type="file" accept="image/*" multiple style="display:none" onchange="uploadPropImages(${p.id},this)">
@@ -1375,55 +1472,175 @@ async function renderPropertyDetail(params) {
             </div>
           </div>
 
-          <!-- Main Info -->
-          <div class="bg-white rounded-xl border p-5">
-            <div class="flex items-start justify-between mb-2">
+          <!-- Title block -->
+          <div style="padding:14px 16px 14px">
+            <div style="font-size:16px;font-weight:600;color:#1E293B;margin-bottom:3px;line-height:1.35">${esc(p.title)}</div>
+            <div style="font-size:10px;color:#94A3B8;margin-bottom:12px">${esc(p.property_code)} · บันทึก ${fmtDate(p.created_at||p.date_added||'')}</div>
+
+            <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:12px">
               <div>
-                <h2 class="text-xl font-bold font-semibold">${esc(p.title)}</h2>
-                <div class="text-sm text-gray-500 mt-1">${esc(p.property_type)} · ${esc(p.property_subtype||'')} · ${esc(p.province||'')} ${esc(p.district||'')}</div>
-                ${p.village_project?`<div class="text-xs text-gray-400 mt-0.5">หมู่บ้าน/โครงการ: ${esc(p.village_project)}</div>`:''}
-                ${p.nearby_places?`<div class="text-xs text-gray-400 mt-0.5">ใกล้เคียง: ${esc(p.nearby_places)}</div>`:''}
+                <div style="font-size:9px;color:#94A3B8;margin-bottom:2px">ราคาขาย</div>
+                <div style="font-size:22px;font-weight:700;color:#1E293B;line-height:1">${Number(p.sale_price||0).toLocaleString('th-TH')} ฿</div>
+                <div style="font-size:11px;color:#5DB85C;font-weight:600;margin-top:4px">ค่านายหน้า ${Number(p.commission_amount||0).toLocaleString('th-TH')} ฿ (${p.commission_rate||0}%)</div>
               </div>
-              <div class="text-2xl font-bold font-semibold">${fmtPrice(p.sale_price)}</div>
+              ${sqmPrice ? `<div style="text-align:right">
+                <div style="font-size:9px;color:#94A3B8;margin-bottom:2px">ราคาต่อ ตร.ม.</div>
+                <div style="font-size:15px;font-weight:600;color:#1E293B">${sqmPrice} ฿</div>
+              </div>` : ''}
             </div>
-            ${p.highlights?`<div class="p-2 bg-yellow-50 rounded text-xs text-gray-700 mb-2"><strong>จุดเด่น:</strong> ${esc(p.highlights)}</div>`:''}
-            ${p.drawbacks?`<div class="p-2 bg-red-50 rounded text-xs text-gray-700 mb-2"><strong>จุดด้อย:</strong> ${esc(p.drawbacks)}</div>`:''}
-            ${p.structure?`<div class="p-2 bg-blue-50 rounded text-xs text-gray-700 mb-2"><strong>สิ่งปลูกสร้าง:</strong> ${esc(p.structure)}</div>`:''}
-            ${p.title_deed&&p.title_deed!=='-- ยังไม่ระบุ --'?`<div class="p-2 bg-green-50 rounded text-xs text-gray-700 mb-2"><strong>เอกสารสิทธิ์:</strong> ${esc(p.title_deed)}</div>`:''}
-            <div class="grid grid-cols-2 gap-3 mt-2">
-              ${infoRow('ราคาขาย', fmtPrice(p.sale_price))}
-              ${infoRow('ราคาประเมิน', fmtPrice(p.appraisal_price))}
-              ${p.min_acceptable_price ? infoRow('ราคาต่ำสุดที่รับได้', fmtPrice(p.min_acceptable_price)) : ''}
-              ${infoRow('ค่านายหน้า', fmtNum(p.commission_amount)+' ฿ ('+p.commission_rate+'%)')}
-              ${infoRow('เงื่อนไขโอน', p.transfer_fee_condition)}
-              ${infoRow('โซนพื้นที่', p.zone)}
-              ${infoRow('เจ้าของ', p.owner_name)}
-              ${infoRow('ผู้ดูแล', p.agent_name)}
-              ${p.marketing_data?.price_highlight ? infoRow('จุดขายด้านราคา', p.marketing_data.price_highlight) : ''}
+
+            <div style="display:flex;flex-wrap:wrap;gap:5px">
+              ${p.listing_type?`<span style="font-size:10px;padding:3px 9px;border-radius:20px;background:#ECFDF5;color:#166534;border:0.5px solid #BBF7D0;font-weight:500">${esc(p.listing_type)}</span>`:''}
+              ${p.property_type?`<span style="font-size:10px;padding:3px 9px;border-radius:20px;background:#EFF6FF;color:#1D4ED8;font-weight:500">${esc(p.property_type)}</span>`:''}
+              ${p.property_subtype?`<span style="font-size:10px;padding:3px 9px;border-radius:20px;background:#F1F5F9;color:#475569;font-weight:500">${esc(p.property_subtype)}</span>`:''}
+              ${p.province||p.district?`<span style="font-size:10px;padding:3px 9px;border-radius:20px;background:#F1F5F9;color:#475569;font-weight:500">${[p.province,p.district].filter(Boolean).map(esc).join(' · ')}</span>`:''}
+              ${p.title_deed&&p.title_deed!=='-- ยังไม่ระบุ --'?`<span style="font-size:10px;padding:3px 9px;border-radius:20px;background:#F5F3FF;color:#5B21B6;font-weight:500">${esc(p.title_deed)}</span>`:''}
             </div>
           </div>
-          ${detailItems ? `<div class="bg-white rounded-xl border p-5"><h3 class="text-sm font-semibold mb-3">รายละเอียดทรัพย์</h3><div class="grid grid-cols-3 gap-3">${detailItems}</div></div>` : ''}
-          <!-- Deals -->
-          <div class="bg-white rounded-xl border p-5">
-            <div class="flex items-center justify-between mb-3">
-              <h3 class="text-sm font-semibold">ดีลที่เกี่ยวข้อง (${p.deals.length})</h3>
-              <button onclick="showCreateDealModal(${p.id})" class="btn btn-gold btn-sm">+ สร้างดีล</button>
+
+          <!-- Specs strip -->
+          ${specsHtml ? `<div style="display:flex;border-top:0.5px solid #F1F5F9">${specsHtml}<div style="flex:0 0 0"></div></div>` : ''}
+        </div>
+
+        <!-- Info card -->
+        <div style="background:#fff;border-radius:14px;border:0.5px solid #E2E8F0;overflow:hidden">
+
+          <!-- ข้อมูลทั่วไป -->
+          <div style="padding:14px 16px">
+            <div style="font-size:10px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:10px">ข้อมูลทั่วไป</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;border:0.5px solid #F1F5F9;border-radius:10px;overflow:hidden">
+              ${kv('ประเภทย่อย', p.property_subtype)}
+              ${kv('จำนวนชั้น', floors ? floors+' ชั้น' : '')}
+              ${kv('สภาพทรัพย์', condition)}
+              ${kv('อายุ', age ? age+' ปี' : '')}
+              ${kv('เฟอร์นิเจอร์', furniture)}
+              ${kvGreen('เอกสารสิทธิ์', p.title_deed&&p.title_deed!=='-- ยังไม่ระบุ --'?p.title_deed:'')||kv('เอกสารสิทธิ์','')}
+              ${kv('ราคาประเมิน', p.appraisal_price ? Number(p.appraisal_price).toLocaleString('th-TH')+' ฿' : '')}
+              ${kv('เงื่อนไขโอน', p.transfer_fee_condition)}
             </div>
-            ${p.deals.length ? `<table><thead><tr><th>รหัส</th><th>ลูกค้า</th><th>สถานะ</th><th>ราคา</th></tr></thead><tbody>${p.deals.map(d=>`<tr><td class="text-xs font-semibold">${esc(d.deal_code)}</td><td>${esc(d.customer_name)}</td><td>${custBadge(d.status)}</td><td class="font-bold text-sm">${fmtNum(d.sale_price)} ฿</td></tr>`).join('')}</tbody></table>` : '<p class="text-xs text-gray-400">ยังไม่มีดีล</p>'}
+          </div>
+
+          <!-- ที่ตั้ง -->
+          <div style="padding:14px 16px;border-top:0.5px solid #F8FAFC">
+            <div style="font-size:10px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:10px">ที่ตั้ง</div>
+            <div style="display:flex;flex-wrap:wrap;gap:6px">
+              ${locChip(p.province ? 'จ.'+p.province : '')}
+              ${locChip(p.district ? 'อ.'+p.district : '')}
+              ${locChip(p.subdistrict ? 'ต.'+p.subdistrict : '')}
+              ${locChip(p.village_project)}
+              ${locChip(p.zone ? 'โซน: '+p.zone : '')}
+            </div>
+            ${p.nearby_places?`<div style="font-size:11px;color:#64748B;margin-top:8px">ใกล้เคียง: ${esc(p.nearby_places)}</div>`:''}
+          </div>
+
+          <!-- จุดเด่น/ด้อย -->
+          ${p.highlights||p.drawbacks ? `
+          <div style="padding:14px 16px;border-top:0.5px solid #F8FAFC">
+            <div style="font-size:10px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:10px">จุดเด่นและจุดด้อย</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+              ${p.highlights?`<div style="border-radius:10px;padding:11px 13px;background:#F0FDF4;border:0.5px solid #BBF7D0">
+                <div style="font-size:9px;font-weight:700;color:#166534;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;display:flex;align-items:center;gap:5px"><div style="width:6px;height:6px;border-radius:50%;background:#22C55E"></div>จุดเด่น</div>
+                <div style="font-size:11px;color:#374151;line-height:1.65">${esc(p.highlights)}</div>
+              </div>`:''}
+              ${p.drawbacks?`<div style="border-radius:10px;padding:11px 13px;background:#FFFBEB;border:0.5px solid #FDE68A">
+                <div style="font-size:9px;font-weight:700;color:#92400E;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;display:flex;align-items:center;gap:5px"><div style="width:6px;height:6px;border-radius:50%;background:#F59E0B"></div>จุดด้อย</div>
+                <div style="font-size:11px;color:#374151;line-height:1.65">${esc(p.drawbacks)}</div>
+              </div>`:''}
+            </div>
+          </div>` : ''}
+
+          <!-- รายละเอียดเพิ่มเติม -->
+          ${p.structure||p.description ? `
+          <div style="padding:14px 16px;border-top:0.5px solid #F8FAFC">
+            <div style="font-size:10px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:8px">รายละเอียดเพิ่มเติม</div>
+            <div style="font-size:12px;color:#475569;line-height:1.75">${esc(p.structure||p.description||'')}</div>
+          </div>` : ''}
+        </div>
+
+        <!-- Deals card -->
+        <div style="background:#fff;border-radius:14px;border:0.5px solid #E2E8F0;overflow:hidden">
+          <div style="padding:14px 16px;display:flex;align-items:center;justify-content:space-between">
+            <div style="font-size:10px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:0.6px">ดีลที่เกี่ยวข้อง (${p.deals.length})</div>
+            <button onclick="showCreateDealModal(${p.id})" style="display:flex;align-items:center;gap:5px;padding:6px 12px;border-radius:8px;background:#5DB85C;color:#fff;font-size:11px;font-weight:500;border:none;cursor:pointer">
+              <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+              สร้างดีล
+            </button>
+          </div>
+          <div style="padding:0 4px 12px">
+            ${p.deals.length ? `<table style="width:100%"><thead><tr><th>รหัส</th><th>ลูกค้า</th><th>สถานะ</th><th>ราคา</th></tr></thead><tbody>${p.deals.map(dl=>`<tr><td style="font-size:11px;font-weight:600">${esc(dl.deal_code)}</td><td>${esc(dl.customer_name)}</td><td>${custBadge(dl.status)}</td><td style="font-weight:700;font-size:12px">${fmtNum(dl.sale_price)} ฿</td></tr>`).join('')}</tbody></table>` : '<p style="font-size:12px;color:#94A3B8;padding:8px 14px">ยังไม่มีดีล</p>'}
           </div>
         </div>
-        <div class="space-y-4">
-          <div class="bg-white rounded-xl border p-5">
-            <h3 class="text-sm font-semibold mb-3">เปลี่ยนสถานะ</h3>
-            <div class="space-y-2">${['พร้อมขาย','จองแล้ว','ขายแล้ว','ระงับขาย'].map(s=>`<button onclick="api.patch('/api/properties/${p.id}/status',{status:'${s}'}).then(()=>{toast('อัปเดต: ${s}');navigate('property-detail',{id:${p.id}})})" class="btn btn-sm w-full text-left ${p.status===s?'btn-primary':'btn-outline'}">${s}</button>`).join('')}</div>
-          </div>
-          ${p.internal_note?`<div class="bg-yellow-50 rounded-xl border border-yellow-200 p-4"><div class="text-xs font-semibold text-yellow-700 mb-1">หมายเหตุภายใน</div><div class="text-xs text-gray-700">${esc(p.internal_note)}</div></div>`:''}
-          ${p.marketing_data?.caption?`<div class="bg-white rounded-xl border p-4"><div class="text-xs font-semibold mb-2">Caption สำหรับโพสต์</div><div class="text-xs text-gray-700 leading-relaxed">${esc(p.marketing_data.caption)}</div></div>`:''}
-          ${p.marketing_data?.hashtag?`<div class="bg-white rounded-xl border p-4"><div class="text-xs font-semibold mb-1">Hashtag</div><div class="text-xs text-gray-500">${esc(p.marketing_data.hashtag)}</div></div>`:''}
-          ${p.marketing_data?.tiktok?`<div class="bg-white rounded-xl border p-4"><div class="text-xs font-semibold mb-1">Script TikTok</div><div class="text-xs text-gray-700 leading-relaxed">${esc(p.marketing_data.tiktok)}</div></div>`:''}
-        </div>
+
       </div>
-    </div>`;
+
+      <!-- RIGHT -->
+      <div style="display:flex;flex-direction:column;gap:12px">
+
+        <!-- เจ้าของ -->
+        <div style="background:#fff;border-radius:14px;border:0.5px solid #E2E8F0;padding:16px">
+          <div style="font-size:10px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:12px">เจ้าของทรัพย์</div>
+          <div style="display:flex;align-items:center;gap:11px;margin-bottom:12px">
+            <div style="width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#5DB85C,#4A9E49);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:16px;flex-shrink:0">
+              ${(p.owner_name||'?').charAt(0).replace(/[ก-ฮ]/u, s => s)}
+            </div>
+            <div>
+              <div style="font-size:13px;font-weight:600;color:#1E293B">${esc(p.owner_name||'-')}</div>
+              <div style="font-size:10px;color:#94A3B8;margin-top:1px">เจ้าของ · ฝากขาย</div>
+            </div>
+          </div>
+          ${p.owner_phone ? `<div style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:9px;border:0.5px solid #E2E8F0;background:#F8FAFC;margin-bottom:6px">
+            <div style="width:28px;height:28px;border-radius:7px;background:#ECFDF5;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <svg width="12" height="12" fill="none" stroke="#16A34A" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+            </div>
+            <div>
+              <div style="font-size:9px;color:#94A3B8">โทรศัพท์</div>
+              <div style="font-size:11px;font-weight:600;color:#1E293B">${esc(p.owner_phone)}</div>
+            </div>
+          </div>` : ''}
+          ${p.agent_name ? `<div style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:9px;border:0.5px solid #E2E8F0;background:#F8FAFC">
+            <div style="width:28px;height:28px;border-radius:7px;background:#EFF6FF;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <svg width="12" height="12" fill="none" stroke="#1D4ED8" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+            </div>
+            <div>
+              <div style="font-size:9px;color:#94A3B8">ผู้ดูแล</div>
+              <div style="font-size:11px;font-weight:600;color:#1E293B">${esc(p.agent_name)}</div>
+            </div>
+          </div>` : ''}
+        </div>
+
+        <!-- เปลี่ยนสถานะ + actions -->
+        <div style="background:#fff;border-radius:14px;border:0.5px solid #E2E8F0;padding:14px 16px">
+          <div style="font-size:10px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:10px">การดำเนินการ</div>
+          ${btnP('<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>', 'สร้างดีล / นัดหมาย', `showCreateDealModal(${p.id})`)}
+          ${btnO('<path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>', 'แก้ไขข้อมูล', `navigate('edit-property',{id:${p.id}})`)}
+          <div style="margin-bottom:7px">
+            <select onchange="if(this.value){api.patch('/api/properties/${p.id}/status',{status:this.value}).then(()=>{toast('อัปเดตสถานะ: '+this.value);navigate('property-detail',{id:${p.id}})})}" style="width:100%;padding:9px 12px;border-radius:10px;border:0.5px solid #E2E8F0;font-size:12px;color:#374151;background:#fff;cursor:pointer">
+              <option value="">เปลี่ยนสถานะ...</option>
+              ${['พร้อมขาย','จองแล้ว','ขายแล้ว','ระงับขาย'].map(s=>`<option value="${s}" ${p.status===s?'selected':''}>${s}</option>`).join('')}
+            </select>
+          </div>
+          ${btnR('<path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>', 'ลบทรัพย์', `if(confirm('ยืนยันลบทรัพย์นี้?')){api.delete('/api/properties/${p.id}').then(()=>{toast('ลบแล้ว');navigate('properties')}).catch(e=>toast(e.message,'error'))}`)}
+        </div>
+
+        <!-- หมายเหตุ -->
+        ${p.internal_note?`
+        <div style="background:#FFFBEB;border-radius:14px;border:0.5px solid #FDE68A;padding:14px 16px">
+          <div style="font-size:10px;font-weight:700;color:#92400E;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px">หมายเหตุภายใน</div>
+          <div style="font-size:12px;color:#374151;line-height:1.65">${esc(p.internal_note)}</div>
+        </div>` : ''}
+
+        <!-- Marketing -->
+        ${p.marketing_data?.caption||p.marketing_data?.hashtag||p.marketing_data?.tiktok ? `
+        <div style="background:#fff;border-radius:14px;border:0.5px solid #E2E8F0;padding:14px 16px">
+          <div style="font-size:10px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:10px">ข้อมูลการตลาด</div>
+          ${p.marketing_data?.caption?`<div style="margin-bottom:10px"><div style="font-size:10px;color:#94A3B8;margin-bottom:4px">Caption</div><div style="font-size:11px;color:#374151;line-height:1.65;background:#F8FAFC;border-radius:8px;padding:8px 10px">${esc(p.marketing_data.caption)}</div></div>`:''}
+          ${p.marketing_data?.hashtag?`<div style="margin-bottom:10px"><div style="font-size:10px;color:#94A3B8;margin-bottom:4px">Hashtag</div><div style="font-size:11px;color:#5B21B6">${esc(p.marketing_data.hashtag)}</div></div>`:''}
+          ${p.marketing_data?.tiktok?`<div><div style="font-size:10px;color:#94A3B8;margin-bottom:4px">Script TikTok</div><div style="font-size:11px;color:#374151;line-height:1.65">${esc(p.marketing_data.tiktok)}</div></div>`:''}
+        </div>` : ''}
+
+      </div>
+    </div>
+  </div>`;
 }
 
 // ── Image upload via ImgBB (client-side, ไม่ผ่าน GAS) ─────────
