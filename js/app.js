@@ -1440,7 +1440,7 @@ async function renderPropertyDetail(params) {
         <div style="background:#fff;border-radius:14px;border:0.5px solid #E2E8F0;overflow:hidden">
 
           <!-- Hero / gallery -->
-          <div style="position:relative;height:${images.length?'220px':'160px'};background:#1E293B;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px">
+          <div style="position:relative;width:100%;aspect-ratio:16/7;background:#1E293B;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;overflow:hidden">
             ${images.length ? `
               <div id="hero-img-wrap" style="position:absolute;inset:0;overflow:hidden">
                 <img id="hero-img" src="${esc(images[0].url||images[0].dataUrl||'')}" style="width:100%;height:100%;object-fit:cover;cursor:pointer" onclick="previewImg('${esc(images[0].url||images[0].dataUrl||'')}')">
