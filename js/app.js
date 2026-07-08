@@ -895,6 +895,7 @@ async function renderAddProperty() {
               </select>
             </div>
             <div class="form-group col-span-2"><label class="form-label">สถานที่ใกล้เคียง</label><input id="ap-nearby" class="form-control" placeholder="เช่น ห้างสรรพสินค้า, โรงพยาบาล, BIG C"></div>
+            <div class="form-group col-span-2"><label class="form-label">ลิงก์ Google Maps</label><input id="ap-mapurl" class="form-control" placeholder="https://maps.google.com/..."></div>
             <div class="form-group">
               <label class="form-label">ผู้ดูแลทรัพย์</label>
               <select id="ap-agent" class="form-control"><option value="">-- เลือก --</option>${users.map(u=>`<option value="${u.id}">${u.name}</option>`).join('')}</select>
@@ -1140,7 +1141,7 @@ async function submitAddProperty(save = true) {
     property_type: type, property_subtype: getVal('ap-subtype'), title,
     status: save ? getVal('ap-status') : 'ระงับขาย',
     province: getVal('ap-province'), district: getVal('ap-district'),
-    village_project: getVal('ap-village'), zone: getVal('ap-zone'), nearby_places: getVal('ap-nearby'),
+    village_project: getVal('ap-village'), zone: getVal('ap-zone'), nearby_places: getVal('ap-nearby'), map_url: getVal('ap-mapurl'),
     sale_price: getNum('ap-price'), appraisal_price: getNum('ap-appraisal'), min_acceptable_price: getNum('ap-minprice'),
     commission_rate: getNum('ap-commrate'), transfer_fee_condition: getVal('ap-transfer'),
     highlights: getVal('ap-highlights'), drawbacks: getVal('ap-drawbacks'), structure: getVal('ap-structure'),
@@ -1213,6 +1214,7 @@ async function renderEditProperty(params) {
               </select>
             </div>
             <div class="form-group col-span-2"><label class="form-label">สถานที่ใกล้เคียง</label><input id="ep-nearby" class="form-control" value="${esc(p.nearby_places||'')}"></div>
+            <div class="form-group col-span-2"><label class="form-label">ลิงก์ Google Maps</label><input id="ep-mapurl" class="form-control" placeholder="https://maps.google.com/..." value="${esc(p.map_url||'')}"></div>
             <div class="form-group">
               <label class="form-label">ผู้ดูแลทรัพย์</label>
               <select id="ep-agent" class="form-control">
@@ -1311,7 +1313,7 @@ async function submitEditProperty(id) {
     title,
     property_type: getVal('ep-type'), property_subtype: getVal('ep-subtype'),
     province: getVal('ep-province'), district: getVal('ep-district'),
-    village_project: getVal('ep-village'), zone: getVal('ep-zone'), nearby_places: getVal('ep-nearby'),
+    village_project: getVal('ep-village'), zone: getVal('ep-zone'), nearby_places: getVal('ep-nearby'), map_url: getVal('ep-mapurl'),
     status: getVal('ep-status'), assigned_agent_id: getVal('ep-agent'), owner_id: getVal('ep-owner'),
     sale_price: getNum('ep-price'), appraisal_price: getNum('ep-appraisal'), min_acceptable_price: getNum('ep-minprice'),
     commission_rate: getNum('ep-commrate'), transfer_fee_condition: getVal('ep-transfer'),
@@ -1439,38 +1441,43 @@ async function renderPropertyDetail(params) {
         <!-- Hero + Title card -->
         <div style="background:#fff;border-radius:14px;border:0.5px solid #E2E8F0;overflow:hidden">
 
-          <!-- Hero / gallery -->
-          <div style="position:relative;width:100%;aspect-ratio:16/7;background:#1E293B;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;overflow:hidden">
+          <!-- Hero image with carousel -->
+          <div id="hero-wrap-${p.id}" style="position:relative;width:100%;height:320px;background:#1E293B;overflow:hidden;display:flex;align-items:center;justify-content:center;user-select:none">
             ${images.length ? `
-              <div id="hero-img-wrap" style="position:absolute;inset:0;overflow:hidden">
-                <img id="hero-img" src="${esc(images[0].url||images[0].dataUrl||'')}" style="width:100%;height:100%;object-fit:cover;cursor:pointer" onclick="previewImg('${esc(images[0].url||images[0].dataUrl||'')}')">
-              </div>
-              <div style="position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:5px">
-                ${images.map((_,i)=>`<div onclick="(function(){var im=document.getElementById('hero-img');im.src='${esc(_.url||_.dataUrl||'')}';im.onclick=function(){previewImg('${esc(_.url||_.dataUrl||'')}')}})()" style="width:${i===0?'16px':'6px'};height:6px;border-radius:3px;background:${i===0?'#fff':'rgba(255,255,255,0.4)'};cursor:pointer"></div>`).join('')}
-              </div>` : `
-              <div style="width:40px;height:40px;border-radius:10px;background:rgba(255,255,255,0.07);display:flex;align-items:center;justify-content:center">
-                <svg width="22" height="22" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-              </div>
-              <div style="font-size:11px;color:rgba(255,255,255,0.25)">ยังไม่มีรูปภาพ</div>`}
-            <span style="position:absolute;top:12px;left:12px;background:${sColor};color:#fff;font-size:10px;font-weight:600;padding:3px 10px;border-radius:20px">${esc(p.status||'')}</span>
-            <span style="position:absolute;top:12px;right:12px;background:rgba(0,0,0,0.4);backdrop-filter:blur(4px);color:rgba(255,255,255,0.8);font-size:10px;padding:3px 10px;border-radius:20px">${images.length} รูป</span>
+              <img id="hero-img" src="${esc(images[0].url||images[0].dataUrl||'')}" style="width:100%;height:100%;object-fit:cover;cursor:pointer" onclick="previewImg(this.src)">
+              ${images.length > 1 ? `
+              <button onclick="_heroNav(${p.id},-1)" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,0.4);backdrop-filter:blur(4px);border:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;z-index:2">&#8249;</button>
+              <button onclick="_heroNav(${p.id},1)" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,0.4);backdrop-filter:blur(4px);border:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;z-index:2">&#8250;</button>
+              <div style="position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:5px" id="hero-dots-${p.id}">
+                ${images.map((_,i)=>`<div class="hero-dot-${p.id}" style="width:${i===0?'16px':'6px'};height:6px;border-radius:3px;background:${i===0?'#fff':'rgba(255,255,255,0.4)'};transition:all 0.2s"></div>`).join('')}
+              </div>` : ''}
+            ` : `
+              <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+                <div style="width:40px;height:40px;border-radius:10px;background:rgba(255,255,255,0.07);display:flex;align-items:center;justify-content:center">
+                  <svg width="22" height="22" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                </div>
+                <div style="font-size:11px;color:rgba(255,255,255,0.25)">ยังไม่มีรูปภาพ</div>
+              </div>`}
+            <span style="position:absolute;top:12px;left:12px;background:${sColor};color:#fff;font-size:10px;font-weight:600;padding:3px 10px;border-radius:20px;z-index:3">${esc(p.status||'')}</span>
+            <span style="position:absolute;top:12px;right:12px;background:rgba(0,0,0,0.4);backdrop-filter:blur(4px);color:rgba(255,255,255,0.8);font-size:10px;padding:3px 10px;border-radius:20px;z-index:3">${images.length} รูป</span>
           </div>
 
-          <!-- Upload row -->
-          <div style="padding:10px 14px 0">
-            <div class="img-gallery" id="img-gallery-${p.id}">
-              ${images.map((img,i)=>{ const src=img.url||img.dataUrl||''; return `
-                <div class="img-thumb">
-                  <img src="${src}" alt="${esc(img.caption||'')}" onclick="previewImg('${src}')">
-                  <button class="img-del" onclick="deletePropImage(${p.id},${i})" title="ลบรูปนี้">&times;</button>
-                </div>`; }).join('')}
-              <label class="img-add-btn cursor-pointer">
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                เพิ่มรูป
-                <input type="file" accept="image/*" multiple style="display:none" onchange="uploadPropImages(${p.id},this)">
-              </label>
-            </div>
+          <!-- Thumbnail strip -->
+          <div style="display:flex;gap:6px;overflow-x:auto;padding:10px 14px;scrollbar-width:none;-webkit-overflow-scrolling:touch" id="img-gallery-${p.id}">
+            ${images.map((img,i)=>{ const src=esc(img.url||img.dataUrl||''); return `
+              <div style="position:relative;flex-shrink:0" class="prop-thumb-wrap">
+                <div class="prop-thumb" onclick="_heroSetIdx(${p.id},${i})" style="width:80px;height:60px;border-radius:8px;overflow:hidden;cursor:pointer;border:2px solid ${i===0?'#5DB85C':'transparent'};flex-shrink:0">
+                  <img src="${src}" style="width:100%;height:100%;object-fit:cover">
+                </div>
+                <button onclick="deletePropImage(${p.id},${i})" style="position:absolute;top:2px;right:2px;width:18px;height:18px;background:rgba(0,0,0,0.55);border:none;border-radius:50%;color:#fff;font-size:11px;line-height:1;cursor:pointer;display:none" class="prop-del-btn">&times;</button>
+              </div>`; }).join('')}
+            <label style="width:80px;height:60px;border-radius:8px;border:1.5px dashed #CBD5E1;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;color:#94A3B8;font-size:10px;gap:3px;flex-shrink:0;background:transparent">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+              เพิ่มรูป
+              <input type="file" accept="image/*" multiple style="display:none" onchange="uploadPropImages(${p.id},this)">
+            </label>
           </div>
+          <style>.prop-thumb-wrap:hover .prop-del-btn{display:block!important}.prop-thumb-wrap:hover .prop-thumb{opacity:0.9}</style>
 
           <!-- Title block -->
           <div style="padding:14px 16px 14px">
@@ -1522,7 +1529,13 @@ async function renderPropertyDetail(params) {
 
           <!-- ที่ตั้ง -->
           <div style="padding:14px 16px;border-top:0.5px solid #F8FAFC">
-            <div style="font-size:10px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:10px">ที่ตั้ง</div>
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+              <div style="font-size:10px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:0.6px">ที่ตั้ง</div>
+              ${p.map_url ? `<a href="${esc(p.map_url)}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:8px;background:#EFF6FF;border:0.5px solid #BFDBFE;color:#1D4ED8;font-size:11px;font-weight:500;text-decoration:none">
+                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                เปิด Google Maps
+              </a>` : ''}
+            </div>
             <div style="display:flex;flex-wrap:wrap;gap:6px">
               ${locChip(p.province ? 'จ.'+p.province : '')}
               ${locChip(p.district ? 'อ.'+p.district : '')}
@@ -1641,6 +1654,48 @@ async function renderPropertyDetail(params) {
       </div>
     </div>
   </div>`;
+  // init carousel after DOM ready
+  if (images.length > 1) {
+    const srcs = images.map(img => img.url||img.dataUrl||'');
+    setTimeout(() => _initHeroCarousel(p.id, srcs), 0);
+  }
+}
+
+// ── Hero carousel navigation ───────────────────────────────────
+let _heroIdx = 0;
+let _heroImgs = [];
+window._heroNav = function(propId, dir) {
+  if (!_heroImgs.length) return;
+  _heroIdx = (_heroIdx + dir + _heroImgs.length) % _heroImgs.length;
+  _heroSetIdx(propId, _heroIdx);
+};
+function _heroSetIdx(propId, idx) {
+  _heroIdx = idx;
+  const img = document.getElementById('hero-img');
+  if (img) { img.src = _heroImgs[idx]; img.onclick = () => previewImg(_heroImgs[idx]); }
+  // update dots
+  document.querySelectorAll('.hero-dot-'+propId).forEach((d,i) => {
+    d.style.width = i===idx ? '16px' : '6px';
+    d.style.background = i===idx ? '#fff' : 'rgba(255,255,255,0.4)';
+  });
+  // update thumb borders
+  document.querySelectorAll('.prop-thumb').forEach((t,i) => {
+    t.style.borderColor = i===idx ? '#5DB85C' : 'transparent';
+  });
+}
+// init carousel after render
+function _initHeroCarousel(propId, imgs) {
+  _heroIdx = 0;
+  _heroImgs = imgs;
+  // swipe support
+  const wrap = document.getElementById('hero-wrap-'+propId);
+  if (!wrap) return;
+  let tx = 0;
+  wrap.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, {passive:true});
+  wrap.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - tx;
+    if (Math.abs(dx) > 40) _heroNav(propId, dx < 0 ? 1 : -1);
+  }, {passive:true});
 }
 
 // ── Image upload via ImgBB (client-side, ไม่ผ่าน GAS) ─────────
