@@ -17,13 +17,13 @@ function addMissingColumns() {
   // คอลัมน์ที่ต้องการทั้งหมด ตามลำดับใหม่
   const required = [
     'id','property_code','title','property_type','property_subtype',
-    'province','district','village_project','zone','nearby_places',
+    'province','district','village_project','zone','nearby_places','map_url',
     'sale_price','appraisal_price','min_acceptable_price',
     'commission_rate','commission_amount','transfer_fee_condition',
     'bedrooms','bathrooms','area','floor',
     'status','agent_name','owner_id',
     'highlights','drawbacks','structure','internal_note',
-    'images','property_details','marketing_data','created_at'
+    'images','property_details','marketing_data','title_deed','created_at'
   ];
 
   required.forEach(col => {
