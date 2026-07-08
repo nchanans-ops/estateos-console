@@ -249,7 +249,7 @@ function pageHeader(title, subtitle, actionsHtml = '') {
         <div style="width:4px;height:28px;background:linear-gradient(180deg,#5DB85C,#4A9E49);border-radius:4px;flex-shrink:0"></div>
         <h2 style="font-size:26px;font-weight:800;color:#1A1A3A;letter-spacing:-0.5px;line-height:1">${title}</h2>
       </div>
-      <p style="font-size:13px;color:#94A3B8;margin-left:14px">${subtitle}</p>
+      <p style="font-size:17px;color:#94A3B8;margin-left:14px">${subtitle}</p>
     </div>
     ${actionsHtml ? `<div style="display:flex;align-items:center;gap:8px">${actionsHtml}</div>` : ''}
   </div>`;
@@ -556,18 +556,18 @@ async function renderCustomerDetail(params) {
           <div class="bg-white rounded-xl border p-5">
             <div class="flex items-center justify-between mb-3">
               <h3 class="text-sm font-semibold">ดีลที่เกี่ยวข้อง (${c.deals.length})</h3>
-              <button onclick="navigate('pipeline')" class="btn btn-xs btn-outline" style="font-size:11px">ดูทั้งหมดใน Pipeline</button>
+              <button onclick="navigate('pipeline')" class="btn btn-xs btn-outline" style="font-size:15px">ดูทั้งหมดใน Pipeline</button>
             </div>
             ${c.deals.length ? c.deals.map(d=>`
               <div class="p-3 rounded-xl mb-2 cursor-pointer border border-transparent hover:border-primary-200 hover:bg-primary-50 transition-all"
                 style="background:#F8FAFC" onclick="showDealDetail(${d.id})">
                 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
-                  <span style="font-size:11px;font-weight:700;color:#5DB85C">${esc(d.deal_code)}</span>
+                  <span style="font-size:15px;font-weight:700;color:#5DB85C">${esc(d.deal_code)}</span>
                   ${custBadge(d.status)}
                 </div>
-                <div style="font-size:11px;color:#64748B">${esc(d.property_title||'-')}</div>
-                <div style="font-size:13px;font-weight:700;color:#0F172A;margin-top:4px">${fmtNum(d.sale_price)} ฿</div>
-              </div>`).join('') : '<p class="text-xs text-gray-400">ยังไม่มีดีล — <button onclick="navigate(\'pipeline\')" style="background:none;border:none;color:#5DB85C;cursor:pointer;font-size:12px;padding:0">สร้างดีลใน Pipeline</button></p>'}
+                <div style="font-size:15px;color:#64748B">${esc(d.property_title||'-')}</div>
+                <div style="font-size:17px;font-weight:700;color:#0F172A;margin-top:4px">${fmtNum(d.sale_price)} ฿</div>
+              </div>`).join('') : '<p class="text-xs text-gray-400">ยังไม่มีดีล — <button onclick="navigate(\'pipeline\')" style="background:none;border:none;color:#5DB85C;cursor:pointer;font-size:16px;padding:0">สร้างดีลใน Pipeline</button></p>'}
           </div>
 
           <!-- Matched Properties -->
@@ -776,8 +776,8 @@ async function renderProperties() {
         <div class="prop-card-img">
           ${propCardImg(p)}
           <div class="prop-card-badges">
-            <span class="badge badge-navy" style="font-size:10px">${esc(p.property_type)}</span>
-            ${p.zone ? `<span class="badge badge-gold" style="font-size:10px">${esc(p.zone)}</span>` : ''}
+            <span class="badge badge-navy" style="font-size:14px">${esc(p.property_type)}</span>
+            ${p.zone ? `<span class="badge badge-gold" style="font-size:14px">${esc(p.zone)}</span>` : ''}
           </div>
           <div class="prop-card-status">${propBadge(p.status)}</div>
         </div>
@@ -1367,8 +1367,8 @@ async function renderPropertyDetail(params) {
       <div style="width:28px;height:28px;border-radius:7px;background:#F8FAFC;display:flex;align-items:center;justify-content:center">
         <svg width="13" height="13" fill="none" stroke="#64748B" stroke-width="1.8" viewBox="0 0 24 24">${icon}</svg>
       </div>
-      <div style="font-size:14px;font-weight:700;color:#1E293B">${esc(String(val))}</div>
-      <div style="font-size:11px;color:#94A3B8;text-align:center">${lbl}</div>
+      <div style="font-size:18px;font-weight:700;color:#1E293B">${esc(String(val))}</div>
+      <div style="font-size:17px;color:#94A3B8;text-align:center">${lbl}</div>
     </div>` : '';
 
   const specsHtml = [
@@ -1382,25 +1382,25 @@ async function renderPropertyDetail(params) {
   // kv row helper
   const kv = (l, v) => v ? `
     <div style="padding:9px 12px;border-bottom:0.5px solid #F1F5F9;border-right:0.5px solid #F1F5F9">
-      <div style="font-size:11px;color:#94A3B8;text-transform:uppercase;letter-spacing:0.3px;margin-bottom:2px">${l}</div>
-      <div style="font-size:13px;font-weight:500;color:#1E293B">${esc(String(v))}</div>
-    </div>` : `<div style="padding:9px 12px;border-bottom:0.5px solid #F1F5F9;border-right:0.5px solid #F1F5F9"><div style="font-size:11px;color:#94A3B8;text-transform:uppercase;letter-spacing:0.3px;margin-bottom:2px">${l}</div><div style="font-size:13px;color:#CBD5E1">-</div></div>`;
+      <div style="font-size:16px;color:#94A3B8;text-transform:uppercase;letter-spacing:0.3px;margin-bottom:3px">${l}</div>
+      <div style="font-size:19px;font-weight:500;color:#1E293B">${esc(String(v))}</div>
+    </div>` : `<div style="padding:9px 12px;border-bottom:0.5px solid #F1F5F9;border-right:0.5px solid #F1F5F9"><div style="font-size:16px;color:#94A3B8;text-transform:uppercase;letter-spacing:0.3px;margin-bottom:3px">${l}</div><div style="font-size:19px;color:#CBD5E1">-</div></div>`;
 
   const kvGreen = (l, v) => v ? `
     <div style="padding:9px 12px;border-bottom:0.5px solid #F1F5F9;border-right:0.5px solid #F1F5F9">
-      <div style="font-size:11px;color:#94A3B8;text-transform:uppercase;letter-spacing:0.3px;margin-bottom:2px">${l}</div>
-      <div style="font-size:13px;font-weight:500;color:#16A34A">${esc(String(v))}</div>
+      <div style="font-size:16px;color:#94A3B8;text-transform:uppercase;letter-spacing:0.3px;margin-bottom:3px">${l}</div>
+      <div style="font-size:19px;font-weight:500;color:#16A34A">${esc(String(v))}</div>
     </div>` : '';
 
   // location chips
-  const locChip = v => v ? `<span style="display:inline-flex;align-items:center;gap:4px;padding:5px 10px;border-radius:8px;background:#F8FAFC;border:0.5px solid #E2E8F0;font-size:12px;color:#475569">${esc(v)}</span>` : '';
+  const locChip = v => v ? `<span style="display:inline-flex;align-items:center;gap:4px;padding:6px 12px;border-radius:8px;background:#F8FAFC;border:0.5px solid #E2E8F0;font-size:18px;color:#475569">${esc(v)}</span>` : '';
 
   // action button helpers
-  const btnP = (icon, label, onclick) => `<button onclick="${onclick}" style="display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:9px 14px;border-radius:10px;background:#5DB85C;color:#fff;font-size:12px;font-weight:500;border:none;cursor:pointer;margin-bottom:7px">
+  const btnP = (icon, label, onclick) => `<button onclick="${onclick}" style="display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:9px 14px;border-radius:10px;background:#5DB85C;color:#fff;font-size:16px;font-weight:500;border:none;cursor:pointer;margin-bottom:7px">
     <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">${icon}</svg>${label}</button>`;
-  const btnO = (icon, label, onclick) => `<button onclick="${onclick}" style="display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:9px 14px;border-radius:10px;background:#fff;color:#374151;font-size:12px;font-weight:500;border:0.5px solid #E2E8F0;cursor:pointer;margin-bottom:7px">
+  const btnO = (icon, label, onclick) => `<button onclick="${onclick}" style="display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:9px 14px;border-radius:10px;background:#fff;color:#374151;font-size:16px;font-weight:500;border:0.5px solid #E2E8F0;cursor:pointer;margin-bottom:7px">
     <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">${icon}</svg>${label}</button>`;
-  const btnR = (icon, label, onclick) => `<button onclick="${onclick}" style="display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:9px 14px;border-radius:10px;background:#FEF2F2;color:#DC2626;font-size:12px;font-weight:500;border:0.5px solid #FECACA;cursor:pointer">
+  const btnR = (icon, label, onclick) => `<button onclick="${onclick}" style="display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:9px 14px;border-radius:10px;background:#FEF2F2;color:#DC2626;font-size:16px;font-weight:500;border:0.5px solid #FECACA;cursor:pointer">
     <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">${icon}</svg>${label}</button>`;
 
   $('main-content').innerHTML = `
@@ -1409,7 +1409,7 @@ async function renderPropertyDetail(params) {
     <!-- Header row -->
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
       <div>
-        <div style="font-size:11px;color:#94A3B8;margin-bottom:3px">
+        <div style="font-size:15px;color:#94A3B8;margin-bottom:3px">
           <span style="cursor:pointer;color:#5DB85C" onclick="navigate('properties')">ทรัพย์สิน</span>
           / ${esc(p.property_type||'')}
           / <span style="color:#5DB85C">${esc(p.property_code||'')}</span>
@@ -1417,15 +1417,15 @@ async function renderPropertyDetail(params) {
         <div style="font-size:16px;font-weight:700;color:#1E293B">รายละเอียดทรัพย์</div>
       </div>
       <div style="display:flex;gap:7px">
-        <button onclick="navigate('properties')" style="display:flex;align-items:center;gap:5px;padding:7px 13px;border-radius:9px;background:#fff;border:0.5px solid #E2E8F0;color:#374151;font-size:11px;font-weight:500;cursor:pointer">
+        <button onclick="navigate('properties')" style="display:flex;align-items:center;gap:5px;padding:7px 13px;border-radius:9px;background:#fff;border:0.5px solid #E2E8F0;color:#374151;font-size:15px;font-weight:500;cursor:pointer">
           <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
           กลับ
         </button>
-        <button onclick="navigate('edit-property',{id:${p.id}})" style="display:flex;align-items:center;gap:5px;padding:7px 13px;border-radius:9px;background:#fff;border:0.5px solid #E2E8F0;color:#374151;font-size:11px;font-weight:500;cursor:pointer">
+        <button onclick="navigate('edit-property',{id:${p.id}})" style="display:flex;align-items:center;gap:5px;padding:7px 13px;border-radius:9px;background:#fff;border:0.5px solid #E2E8F0;color:#374151;font-size:15px;font-weight:500;cursor:pointer">
           <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
           แก้ไข
         </button>
-        <button onclick="showCreateDealModal(${p.id})" style="display:flex;align-items:center;gap:5px;padding:7px 13px;border-radius:9px;background:#5DB85C;border:none;color:#fff;font-size:11px;font-weight:500;cursor:pointer">
+        <button onclick="showCreateDealModal(${p.id})" style="display:flex;align-items:center;gap:5px;padding:7px 13px;border-radius:9px;background:#5DB85C;border:none;color:#fff;font-size:15px;font-weight:500;cursor:pointer">
           <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
           สร้างดีล
         </button>
@@ -1456,10 +1456,10 @@ async function renderPropertyDetail(params) {
                 <div style="width:40px;height:40px;border-radius:10px;background:rgba(255,255,255,0.07);display:flex;align-items:center;justify-content:center">
                   <svg width="22" height="22" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                 </div>
-                <div style="font-size:11px;color:rgba(255,255,255,0.25)">ยังไม่มีรูปภาพ</div>
+                <div style="font-size:15px;color:rgba(255,255,255,0.25)">ยังไม่มีรูปภาพ</div>
               </div>`}
-            <span style="position:absolute;top:12px;left:12px;background:${sColor};color:#fff;font-size:10px;font-weight:600;padding:3px 10px;border-radius:20px;z-index:3">${esc(p.status||'')}</span>
-            <span style="position:absolute;top:12px;right:12px;background:rgba(0,0,0,0.4);backdrop-filter:blur(4px);color:rgba(255,255,255,0.8);font-size:10px;padding:3px 10px;border-radius:20px;z-index:3">${images.length} รูป</span>
+            <span style="position:absolute;top:12px;left:12px;background:${sColor};color:#fff;font-size:14px;font-weight:600;padding:3px 10px;border-radius:20px;z-index:3">${esc(p.status||'')}</span>
+            <span style="position:absolute;top:12px;right:12px;background:rgba(0,0,0,0.4);backdrop-filter:blur(4px);color:rgba(255,255,255,0.8);font-size:14px;padding:3px 10px;border-radius:20px;z-index:3">${images.length} รูป</span>
           </div>
 
           <!-- Thumbnail strip -->
@@ -1469,9 +1469,9 @@ async function renderPropertyDetail(params) {
                 <div class="prop-thumb" onclick="_heroSetIdx(${p.id},${i})" style="width:80px;height:60px;border-radius:8px;overflow:hidden;cursor:pointer;border:2px solid ${i===0?'#5DB85C':'transparent'};flex-shrink:0">
                   <img src="${src}" style="width:100%;height:100%;object-fit:cover">
                 </div>
-                <button onclick="deletePropImage(${p.id},${i})" style="position:absolute;top:2px;right:2px;width:18px;height:18px;background:rgba(0,0,0,0.55);border:none;border-radius:50%;color:#fff;font-size:11px;line-height:1;cursor:pointer;display:none" class="prop-del-btn">&times;</button>
+                <button onclick="deletePropImage(${p.id},${i})" style="position:absolute;top:2px;right:2px;width:18px;height:18px;background:rgba(0,0,0,0.55);border:none;border-radius:50%;color:#fff;font-size:15px;line-height:1;cursor:pointer;display:none" class="prop-del-btn">&times;</button>
               </div>`; }).join('')}
-            <label style="width:80px;height:60px;border-radius:8px;border:1.5px dashed #CBD5E1;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;color:#94A3B8;font-size:10px;gap:3px;flex-shrink:0;background:transparent">
+            <label style="width:80px;height:60px;border-radius:8px;border:1.5px dashed #CBD5E1;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;color:#94A3B8;font-size:14px;gap:3px;flex-shrink:0;background:transparent">
               <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
               เพิ่มรูป
               <input type="file" accept="image/*" multiple style="display:none" onchange="uploadPropImages(${p.id},this)">
@@ -1482,26 +1482,26 @@ async function renderPropertyDetail(params) {
           <!-- Title block -->
           <div style="padding:14px 16px 14px">
             <div style="font-size:16px;font-weight:600;color:#1E293B;margin-bottom:3px;line-height:1.35">${esc(p.title)}</div>
-            <div style="font-size:11px;color:#94A3B8;margin-bottom:12px">${esc(p.property_code)} · บันทึก ${fmtDate(p.created_at||p.date_added||'')}</div>
+            <div style="font-size:17px;color:#94A3B8;margin-bottom:12px">${esc(p.property_code)} · บันทึก ${fmtDate(p.created_at||p.date_added||'')}</div>
 
             <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:12px">
               <div>
-                <div style="font-size:11px;color:#94A3B8;margin-bottom:2px">ราคาขาย</div>
-                <div style="font-size:22px;font-weight:700;color:#1E293B;line-height:1">${Number(p.sale_price||0).toLocaleString('th-TH')} ฿</div>
-                <div style="font-size:12px;color:#5DB85C;font-weight:600;margin-top:4px">ค่านายหน้า ${Number(p.commission_amount||0).toLocaleString('th-TH')} ฿ (${p.commission_rate||0}%)</div>
+                <div style="font-size:17px;color:#94A3B8;margin-bottom:2px">ราคาขาย</div>
+                <div style="font-size:24px;font-weight:700;color:#1E293B;line-height:1">${Number(p.sale_price||0).toLocaleString('th-TH')} ฿</div>
+                <div style="font-size:18px;color:#5DB85C;font-weight:600;margin-top:4px">ค่านายหน้า ${Number(p.commission_amount||0).toLocaleString('th-TH')} ฿ (${p.commission_rate||0}%)</div>
               </div>
               ${sqmPrice ? `<div style="text-align:right">
-                <div style="font-size:11px;color:#94A3B8;margin-bottom:2px">ราคาต่อ ตร.ม.</div>
-                <div style="font-size:15px;font-weight:600;color:#1E293B">${sqmPrice} ฿</div>
+                <div style="font-size:17px;color:#94A3B8;margin-bottom:2px">ราคาต่อ ตร.ม.</div>
+                <div style="font-size:17px;font-weight:600;color:#1E293B">${sqmPrice} ฿</div>
               </div>` : ''}
             </div>
 
             <div style="display:flex;flex-wrap:wrap;gap:5px">
-              ${p.listing_type?`<span style="font-size:11px;padding:3px 9px;border-radius:20px;background:#ECFDF5;color:#166534;border:0.5px solid #BBF7D0;font-weight:500">${esc(p.listing_type)}</span>`:''}
-              ${p.property_type?`<span style="font-size:11px;padding:3px 9px;border-radius:20px;background:#EFF6FF;color:#1D4ED8;font-weight:500">${esc(p.property_type)}</span>`:''}
-              ${p.property_subtype?`<span style="font-size:11px;padding:3px 9px;border-radius:20px;background:#F1F5F9;color:#475569;font-weight:500">${esc(p.property_subtype)}</span>`:''}
-              ${p.province||p.district?`<span style="font-size:11px;padding:3px 9px;border-radius:20px;background:#F1F5F9;color:#475569;font-weight:500">${[p.province,p.district].filter(Boolean).map(esc).join(' · ')}</span>`:''}
-              ${p.title_deed&&p.title_deed!=='-- ยังไม่ระบุ --'?`<span style="font-size:11px;padding:3px 9px;border-radius:20px;background:#F5F3FF;color:#5B21B6;font-weight:500">${esc(p.title_deed)}</span>`:''}
+              ${p.listing_type?`<span style="font-size:17px;padding:4px 10px;border-radius:20px;background:#ECFDF5;color:#166534;border:0.5px solid #BBF7D0;font-weight:500">${esc(p.listing_type)}</span>`:''}
+              ${p.property_type?`<span style="font-size:17px;padding:4px 10px;border-radius:20px;background:#EFF6FF;color:#1D4ED8;font-weight:500">${esc(p.property_type)}</span>`:''}
+              ${p.property_subtype?`<span style="font-size:17px;padding:4px 10px;border-radius:20px;background:#F1F5F9;color:#475569;font-weight:500">${esc(p.property_subtype)}</span>`:''}
+              ${p.province||p.district?`<span style="font-size:17px;padding:4px 10px;border-radius:20px;background:#F1F5F9;color:#475569;font-weight:500">${[p.province,p.district].filter(Boolean).map(esc).join(' · ')}</span>`:''}
+              ${p.title_deed&&p.title_deed!=='-- ยังไม่ระบุ --'?`<span style="font-size:17px;padding:4px 10px;border-radius:20px;background:#F5F3FF;color:#5B21B6;font-weight:500">${esc(p.title_deed)}</span>`:''}
             </div>
           </div>
 
@@ -1514,7 +1514,7 @@ async function renderPropertyDetail(params) {
 
           <!-- ข้อมูลทั่วไป -->
           <div style="padding:14px 16px">
-            <div style="font-size:12px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:10px">ข้อมูลทั่วไป</div>
+            <div style="font-size:18px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:10px">ข้อมูลทั่วไป</div>
             <div style="display:grid;grid-template-columns:1fr 1fr;border:0.5px solid #F1F5F9;border-radius:10px;overflow:hidden">
               ${kv('ประเภทย่อย', p.property_subtype)}
               ${kv('จำนวนชั้น', floors ? floors+' ชั้น' : '')}
@@ -1530,8 +1530,8 @@ async function renderPropertyDetail(params) {
           <!-- ที่ตั้ง -->
           <div style="padding:14px 16px;border-top:0.5px solid #F8FAFC">
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-              <div style="font-size:12px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:0.6px">ที่ตั้ง</div>
-              ${p.map_url ? `<a href="${esc(p.map_url)}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:7px;padding:7px 14px;border-radius:10px;background:#4285F4;color:#fff;font-size:12px;font-weight:600;text-decoration:none;box-shadow:0 2px 8px rgba(66,133,244,0.35);letter-spacing:0.1px">
+              <div style="font-size:18px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:0.6px">ที่ตั้ง</div>
+              ${p.map_url ? `<a href="${esc(p.map_url)}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:7px;padding:7px 14px;border-radius:10px;background:#4285F4;color:#fff;font-size:16px;font-weight:600;text-decoration:none;box-shadow:0 2px 8px rgba(66,133,244,0.35);letter-spacing:0.1px">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
                 Google Maps
               </a>` : ''}
@@ -1543,21 +1543,21 @@ async function renderPropertyDetail(params) {
               ${locChip(p.village_project)}
               ${locChip(p.zone ? 'โซน: '+p.zone : '')}
             </div>
-            ${p.nearby_places?`<div style="font-size:12px;color:#64748B;margin-top:8px">ใกล้เคียง: ${esc(p.nearby_places)}</div>`:''}
+            ${p.nearby_places?`<div style="font-size:18px;color:#64748B;margin-top:8px">ใกล้เคียง: ${esc(p.nearby_places)}</div>`:''}
           </div>
 
           <!-- จุดเด่น/ด้อย -->
           ${p.highlights||p.drawbacks ? `
           <div style="padding:14px 16px;border-top:0.5px solid #F8FAFC">
-            <div style="font-size:12px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:10px">จุดเด่นและจุดด้อย</div>
+            <div style="font-size:18px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:10px">จุดเด่นและจุดด้อย</div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
               ${p.highlights?`<div style="border-radius:10px;padding:11px 13px;background:#F0FDF4;border:0.5px solid #BBF7D0">
-                <div style="font-size:11px;font-weight:700;color:#166534;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;display:flex;align-items:center;gap:5px"><div style="width:6px;height:6px;border-radius:50%;background:#22C55E"></div>จุดเด่น</div>
-                <div style="font-size:13px;color:#374151;line-height:1.65">${esc(p.highlights)}</div>
+                <div style="font-size:17px;font-weight:700;color:#166534;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;display:flex;align-items:center;gap:5px"><div style="width:6px;height:6px;border-radius:50%;background:#22C55E"></div>จุดเด่น</div>
+                <div style="font-size:19px;color:#374151;line-height:1.65">${esc(p.highlights)}</div>
               </div>`:''}
               ${p.drawbacks?`<div style="border-radius:10px;padding:11px 13px;background:#FFFBEB;border:0.5px solid #FDE68A">
-                <div style="font-size:11px;font-weight:700;color:#92400E;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;display:flex;align-items:center;gap:5px"><div style="width:6px;height:6px;border-radius:50%;background:#F59E0B"></div>จุดด้อย</div>
-                <div style="font-size:13px;color:#374151;line-height:1.65">${esc(p.drawbacks)}</div>
+                <div style="font-size:17px;font-weight:700;color:#92400E;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;display:flex;align-items:center;gap:5px"><div style="width:6px;height:6px;border-radius:50%;background:#F59E0B"></div>จุดด้อย</div>
+                <div style="font-size:19px;color:#374151;line-height:1.65">${esc(p.drawbacks)}</div>
               </div>`:''}
             </div>
           </div>` : ''}
@@ -1565,22 +1565,22 @@ async function renderPropertyDetail(params) {
           <!-- รายละเอียดเพิ่มเติม -->
           ${p.structure||p.description ? `
           <div style="padding:14px 16px;border-top:0.5px solid #F8FAFC">
-            <div style="font-size:12px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:8px">รายละเอียดเพิ่มเติม</div>
-            <div style="font-size:13px;color:#475569;line-height:1.75">${esc(p.structure||p.description||'')}</div>
+            <div style="font-size:18px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:8px">รายละเอียดเพิ่มเติม</div>
+            <div style="font-size:19px;color:#475569;line-height:1.75">${esc(p.structure||p.description||'')}</div>
           </div>` : ''}
         </div>
 
         <!-- Deals card -->
         <div style="background:#fff;border-radius:14px;border:0.5px solid #E2E8F0;overflow:hidden">
           <div style="padding:14px 16px;display:flex;align-items:center;justify-content:space-between">
-            <div style="font-size:12px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:0.6px">ดีลที่เกี่ยวข้อง (${p.deals.length})</div>
-            <button onclick="showCreateDealModal(${p.id})" style="display:flex;align-items:center;gap:5px;padding:6px 12px;border-radius:8px;background:#5DB85C;color:#fff;font-size:12px;font-weight:500;border:none;cursor:pointer">
+            <div style="font-size:16px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:0.6px">ดีลที่เกี่ยวข้อง (${p.deals.length})</div>
+            <button onclick="showCreateDealModal(${p.id})" style="display:flex;align-items:center;gap:5px;padding:6px 12px;border-radius:8px;background:#5DB85C;color:#fff;font-size:16px;font-weight:500;border:none;cursor:pointer">
               <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
               สร้างดีล
             </button>
           </div>
           <div style="padding:0 4px 12px">
-            ${p.deals.length ? `<table style="width:100%"><thead><tr><th>รหัส</th><th>ลูกค้า</th><th>สถานะ</th><th>ราคา</th></tr></thead><tbody>${p.deals.map(dl=>`<tr><td style="font-size:11px;font-weight:600">${esc(dl.deal_code)}</td><td>${esc(dl.customer_name)}</td><td>${custBadge(dl.status)}</td><td style="font-weight:700;font-size:12px">${fmtNum(dl.sale_price)} ฿</td></tr>`).join('')}</tbody></table>` : '<p style="font-size:12px;color:#94A3B8;padding:8px 14px">ยังไม่มีดีล</p>'}
+            ${p.deals.length ? `<table style="width:100%"><thead><tr><th>รหัส</th><th>ลูกค้า</th><th>สถานะ</th><th>ราคา</th></tr></thead><tbody>${p.deals.map(dl=>`<tr><td style="font-size:15px;font-weight:600">${esc(dl.deal_code)}</td><td>${esc(dl.customer_name)}</td><td>${custBadge(dl.status)}</td><td style="font-weight:700;font-size:16px">${fmtNum(dl.sale_price)} ฿</td></tr>`).join('')}</tbody></table>` : '<p style="font-size:16px;color:#94A3B8;padding:8px 14px">ยังไม่มีดีล</p>'}
           </div>
         </div>
 
@@ -1591,14 +1591,14 @@ async function renderPropertyDetail(params) {
 
         <!-- เจ้าของ -->
         <div style="background:#fff;border-radius:14px;border:0.5px solid #E2E8F0;padding:16px">
-          <div style="font-size:12px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:12px">เจ้าของทรัพย์</div>
+          <div style="font-size:18px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:12px">เจ้าของทรัพย์</div>
           <div style="display:flex;align-items:center;gap:11px;margin-bottom:12px">
             <div style="width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#5DB85C,#4A9E49);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:16px;flex-shrink:0">
               ${(p.owner_name||'?').charAt(0).replace(/[ก-ฮ]/u, s => s)}
             </div>
             <div>
-              <div style="font-size:13px;font-weight:600;color:#1E293B">${esc(p.owner_name||'-')}</div>
-              <div style="font-size:11px;color:#94A3B8;margin-top:1px">เจ้าของ · ฝากขาย</div>
+              <div style="font-size:17px;font-weight:600;color:#1E293B">${esc(p.owner_name||'-')}</div>
+              <div style="font-size:17px;color:#94A3B8;margin-top:1px">เจ้าของ · ฝากขาย</div>
             </div>
           </div>
           ${p.owner_phone ? `<div style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:9px;border:0.5px solid #E2E8F0;background:#F8FAFC;margin-bottom:6px">
@@ -1606,8 +1606,8 @@ async function renderPropertyDetail(params) {
               <svg width="12" height="12" fill="none" stroke="#16A34A" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
             </div>
             <div>
-              <div style="font-size:11px;color:#94A3B8">โทรศัพท์</div>
-              <div style="font-size:13px;font-weight:600;color:#1E293B">${esc(p.owner_phone)}</div>
+              <div style="font-size:17px;color:#94A3B8">โทรศัพท์</div>
+              <div style="font-size:19px;font-weight:600;color:#1E293B">${esc(p.owner_phone)}</div>
             </div>
           </div>` : ''}
           ${p.agent_name ? `<div style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:9px;border:0.5px solid #E2E8F0;background:#F8FAFC">
@@ -1615,19 +1615,19 @@ async function renderPropertyDetail(params) {
               <svg width="12" height="12" fill="none" stroke="#1D4ED8" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
             </div>
             <div>
-              <div style="font-size:11px;color:#94A3B8">ผู้ดูแล</div>
-              <div style="font-size:13px;font-weight:600;color:#1E293B">${esc(p.agent_name)}</div>
+              <div style="font-size:17px;color:#94A3B8">ผู้ดูแล</div>
+              <div style="font-size:19px;font-weight:600;color:#1E293B">${esc(p.agent_name)}</div>
             </div>
           </div>` : ''}
         </div>
 
         <!-- เปลี่ยนสถานะ + actions -->
         <div style="background:#fff;border-radius:14px;border:0.5px solid #E2E8F0;padding:14px 16px">
-          <div style="font-size:12px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:10px">การดำเนินการ</div>
+          <div style="font-size:18px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:10px">การดำเนินการ</div>
           ${btnP('<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>', 'สร้างดีล / นัดหมาย', `showCreateDealModal(${p.id})`)}
           ${btnO('<path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>', 'แก้ไขข้อมูล', `navigate('edit-property',{id:${p.id}})`)}
           <div style="margin-bottom:7px">
-            <select onchange="if(this.value){api.patch('/api/properties/${p.id}/status',{status:this.value}).then(()=>{toast('อัปเดตสถานะ: '+this.value);navigate('property-detail',{id:${p.id}})})}" style="width:100%;padding:9px 12px;border-radius:10px;border:0.5px solid #E2E8F0;font-size:12px;color:#374151;background:#fff;cursor:pointer">
+            <select onchange="if(this.value){api.patch('/api/properties/${p.id}/status',{status:this.value}).then(()=>{toast('อัปเดตสถานะ: '+this.value);navigate('property-detail',{id:${p.id}})})}" style="width:100%;padding:9px 12px;border-radius:10px;border:0.5px solid #E2E8F0;font-size:16px;color:#374151;background:#fff;cursor:pointer">
               <option value="">เปลี่ยนสถานะ...</option>
               ${['พร้อมขาย','จองแล้ว','ขายแล้ว','ระงับขาย'].map(s=>`<option value="${s}" ${p.status===s?'selected':''}>${s}</option>`).join('')}
             </select>
@@ -1638,17 +1638,17 @@ async function renderPropertyDetail(params) {
         <!-- หมายเหตุ -->
         ${p.internal_note?`
         <div style="background:#FFFBEB;border-radius:14px;border:0.5px solid #FDE68A;padding:14px 16px">
-          <div style="font-size:12px;font-weight:700;color:#92400E;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px">หมายเหตุภายใน</div>
-          <div style="font-size:13px;color:#374151;line-height:1.65">${esc(p.internal_note)}</div>
+          <div style="font-size:18px;font-weight:700;color:#92400E;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px">หมายเหตุภายใน</div>
+          <div style="font-size:19px;color:#374151;line-height:1.65">${esc(p.internal_note)}</div>
         </div>` : ''}
 
         <!-- Marketing -->
         ${p.marketing_data?.caption||p.marketing_data?.hashtag||p.marketing_data?.tiktok ? `
         <div style="background:#fff;border-radius:14px;border:0.5px solid #E2E8F0;padding:14px 16px">
-          <div style="font-size:12px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:10px">ข้อมูลการตลาด</div>
-          ${p.marketing_data?.caption?`<div style="margin-bottom:10px"><div style="font-size:11px;color:#94A3B8;margin-bottom:4px">Caption</div><div style="font-size:12px;color:#374151;line-height:1.65;background:#F8FAFC;border-radius:8px;padding:8px 10px">${esc(p.marketing_data.caption)}</div></div>`:''}
-          ${p.marketing_data?.hashtag?`<div style="margin-bottom:10px"><div style="font-size:11px;color:#94A3B8;margin-bottom:4px">Hashtag</div><div style="font-size:12px;color:#5B21B6">${esc(p.marketing_data.hashtag)}</div></div>`:''}
-          ${p.marketing_data?.tiktok?`<div><div style="font-size:11px;color:#94A3B8;margin-bottom:4px">Script TikTok</div><div style="font-size:12px;color:#374151;line-height:1.65">${esc(p.marketing_data.tiktok)}</div></div>`:''}
+          <div style="font-size:18px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:10px">ข้อมูลการตลาด</div>
+          ${p.marketing_data?.caption?`<div style="margin-bottom:10px"><div style="font-size:17px;color:#94A3B8;margin-bottom:4px">Caption</div><div style="font-size:18px;color:#374151;line-height:1.65;background:#F8FAFC;border-radius:8px;padding:8px 10px">${esc(p.marketing_data.caption)}</div></div>`:''}
+          ${p.marketing_data?.hashtag?`<div style="margin-bottom:10px"><div style="font-size:17px;color:#94A3B8;margin-bottom:4px">Hashtag</div><div style="font-size:18px;color:#5B21B6">${esc(p.marketing_data.hashtag)}</div></div>`:''}
+          ${p.marketing_data?.tiktok?`<div><div style="font-size:17px;color:#94A3B8;margin-bottom:4px">Script TikTok</div><div style="font-size:18px;color:#374151;line-height:1.65">${esc(p.marketing_data.tiktok)}</div></div>`:''}
         </div>` : ''}
 
       </div>
@@ -1826,9 +1826,9 @@ async function renderPipeline() {
             <div class="kanban-header" style="color:#1E293B">
               <div style="display:flex;align-items:center;gap:6px">
                 <span style="width:8px;height:8px;border-radius:50%;background:${dot};flex-shrink:0;display:inline-block"></span>
-                <span style="font-size:12px;font-weight:700">${stage}</span>
+                <span style="font-size:16px;font-weight:700">${stage}</span>
               </div>
-              <span style="background:#F1F5F9;color:#64748B;min-width:20px;height:20px;border-radius:999px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700">${stagDeals.length}</span>
+              <span style="background:#F1F5F9;color:#64748B;min-width:20px;height:20px;border-radius:999px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700">${stagDeals.length}</span>
             </div>
             <div class="kanban-cards">
               ${stagDeals.map(d=>`
@@ -1842,9 +1842,9 @@ async function renderPipeline() {
                     <div class="deal-card-title" style="color:#5DB85C;text-decoration:underline;text-underline-offset:2px">${esc(d.customer_name||'-')}</div>
                   </button>
                   <div class="deal-card-sub" style="color:#94A3B8">${esc(d.property_code||'')} · ${esc(d.property_type||'')}</div>
-                  <div style="font-size:11px;color:#64748B;margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(d.property_title||'')}</div>
-                  <div style="font-size:15px;font-weight:700;color:#0F172A">${fmtNum(d.sale_price)} ฿</div>
-                  <div style="font-size:11px;color:#16A34A;margin-top:2px">ค่านายหน้า ${fmtNum(d.commission_amount)} ฿</div>
+                  <div style="font-size:15px;color:#64748B;margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(d.property_title||'')}</div>
+                  <div style="font-size:19px;font-weight:700;color:#0F172A">${fmtNum(d.sale_price)} ฿</div>
+                  <div style="font-size:15px;color:#16A34A;margin-top:2px">ค่านายหน้า ${fmtNum(d.commission_amount)} ฿</div>
                 </div>`).join('')}
             </div>
           </div>`;
@@ -2161,7 +2161,7 @@ async function init() {
   $('main-content').innerHTML = `
     <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:60vh;gap:16px">
       <div class="animate-spin w-10 h-10 border-2 border-t-transparent rounded-full" style="border-color:#5DB85C;border-top-color:transparent"></div>
-      <div style="font-size:13px;color:#94A3B8">กำลังโหลดข้อมูล...</div>
+      <div style="font-size:17px;color:#94A3B8">กำลังโหลดข้อมูล...</div>
     </div>`;
 
   // Prefetch ทุก list พร้อมกัน — หน้าไหนกดก็ได้เลย ไม่ต้องรอ
