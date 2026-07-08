@@ -885,7 +885,7 @@ async function renderAddProperty() {
               </select>
             </div>
             <div class="form-group"><label class="form-label">ประเภทย่อย</label><select id="ap-subtype" class="form-control"></select></div>
-            <div class="form-group"><label class="form-label">จังหวัด</label><input id="ap-province" class="form-control" value="เชียงใหม่"></div>
+            <div class="form-group"><label class="form-label">จังหวัด</label><select id="ap-province" class="form-control"><option value="ขอนแก่น">ขอนแก่น</option><option value="อุดรธานี">อุดรธานี</option></select></div>
             <div class="form-group"><label class="form-label">อำเภอ</label><input id="ap-district" class="form-control"></div>
             <div class="form-group col-span-2"><label class="form-label">หมู่บ้าน / โครงการ</label><input id="ap-village" class="form-control"></div>
             <div class="form-group col-span-2"><label class="form-label">โซนพื้นที่</label>
@@ -1204,7 +1204,7 @@ async function renderEditProperty(params) {
               </select>
             </div>
             <div class="form-group"><label class="form-label">ประเภทย่อย</label><input id="ep-subtype" class="form-control" value="${esc(p.property_subtype||'')}"></div>
-            <div class="form-group"><label class="form-label">จังหวัด</label><input id="ep-province" class="form-control" value="${esc(p.province||'')}"></div>
+            <div class="form-group"><label class="form-label">จังหวัด</label><select id="ep-province" class="form-control"><option value="ขอนแก่น" ${(p.province||'')==='ขอนแก่น'?'selected':''}>ขอนแก่น</option><option value="อุดรธานี" ${(p.province||'')==='อุดรธานี'?'selected':''}>อุดรธานี</option></select></div>
             <div class="form-group"><label class="form-label">อำเภอ</label><input id="ep-district" class="form-control" value="${esc(p.district||'')}"></div>
             <div class="form-group col-span-2"><label class="form-label">หมู่บ้าน / โครงการ</label><input id="ep-village" class="form-control" value="${esc(p.village_project||'')}"></div>
             <div class="form-group col-span-2"><label class="form-label">โซนพื้นที่</label>
