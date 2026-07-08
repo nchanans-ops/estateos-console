@@ -1,9 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Prompt:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --primary: #5DB85C;
+  --primary: #2B5219;
   --primary-light: #EAF5EA;
-  --primary-dark: #4A9E49;
+  --primary-dark: #1E3A12;
   --bg: #F0F4FA;
   --card: #FFFFFF;
   --text: #1E293B;
@@ -45,7 +45,7 @@ body {
   color: rgba(255,255,255,0.75);
 }
 .nav-icon-btn.active {
-  background: #5DB85C;
+  background: #2B5219;
   color: #fff;
   box-shadow: 0 4px 14px rgba(93,184,92,0.45);
 }
@@ -129,13 +129,13 @@ body {
   white-space: nowrap;
 }
 /* badge palette */
-.badge-blue    { background: #EAF5EA; color: #5DB85C; }
-.badge-navy    { background: #D4EDD4; color: #4A9E49; }
+.badge-blue    { background: #EAF5EA; color: #2B5219; }
+.badge-navy    { background: #D4EDD4; color: #1E3A12; }
 .badge-gray    { background: #F1F5F9; color: #64748B; }
 /* muted aliases */
-.badge-green   { background: #EAF5EA; color: #5DB85C; }
-.badge-purple  { background: #EAF5EA; color: #5DB85C; }
-.badge-indigo  { background: #EAF5EA; color: #5DB85C; }
+.badge-green   { background: #EAF5EA; color: #2B5219; }
+.badge-purple  { background: #EAF5EA; color: #2B5219; }
+.badge-indigo  { background: #EAF5EA; color: #2B5219; }
 .badge-orange  { background: #F1F5F9; color: #64748B; }
 .badge-gold    { background: #F1F5F9; color: #64748B; }
 .badge-yellow  { background: #FEF9C3; color: #A16207; }
@@ -220,7 +220,7 @@ textarea.form-control { min-height: 80px; resize: vertical; }
 .btn-primary:hover:not(:disabled) { background: var(--primary-dark); box-shadow: 0 4px 12px rgba(93,184,92,0.35); }
 .btn-gold { background: #F59E0B; color: #fff; }
 .btn-gold:hover:not(:disabled) { background: #D97706; }
-.btn-success { background: #10B981; color: #fff; }
+.btn-success { background: #2B5219; color: #fff; }
 .btn-success:hover:not(:disabled) { background: #059669; }
 .btn-danger { background: #EF4444; color: #fff; }
 .btn-danger:hover:not(:disabled) { background: #DC2626; }
@@ -281,7 +281,7 @@ textarea.form-control { min-height: 80px; resize: vertical; }
 .kanban-col.drag-over {
   background: rgba(93,184,92,0.05);
   border-color: rgba(255,255,255,0.75);
-  outline: 2px dashed #5DB85C;
+  outline: 2px dashed #2B5219;
   outline-offset: -2px;
 }
 .deal-card-title { font-size: 16px; font-weight: 600; color: var(--text); line-height: 1.4; margin-bottom: 4px; }
@@ -309,7 +309,7 @@ textarea.form-control { min-height: 80px; resize: vertical; }
   align-items: center;
   gap: 8px;
 }
-.toast-success { background: #DCFCE7; color: #15803D; border: 1px solid #BBF7D0; }
+.toast-success { background: #DCFCE7; color: #15803D; border: 1px solid #B8D4B2; }
 .toast-error   { background: #FEE2E2; color: #B91C1C; border: 1px solid #FECACA; }
 .toast-info    { background: #EEF2FF; color: #4338CA; border: 1px solid #C7D2FE; }
 @keyframes slideIn { from { transform: translateX(100px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
@@ -502,7 +502,7 @@ textarea.form-control { min-height: 80px; resize: vertical; }
   border-top: 1px solid #F1F5F9;
 }
 .prop-card-agent { font-size: 15px; color: var(--text-3); display: flex; align-items: center; gap: 4px; }
-.prop-card-comm { font-size: 15px; color: #10B981; font-weight: 600; }
+.prop-card-comm { font-size: 15px; color: #2B5219; font-weight: 600; }
 .prop-card-actions { display: flex; gap: 6px; padding: 0 16px 14px; }
 .prop-card-actions .btn { flex: 1; justify-content: center; }
 

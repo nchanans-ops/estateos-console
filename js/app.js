@@ -246,7 +246,7 @@ function pageHeader(title, subtitle, actionsHtml = '') {
   <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:24px">
     <div>
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px">
-        <div style="width:4px;height:28px;background:linear-gradient(180deg,#5DB85C,#4A9E49);border-radius:4px;flex-shrink:0"></div>
+        <div style="width:4px;height:28px;background:linear-gradient(180deg,#2B5219,#1E3A12);border-radius:4px;flex-shrink:0"></div>
         <h2 style="font-size:26px;font-weight:800;color:#1A1A3A;letter-spacing:-0.5px;line-height:1">${title}</h2>
       </div>
       <p style="font-size:17px;color:#94A3B8;margin-left:14px">${subtitle}</p>
@@ -264,10 +264,10 @@ async function renderDashboard() {
       ${pageHeader('Dashboard', 'ภาพรวมธุรกิจวันนี้')}
       <!-- KPI Cards -->
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        ${kpiCard('ลูกค้าใหม่วันนี้', s.customers_new_today, 'ทั้งหมด '+fmtNum(s.customers_total)+' ราย', '#5DB85C', `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>`)}
-        ${kpiCard('นัดหมายวันนี้', s.appointments_today, 'ต้องติดตาม '+s.customers_followup_today+' ราย', '#5DB85C', `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>`)}
-        ${kpiCard('ดีลเปิดอยู่', s.deals_active, 'ปิดสำเร็จ '+s.deals_closed+' | หลุด '+s.deals_lost, '#5DB85C', `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>`)}
-        ${kpiCard('รายได้เดือนนี้', fmtNum(s.commission_this_month)+' ฿', 'รวมทั้งหมด '+fmtNum(s.commission_received)+' ฿', '#5DB85C', `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>`)}
+        ${kpiCard('ลูกค้าใหม่วันนี้', s.customers_new_today, 'ทั้งหมด '+fmtNum(s.customers_total)+' ราย', '#2B5219', `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>`)}
+        ${kpiCard('นัดหมายวันนี้', s.appointments_today, 'ต้องติดตาม '+s.customers_followup_today+' ราย', '#2B5219', `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>`)}
+        ${kpiCard('ดีลเปิดอยู่', s.deals_active, 'ปิดสำเร็จ '+s.deals_closed+' | หลุด '+s.deals_lost, '#2B5219', `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>`)}
+        ${kpiCard('รายได้เดือนนี้', fmtNum(s.commission_this_month)+' ฿', 'รวมทั้งหมด '+fmtNum(s.commission_received)+' ฿', '#2B5219', `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>`)}
       </div>
 
       <!-- Charts Row -->
@@ -287,7 +287,7 @@ async function renderDashboard() {
         <div class="bg-white rounded-xl p-5 border border-gray-100">
           <h3 class="text-sm font-semibold text-gray-700 mb-3">ทรัพย์สินในระบบ</h3>
           <div class="space-y-2">
-            ${[['พร้อมขาย',s.properties_available,'#5DB85C'],['จองแล้ว',s.properties_reserved,'#9ED89D'],['ขายแล้ว',s.properties_sold,'#CBD5E1']].map(([l,v,c])=>`
+            ${[['พร้อมขาย',s.properties_available,'#2B5219'],['จองแล้ว',s.properties_reserved,'#9ED89D'],['ขายแล้ว',s.properties_sold,'#CBD5E1']].map(([l,v,c])=>`
               <div class="flex items-center justify-between">
                 <div class="flex items-center gap-2"><div class="w-3 h-3 rounded-full" style="background:${c}"></div><span class="text-xs text-gray-600">${l}</span></div>
                 <span class="text-sm font-bold" style="color:${c}">${v}</span>
@@ -306,8 +306,8 @@ async function renderDashboard() {
           <div class="text-2xl font-bold font-semibold">${fmtNum(s.commission_potential)} ฿</div>
           <div class="text-xs text-gray-400 mb-4">จาก ${s.deals_active} ดีลที่กำลังดำเนินการ</div>
           <div class="space-y-3">
-            <div class="flex justify-between text-xs"><span class="text-gray-500">ได้รับแล้ว</span><span class="font-semibold" style="color:#5DB85C">${fmtNum(s.commission_received)} ฿</span></div>
-            <div class="w-full bg-gray-100 rounded-full h-2"><div class="h-2 rounded-full" style="background:#5DB85C;width:${s.commission_potential?Math.min(100,Math.round(s.commission_received/s.commission_potential*100)):100}%"></div></div>
+            <div class="flex justify-between text-xs"><span class="text-gray-500">ได้รับแล้ว</span><span class="font-semibold" style="color:#2B5219">${fmtNum(s.commission_received)} ฿</span></div>
+            <div class="w-full bg-gray-100 rounded-full h-2"><div class="h-2 rounded-full" style="background:#2B5219;width:${s.commission_potential?Math.min(100,Math.round(s.commission_received/s.commission_potential*100)):100}%"></div></div>
           </div>
         </div>
       </div>
@@ -342,7 +342,7 @@ async function renderDashboard() {
   });
   const srcLabels = data.source_stats.map(r=>r.source);
   state.charts.source = new Chart($('chart-source'), {
-    type:'doughnut', data:{ labels: srcLabels.length ? srcLabels : ['ยังไม่มี'], datasets:[{ data: srcLabels.length ? data.source_stats.map(r=>r.count):[1], backgroundColor:['#5DB85C','#7CC87B','#9ED89D','#BAE8B9','#D4EDD4','#EAF5EA'], borderWidth:0 }] },
+    type:'doughnut', data:{ labels: srcLabels.length ? srcLabels : ['ยังไม่มี'], datasets:[{ data: srcLabels.length ? data.source_stats.map(r=>r.count):[1], backgroundColor:['#2B5219','#7CC87B','#9ED89D','#BAE8B9','#D4EDD4','#EAF5EA'], borderWidth:0 }] },
     options:{ plugins:{ legend:{ position:'bottom', labels:{ font:{size:11}, boxWidth:10, color:'#64748B' } } }, responsive:true }
   });
   const plLabels = data.pipeline_stats.map(r=>r.status);
@@ -562,12 +562,12 @@ async function renderCustomerDetail(params) {
               <div class="p-3 rounded-xl mb-2 cursor-pointer border border-transparent hover:border-primary-200 hover:bg-primary-50 transition-all"
                 style="background:#F8FAFC" onclick="showDealDetail(${d.id})">
                 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
-                  <span style="font-size:15px;font-weight:700;color:#5DB85C">${esc(d.deal_code)}</span>
+                  <span style="font-size:15px;font-weight:700;color:#2B5219">${esc(d.deal_code)}</span>
                   ${custBadge(d.status)}
                 </div>
                 <div style="font-size:15px;color:#64748B">${esc(d.property_title||'-')}</div>
                 <div style="font-size:17px;font-weight:700;color:#0F172A;margin-top:4px">${fmtNum(d.sale_price)} ฿</div>
-              </div>`).join('') : '<p class="text-xs text-gray-400">ยังไม่มีดีล — <button onclick="navigate(\'pipeline\')" style="background:none;border:none;color:#5DB85C;cursor:pointer;font-size:16px;padding:0">สร้างดีลใน Pipeline</button></p>'}
+              </div>`).join('') : '<p class="text-xs text-gray-400">ยังไม่มีดีล — <button onclick="navigate(\'pipeline\')" style="background:none;border:none;color:#2B5219;cursor:pointer;font-size:16px;padding:0">สร้างดีลใน Pipeline</button></p>'}
           </div>
 
           <!-- Matched Properties -->
@@ -1353,7 +1353,7 @@ async function renderPropertyDetail(params) {
 
   // สถานะ badge inline style
   const statusColor = {
-    'พร้อมขาย': '#22C55E', 'ขาย': '#22C55E',
+    'พร้อมขาย': '#2B5219', 'ขาย': '#2B5219',
     'จองแล้ว':  '#F59E0B',
     'ขายแล้ว':  '#64748B',
     'ระงับขาย': '#EF4444',
@@ -1389,14 +1389,14 @@ async function renderPropertyDetail(params) {
   const kvGreen = (l, v) => v ? `
     <div style="padding:9px 12px;border-bottom:0.5px solid #F1F5F9;border-right:0.5px solid #F1F5F9">
       <div style="font-size:16px;color:#94A3B8;text-transform:uppercase;letter-spacing:0.3px;margin-bottom:3px">${l}</div>
-      <div style="font-size:19px;font-weight:500;color:#16A34A">${esc(String(v))}</div>
+      <div style="font-size:19px;font-weight:500;color:#1E3A12">${esc(String(v))}</div>
     </div>` : '';
 
   // location chips
   const locChip = v => v ? `<span style="display:inline-flex;align-items:center;gap:4px;padding:6px 12px;border-radius:8px;background:#F8FAFC;border:0.5px solid #E2E8F0;font-size:18px;color:#475569">${esc(v)}</span>` : '';
 
   // action button helpers
-  const btnP = (icon, label, onclick) => `<button onclick="${onclick}" style="display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:9px 14px;border-radius:10px;background:#5DB85C;color:#fff;font-size:16px;font-weight:500;border:none;cursor:pointer;margin-bottom:7px">
+  const btnP = (icon, label, onclick) => `<button onclick="${onclick}" style="display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:9px 14px;border-radius:10px;background:#2B5219;color:#fff;font-size:16px;font-weight:500;border:none;cursor:pointer;margin-bottom:7px">
     <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">${icon}</svg>${label}</button>`;
   const btnO = (icon, label, onclick) => `<button onclick="${onclick}" style="display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:9px 14px;border-radius:10px;background:#fff;color:#374151;font-size:16px;font-weight:500;border:0.5px solid #E2E8F0;cursor:pointer;margin-bottom:7px">
     <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">${icon}</svg>${label}</button>`;
@@ -1410,9 +1410,9 @@ async function renderPropertyDetail(params) {
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
       <div>
         <div style="font-size:15px;color:#94A3B8;margin-bottom:3px">
-          <span style="cursor:pointer;color:#5DB85C" onclick="navigate('properties')">ทรัพย์สิน</span>
+          <span style="cursor:pointer;color:#2B5219" onclick="navigate('properties')">ทรัพย์สิน</span>
           / ${esc(p.property_type||'')}
-          / <span style="color:#5DB85C">${esc(p.property_code||'')}</span>
+          / <span style="color:#2B5219">${esc(p.property_code||'')}</span>
         </div>
         <div style="font-size:16px;font-weight:700;color:#1E293B">รายละเอียดทรัพย์</div>
       </div>
@@ -1425,7 +1425,7 @@ async function renderPropertyDetail(params) {
           <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
           แก้ไข
         </button>
-        <button onclick="showCreateDealModal(${p.id})" style="display:flex;align-items:center;gap:5px;padding:7px 13px;border-radius:9px;background:#5DB85C;border:none;color:#fff;font-size:15px;font-weight:500;cursor:pointer">
+        <button onclick="showCreateDealModal(${p.id})" style="display:flex;align-items:center;gap:5px;padding:7px 13px;border-radius:9px;background:#2B5219;border:none;color:#fff;font-size:15px;font-weight:500;cursor:pointer">
           <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
           สร้างดีล
         </button>
@@ -1466,7 +1466,7 @@ async function renderPropertyDetail(params) {
           <div style="display:flex;gap:6px;overflow-x:auto;padding:10px 14px;scrollbar-width:none;-webkit-overflow-scrolling:touch" id="img-gallery-${p.id}">
             ${images.map((img,i)=>{ const src=esc(img.url||img.dataUrl||''); return `
               <div style="position:relative;flex-shrink:0" class="prop-thumb-wrap">
-                <div class="prop-thumb" onclick="_heroSetIdx(${p.id},${i})" style="width:80px;height:60px;border-radius:8px;overflow:hidden;cursor:pointer;border:2px solid ${i===0?'#5DB85C':'transparent'};flex-shrink:0">
+                <div class="prop-thumb" onclick="_heroSetIdx(${p.id},${i})" style="width:80px;height:60px;border-radius:8px;overflow:hidden;cursor:pointer;border:2px solid ${i===0?'#2B5219':'transparent'};flex-shrink:0">
                   <img src="${src}" style="width:100%;height:100%;object-fit:cover">
                 </div>
                 <button onclick="deletePropImage(${p.id},${i})" style="position:absolute;top:2px;right:2px;width:18px;height:18px;background:rgba(0,0,0,0.55);border:none;border-radius:50%;color:#fff;font-size:15px;line-height:1;cursor:pointer;display:none" class="prop-del-btn">&times;</button>
@@ -1488,7 +1488,7 @@ async function renderPropertyDetail(params) {
               <div>
                 <div style="font-size:17px;color:#94A3B8;margin-bottom:2px">ราคาขาย</div>
                 <div style="font-size:24px;font-weight:700;color:#1E293B;line-height:1">${Number(p.sale_price||0).toLocaleString('th-TH')} ฿</div>
-                <div style="font-size:18px;color:#5DB85C;font-weight:600;margin-top:4px">ค่านายหน้า ${Number(p.commission_amount||0).toLocaleString('th-TH')} ฿ (${p.commission_rate||0}%)</div>
+                <div style="font-size:18px;color:#2B5219;font-weight:600;margin-top:4px">ค่านายหน้า ${Number(p.commission_amount||0).toLocaleString('th-TH')} ฿ (${p.commission_rate||0}%)</div>
               </div>
               ${sqmPrice ? `<div style="text-align:right">
                 <div style="font-size:17px;color:#94A3B8;margin-bottom:2px">ราคาต่อ ตร.ม.</div>
@@ -1497,7 +1497,7 @@ async function renderPropertyDetail(params) {
             </div>
 
             <div style="display:flex;flex-wrap:wrap;gap:5px">
-              ${p.listing_type?`<span style="font-size:17px;padding:4px 10px;border-radius:20px;background:#ECFDF5;color:#166534;border:0.5px solid #BBF7D0;font-weight:500">${esc(p.listing_type)}</span>`:''}
+              ${p.listing_type?`<span style="font-size:17px;padding:4px 10px;border-radius:20px;background:#EEF4EC;color:#1E3A12;border:0.5px solid #B8D4B2;font-weight:500">${esc(p.listing_type)}</span>`:''}
               ${p.property_type?`<span style="font-size:17px;padding:4px 10px;border-radius:20px;background:#EFF6FF;color:#1D4ED8;font-weight:500">${esc(p.property_type)}</span>`:''}
               ${p.property_subtype?`<span style="font-size:17px;padding:4px 10px;border-radius:20px;background:#F1F5F9;color:#475569;font-weight:500">${esc(p.property_subtype)}</span>`:''}
               ${p.province||p.district?`<span style="font-size:17px;padding:4px 10px;border-radius:20px;background:#F1F5F9;color:#475569;font-weight:500">${[p.province,p.district].filter(Boolean).map(esc).join(' · ')}</span>`:''}
@@ -1551,8 +1551,8 @@ async function renderPropertyDetail(params) {
           <div style="padding:14px 16px;border-top:0.5px solid #F8FAFC">
             <div style="font-size:18px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:10px">จุดเด่นและจุดด้อย</div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-              ${p.highlights?`<div style="border-radius:10px;padding:11px 13px;background:#F0FDF4;border:0.5px solid #BBF7D0">
-                <div style="font-size:17px;font-weight:700;color:#166534;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;display:flex;align-items:center;gap:5px"><div style="width:6px;height:6px;border-radius:50%;background:#22C55E"></div>จุดเด่น</div>
+              ${p.highlights?`<div style="border-radius:10px;padding:11px 13px;background:#F0FDF4;border:0.5px solid #B8D4B2">
+                <div style="font-size:17px;font-weight:700;color:#1E3A12;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;display:flex;align-items:center;gap:5px"><div style="width:6px;height:6px;border-radius:50%;background:#2B5219"></div>จุดเด่น</div>
                 <div style="font-size:19px;color:#374151;line-height:1.65">${esc(p.highlights)}</div>
               </div>`:''}
               ${p.drawbacks?`<div style="border-radius:10px;padding:11px 13px;background:#FFFBEB;border:0.5px solid #FDE68A">
@@ -1574,7 +1574,7 @@ async function renderPropertyDetail(params) {
         <div style="background:#fff;border-radius:14px;border:0.5px solid #E2E8F0;overflow:hidden">
           <div style="padding:14px 16px;display:flex;align-items:center;justify-content:space-between">
             <div style="font-size:16px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:0.6px">ดีลที่เกี่ยวข้อง (${p.deals.length})</div>
-            <button onclick="showCreateDealModal(${p.id})" style="display:flex;align-items:center;gap:5px;padding:6px 12px;border-radius:8px;background:#5DB85C;color:#fff;font-size:16px;font-weight:500;border:none;cursor:pointer">
+            <button onclick="showCreateDealModal(${p.id})" style="display:flex;align-items:center;gap:5px;padding:6px 12px;border-radius:8px;background:#2B5219;color:#fff;font-size:16px;font-weight:500;border:none;cursor:pointer">
               <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
               สร้างดีล
             </button>
@@ -1593,7 +1593,7 @@ async function renderPropertyDetail(params) {
         <div style="background:#fff;border-radius:14px;border:0.5px solid #E2E8F0;padding:16px">
           <div style="font-size:18px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:12px">เจ้าของทรัพย์</div>
           <div style="display:flex;align-items:center;gap:11px;margin-bottom:12px">
-            <div style="width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#5DB85C,#4A9E49);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:16px;flex-shrink:0">
+            <div style="width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#2B5219,#1E3A12);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:16px;flex-shrink:0">
               ${(p.owner_name||'?').charAt(0).replace(/[ก-ฮ]/u, s => s)}
             </div>
             <div>
@@ -1602,8 +1602,8 @@ async function renderPropertyDetail(params) {
             </div>
           </div>
           ${p.owner_phone ? `<div style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:9px;border:0.5px solid #E2E8F0;background:#F8FAFC;margin-bottom:6px">
-            <div style="width:28px;height:28px;border-radius:7px;background:#ECFDF5;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-              <svg width="12" height="12" fill="none" stroke="#16A34A" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+            <div style="width:28px;height:28px;border-radius:7px;background:#EEF4EC;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <svg width="12" height="12" fill="none" stroke="#1E3A12" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
             </div>
             <div>
               <div style="font-size:17px;color:#94A3B8">โทรศัพท์</div>
@@ -1680,7 +1680,7 @@ function _heroSetIdx(propId, idx) {
   });
   // update thumb borders
   document.querySelectorAll('.prop-thumb').forEach((t,i) => {
-    t.style.borderColor = i===idx ? '#5DB85C' : 'transparent';
+    t.style.borderColor = i===idx ? '#2B5219' : 'transparent';
   });
 }
 // init carousel after render
@@ -1839,7 +1839,7 @@ async function renderPipeline() {
   const SHOW_STAGES = ['เสนอทรัพย์','นัดชมทรัพย์','ต่อรองราคา','วางมัดจำ','ยื่นสินเชื่อ','นัดวันโอน','ปิดการขายสำเร็จ','ปิดการขายไม่สำเร็จ'];
   // สีแค่ accent dot — header text เป็น dark
   const STAGE_DOTS = {
-    'เสนอทรัพย์':'#5DB85C','นัดชมทรัพย์':'#7C3AED','ต่อรองราคา':'#D97706','วางมัดจำ':'#EA580C','ยื่นสินเชื่อ':'#0891B2','นัดวันโอน':'#059669','ปิดการขายสำเร็จ':'#16A34A','ปิดการขายไม่สำเร็จ':'#DC2626',
+    'เสนอทรัพย์':'#2B5219','นัดชมทรัพย์':'#7C3AED','ต่อรองราคา':'#D97706','วางมัดจำ':'#EA580C','ยื่นสินเชื่อ':'#0891B2','นัดวันโอน':'#059669','ปิดการขายสำเร็จ':'#1E3A12','ปิดการขายไม่สำเร็จ':'#DC2626',
   };
 
   $('main-content').innerHTML = `
@@ -1870,12 +1870,12 @@ async function renderPipeline() {
                   onclick="showDealDetail(${d.id})">
                   <button onclick="event.stopPropagation();navigate('customer-detail',{id:${d.customer_id}})"
                     style="background:none;border:none;padding:0;cursor:pointer;font-family:inherit;text-align:left;width:100%">
-                    <div class="deal-card-title" style="color:#5DB85C;text-decoration:underline;text-underline-offset:2px">${esc(d.customer_name||'-')}</div>
+                    <div class="deal-card-title" style="color:#2B5219;text-decoration:underline;text-underline-offset:2px">${esc(d.customer_name||'-')}</div>
                   </button>
                   <div class="deal-card-sub" style="color:#94A3B8">${esc(d.property_code||'')} · ${esc(d.property_type||'')}</div>
                   <div style="font-size:15px;color:#64748B;margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(d.property_title||'')}</div>
                   <div style="font-size:19px;font-weight:700;color:#0F172A">${fmtNum(d.sale_price)} ฿</div>
-                  <div style="font-size:15px;color:#16A34A;margin-top:2px">ค่านายหน้า ${fmtNum(d.commission_amount)} ฿</div>
+                  <div style="font-size:15px;color:#1E3A12;margin-top:2px">ค่านายหน้า ${fmtNum(d.commission_amount)} ฿</div>
                 </div>`).join('')}
             </div>
           </div>`;
@@ -2071,7 +2071,7 @@ async function renderAppointments() {
       </div>
       <!-- Today -->
       <div class="bg-white rounded-xl border overflow-hidden">
-        <div class="px-5 py-3 style="background:linear-gradient(135deg,#5DB85C,#4A9E49)" text-white text-sm font-semibold">นัดหมายวันนี้ (${today})</div>
+        <div class="px-5 py-3 style="background:linear-gradient(135deg,#2B5219,#1E3A12)" text-white text-sm font-semibold">นัดหมายวันนี้ (${today})</div>
         <div id="appt-today"></div>
       </div>
       <!-- Upcoming -->
@@ -2167,9 +2167,9 @@ async function renderReports() {
       ${pageHeader('รายงานค่านายหน้า', 'สรุปรายได้และดีลที่ปิดสำเร็จ')}
       <!-- Summary Cards -->
       <div class="grid grid-cols-3 gap-4">
-        ${kpiCard('ดีลปิดสำเร็จ', data.summary.count+' ดีล', 'ทั้งหมดที่บันทึก', '#5DB85C', `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>`)}
-        ${kpiCard('รายได้ค่านายหน้ารวม', fmtNum(data.summary.total)+' ฿', 'จากดีลที่ปิดแล้ว', '#5DB85C', `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>`)}
-        ${kpiCard('รายได้เฉลี่ยต่อดีล', fmtNum(data.summary.count?Math.round(data.summary.total/data.summary.count):0)+' ฿', 'ค่าเฉลี่ย', '#5DB85C', `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>`)}
+        ${kpiCard('ดีลปิดสำเร็จ', data.summary.count+' ดีล', 'ทั้งหมดที่บันทึก', '#2B5219', `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>`)}
+        ${kpiCard('รายได้ค่านายหน้ารวม', fmtNum(data.summary.total)+' ฿', 'จากดีลที่ปิดแล้ว', '#2B5219', `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>`)}
+        ${kpiCard('รายได้เฉลี่ยต่อดีล', fmtNum(data.summary.count?Math.round(data.summary.total/data.summary.count):0)+' ฿', 'ค่าเฉลี่ย', '#2B5219', `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>`)}
       </div>
 
       <!-- By Agent -->
@@ -2270,7 +2270,7 @@ async function init() {
   // แสดง loading screen ขณะ prefetch
   $('main-content').innerHTML = `
     <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:60vh;gap:16px">
-      <div class="animate-spin w-10 h-10 border-2 border-t-transparent rounded-full" style="border-color:#5DB85C;border-top-color:transparent"></div>
+      <div class="animate-spin w-10 h-10 border-2 border-t-transparent rounded-full" style="border-color:#2B5219;border-top-color:transparent"></div>
       <div style="font-size:17px;color:#94A3B8">กำลังโหลดข้อมูล...</div>
     </div>`;
 
