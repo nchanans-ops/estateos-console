@@ -1904,39 +1904,52 @@ async function renderPipeline() {
     } catch(err) { toast('ย้ายไม่สำเร็จ', 'error'); }
   };
 
-  // ── Touch Drag & Drop (mobile) ───────────────────────────
+  // ── Touch Drag & Drop (mobile + iPad) ───────────────────────────
   let _tDealId = null, _tGhost = null, _tCard = null;
+  let _tTimer = null, _tDragging = false, _tStartX = 0, _tStartY = 0;
 
   function _touchStart(e) {
     if (e.target.closest('button')) return;
     const card = e.currentTarget;
-    _tDealId = card.dataset.dealId;
-    _tCard = card;
     const touch = e.touches[0];
-    const rect = card.getBoundingClientRect();
+    _tStartX = touch.clientX; _tStartY = touch.clientY;
+    _tCard = card; _tDragging = false;
 
-    _tGhost = card.cloneNode(true);
-    Object.assign(_tGhost.style, {
-      position:'fixed', pointerEvents:'none', zIndex:'9999',
-      width: rect.width+'px', left: rect.left+'px', top: rect.top+'px',
-      opacity:'0.85', boxShadow:'0 10px 30px rgba(0,0,0,0.25)',
-      transform:'scale(1.03)', borderRadius:'12px', transition:'none',
-      background:'#fff'
-    });
-    document.body.appendChild(_tGhost);
-    card.style.opacity = '0.25';
-
-    document.addEventListener('touchmove', _touchMove, {passive:false});
-    document.addEventListener('touchend', _touchEnd, {passive:false});
+    // long-press 200ms เพื่อเริ่ม drag (กัน scroll ขัด)
+    _tTimer = setTimeout(() => {
+      _tDragging = true;
+      _tDealId = card.dataset.dealId;
+      const rect = card.getBoundingClientRect();
+      _tGhost = card.cloneNode(true);
+      Object.assign(_tGhost.style, {
+        position:'fixed', pointerEvents:'none', zIndex:'9999',
+        width: rect.width+'px', left: rect.left+'px', top: rect.top+'px',
+        opacity:'0.88', boxShadow:'0 12px 32px rgba(0,0,0,0.28)',
+        transform:'scale(1.04) rotate(1deg)', borderRadius:'12px',
+        transition:'none', background:'#fff'
+      });
+      document.body.appendChild(_tGhost);
+      card.style.opacity = '0.2';
+      // vibrate เบาๆ บอกว่า drag เริ่มแล้ว
+      if (navigator.vibrate) navigator.vibrate(30);
+    }, 200);
   }
 
   function _touchMove(e) {
-    if (!_tGhost) return;
-    e.preventDefault();
     const t = e.touches[0];
+    const dx = Math.abs(t.clientX - _tStartX);
+    const dy = Math.abs(t.clientY - _tStartY);
+
+    // ถ้าขยับก่อน timer → ยกเลิก drag (เป็น scroll แทน)
+    if (!_tDragging && (dx > 8 || dy > 8)) {
+      clearTimeout(_tTimer); _tTimer = null;
+      _tCard = null;
+      return;
+    }
+    if (!_tDragging || !_tGhost) return;
+    e.preventDefault();
     _tGhost.style.left = (t.clientX - _tGhost.offsetWidth/2) + 'px';
     _tGhost.style.top  = (t.clientY - _tGhost.offsetHeight/2) + 'px';
-    // highlight target col
     _tGhost.style.visibility = 'hidden';
     const el = document.elementFromPoint(t.clientX, t.clientY);
     _tGhost.style.visibility = '';
@@ -1945,9 +1958,8 @@ async function renderPipeline() {
   }
 
   async function _touchEnd(e) {
-    document.removeEventListener('touchmove', _touchMove);
-    document.removeEventListener('touchend', _touchEnd);
-    if (!_tGhost) return;
+    clearTimeout(_tTimer); _tTimer = null;
+    if (!_tDragging || !_tGhost) { _tDragging = false; _tCard = null; return; }
     const t = e.changedTouches[0];
     _tGhost.style.visibility = 'hidden';
     const el = document.elementFromPoint(t.clientX, t.clientY);
@@ -1956,6 +1968,7 @@ async function renderPipeline() {
     _tGhost.remove(); _tGhost = null;
     if (_tCard) _tCard.style.opacity = '1';
     document.querySelectorAll('.kanban-col').forEach(c => c.classList.remove('drag-over'));
+    _tDragging = false;
     if (stage && _tDealId) {
       try {
         await api.patch(`/api/deals/${_tDealId}/status`, { status: stage });
@@ -1966,9 +1979,12 @@ async function renderPipeline() {
     _tDealId = null; _tCard = null;
   }
 
-  // bind touch to all deal cards
+  // bind touch events
   document.querySelectorAll('.deal-card').forEach(c => {
+    c.style.touchAction = 'pan-y'; // อนุญาต vertical scroll ปกติ จนกว่าจะ drag
     c.addEventListener('touchstart', _touchStart, {passive:true});
+    c.addEventListener('touchmove', _touchMove, {passive:false});
+    c.addEventListener('touchend', _touchEnd, {passive:false});
   });
 }
 
