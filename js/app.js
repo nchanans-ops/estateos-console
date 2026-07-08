@@ -1444,7 +1444,7 @@ async function renderPropertyDetail(params) {
           <!-- Hero image with carousel -->
           <div id="hero-wrap-${p.id}" style="position:relative;width:100%;height:320px;background:#1E293B;overflow:hidden;display:flex;align-items:center;justify-content:center;user-select:none">
             ${images.length ? `
-              <img id="hero-img" src="${esc(images[0].url||images[0].dataUrl||'')}" style="width:100%;height:100%;object-fit:cover;cursor:pointer" onclick="previewImg(this.src)">
+              <img id="hero-img" src="${esc(images[0].url||images[0].dataUrl||'')}" style="width:100%;height:100%;object-fit:cover;cursor:pointer" onclick="previewImg(this.src,_heroImgs,_heroIdx)">
               ${images.length > 1 ? `
               <button onclick="_heroNav(${p.id},-1)" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,0.4);backdrop-filter:blur(4px);border:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;z-index:2">&#8249;</button>
               <button onclick="_heroNav(${p.id},1)" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,0.4);backdrop-filter:blur(4px);border:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;z-index:2">&#8250;</button>
@@ -1672,7 +1672,7 @@ window._heroNav = function(propId, dir) {
 function _heroSetIdx(propId, idx) {
   _heroIdx = idx;
   const img = document.getElementById('hero-img');
-  if (img) { img.src = _heroImgs[idx]; img.onclick = () => previewImg(_heroImgs[idx]); }
+  if (img) { img.src = _heroImgs[idx]; img.onclick = () => previewImg(_heroImgs[idx], _heroImgs, idx); }
   // update dots
   document.querySelectorAll('.hero-dot-'+propId).forEach((d,i) => {
     d.style.width = i===idx ? '16px' : '6px';
@@ -1769,12 +1769,43 @@ window.deletePropImage = async function(propId, idx) {
   navigate('property-detail', { id: propId });
 };
 
-window.previewImg = function(src) {
-  showModal(`
-    <div class="p-4" style="max-width:90vw">
-      <div class="flex justify-end mb-2"><button onclick="hideModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button></div>
-      <img src="${src}" style="max-width:100%;max-height:75vh;object-fit:contain;border-radius:8px">
-    </div>`);
+window.previewImg = function(src, allImgs, startIdx) {
+  const imgs = (allImgs && allImgs.length) ? allImgs : [src];
+  let idx = (startIdx !== undefined) ? startIdx : Math.max(0, imgs.indexOf(src));
+
+  function renderLightbox() {
+    return `<div id="lb-wrap" style="position:relative;background:#000;border-radius:14px;overflow:hidden;display:flex;align-items:center;justify-content:center;min-width:320px">
+      <img id="lb-img" src="${imgs[idx]}" style="max-width:88vw;max-height:82vh;object-fit:contain;display:block">
+      <button onclick="hideModal()" style="position:absolute;top:10px;right:10px;width:34px;height:34px;border-radius:50%;background:rgba(0,0,0,0.55);border:none;color:#fff;font-size:22px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:5">&times;</button>
+      ${imgs.length > 1 ? `
+      <span id="lb-counter" style="position:absolute;top:12px;left:12px;background:rgba(0,0,0,0.5);color:#fff;font-size:15px;padding:4px 12px;border-radius:20px;z-index:5">${idx+1} / ${imgs.length}</span>
+      <button onclick="window._lbNav(-1)" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);width:42px;height:42px;border-radius:50%;background:rgba(0,0,0,0.5);border:none;color:#fff;font-size:26px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:5">&#8249;</button>
+      <button onclick="window._lbNav(1)" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);width:42px;height:42px;border-radius:50%;background:rgba(0,0,0,0.5);border:none;color:#fff;font-size:26px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:5">&#8250;</button>
+      ` : ''}
+    </div>`;
+  }
+
+  showModal(renderLightbox());
+
+  // swipe support
+  let _tx = 0;
+  const box = document.getElementById('modal-box');
+  if (box) {
+    box.addEventListener('touchstart', e => { _tx = e.touches[0].clientX; }, {passive:true});
+    box.addEventListener('touchend', e => {
+      const dx = e.changedTouches[0].clientX - _tx;
+      if (Math.abs(dx) > 40) window._lbNav(dx < 0 ? 1 : -1);
+    }, {passive:true});
+  }
+
+  window._lbNav = function(dir) {
+    if (imgs.length < 2) return;
+    idx = (idx + dir + imgs.length) % imgs.length;
+    const img = document.getElementById('lb-img');
+    if (img) img.src = imgs[idx];
+    const counter = document.getElementById('lb-counter');
+    if (counter) counter.textContent = `${idx+1} / ${imgs.length}`;
+  };
 };
 
 function showCreateDealModal(propId) {
