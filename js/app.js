@@ -743,21 +743,13 @@ async function renderProperties() {
         </div>
       </div>
 
-      <!-- Zone Chips — loaded from DB -->
-      <div class="bg-white rounded-xl border p-3">
+      <!-- Zone Chips — filtered by province -->
+      <div class="bg-white rounded-xl border p-3" id="zone-section">
         <div class="flex items-center justify-between mb-2">
           <div class="text-xs font-semibold text-gray-500">เลือกโซน</div>
           <button onclick="navigate('settings')" class="text-xs font-semibold hover:underline" style="background:none;border:none;cursor:pointer;font-family:inherit">+ จัดการโซน</button>
         </div>
-        <div class="zone-chips-row" id="zone-chips-row">
-          <button class="zone-chip active" data-zone="" onclick="selectZone('')">
-            ทั้งหมด <span class="zone-count">${allProps.length}</span>
-          </button>
-          ${zones.map(z => `
-            <button class="zone-chip" data-zone="${esc(z.name)}" onclick="selectZone('${esc(z.name)}')">
-              ${esc(z.name)} <span class="zone-count">${z.property_count}</span>
-            </button>`).join('')}
-        </div>
+        <div class="zone-chips-row" id="zone-chips-row"></div>
       </div>
 
       <!-- Price Range -->
@@ -836,11 +828,30 @@ async function renderProperties() {
   }
   window.applyFilters = applyFilters;
 
+  function renderZoneChips() {
+    const filteredZones = activeProvince
+      ? zones.filter(z => (z.province||'') === activeProvince)
+      : zones;
+    const row = document.getElementById('zone-chips-row');
+    if (!row) return;
+    activeZone = ''; // reset zone เมื่อเปลี่ยน province
+    row.innerHTML = `
+      <button class="zone-chip active" data-zone="" onclick="selectZone('')">
+        ทั้งหมด <span class="zone-count">${filteredZones.reduce((a,z)=>a+(z.property_count||0),0)}</span>
+      </button>
+      ${filteredZones.map(z => `
+        <button class="zone-chip" data-zone="${esc(z.name)}" onclick="selectZone('${esc(z.name)}')">
+          ${esc(z.name)} <span class="zone-count">${z.property_count||0}</span>
+        </button>`).join('')}
+    `;
+  }
+
   window.selectProvince = function(prov) {
     activeProvince = prov;
     document.querySelectorAll('[data-prov]').forEach(c => {
       c.classList.toggle('active', c.dataset.prov === prov);
     });
+    renderZoneChips();
     applyFilters();
   };
 
@@ -862,6 +873,7 @@ async function renderProperties() {
   $('filter-ptype').addEventListener('change', applyFilters);
   $('filter-pstatus').addEventListener('change', applyFilters);
 
+  renderZoneChips();
   renderCards(allProps);
 }
 
@@ -2249,8 +2261,12 @@ async function renderSettings() {
         </div>
 
         <!-- Add new zone -->
-        <div class="flex gap-2 mb-4">
-          <input id="new-zone-name" class="form-control" placeholder="ชื่อโซนใหม่ เช่น บ้านเป็ด, โนนม่วง">
+        <div class="flex gap-2 mb-4 flex-wrap">
+          <select id="new-zone-province" class="form-control" style="width:auto">
+            <option value="ขอนแก่น">ขอนแก่น</option>
+            <option value="อุดรธานี">อุดรธานี</option>
+          </select>
+          <input id="new-zone-name" class="form-control" placeholder="ชื่อโซนใหม่ เช่น เมือง, หนองบัวลำภู" style="flex:1;min-width:160px">
           <button onclick="addZone()" class="btn btn-primary" style="white-space:nowrap">+ เพิ่มโซน</button>
         </div>
 
@@ -2263,9 +2279,10 @@ async function renderSettings() {
 
   window.addZone = async function() {
     const name = $('new-zone-name').value.trim();
+    const province = $('new-zone-province')?.value || 'ขอนแก่น';
     if (!name) { toast('กรุณากรอกชื่อโซน', 'error'); return; }
     try {
-      await api.post('/api/zones', { name, province: 'ขอนแก่น' });
+      await api.post('/api/zones', { name, province });
       $('new-zone-name').value = '';
       zones = await api.get('/api/zones');
       renderZoneList(zones);
