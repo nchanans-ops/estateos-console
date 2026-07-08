@@ -1883,11 +1883,10 @@ async function renderPipeline() {
       </div>
     </div>`;
 
-  // ── Drag & Drop handlers ─────────────────────────────────
+  // ── Desktop Drag & Drop ──────────────────────────────────
   window.kanbanDragStart = function(e, dealId) {
     e.dataTransfer.setData('dealId', dealId);
     setTimeout(() => e.target.style.opacity = '0.4', 0);
-    e.target.style.cursor = 'grabbing';
   };
   window.kanbanDragEnd = function(e) {
     e.target.style.opacity = '1';
@@ -1895,18 +1894,82 @@ async function renderPipeline() {
   };
   window.kanbanDrop = async function(e, targetStage) {
     e.preventDefault();
-    const col = e.currentTarget;
-    col.classList.remove('drag-over');
+    e.currentTarget.classList.remove('drag-over');
     const dealId = e.dataTransfer.getData('dealId');
     if (!dealId) return;
     try {
       await api.patch(`/api/deals/${dealId}/status`, { status: targetStage });
       toast(`ย้ายไป "${targetStage}" แล้ว`);
       renderPipeline();
-    } catch(err) {
-      toast('ย้ายไม่สำเร็จ', 'error');
-    }
+    } catch(err) { toast('ย้ายไม่สำเร็จ', 'error'); }
   };
+
+  // ── Touch Drag & Drop (mobile) ───────────────────────────
+  let _tDealId = null, _tGhost = null, _tCard = null;
+
+  function _touchStart(e) {
+    if (e.target.closest('button')) return;
+    const card = e.currentTarget;
+    _tDealId = card.dataset.dealId;
+    _tCard = card;
+    const touch = e.touches[0];
+    const rect = card.getBoundingClientRect();
+
+    _tGhost = card.cloneNode(true);
+    Object.assign(_tGhost.style, {
+      position:'fixed', pointerEvents:'none', zIndex:'9999',
+      width: rect.width+'px', left: rect.left+'px', top: rect.top+'px',
+      opacity:'0.85', boxShadow:'0 10px 30px rgba(0,0,0,0.25)',
+      transform:'scale(1.03)', borderRadius:'12px', transition:'none',
+      background:'#fff'
+    });
+    document.body.appendChild(_tGhost);
+    card.style.opacity = '0.25';
+
+    document.addEventListener('touchmove', _touchMove, {passive:false});
+    document.addEventListener('touchend', _touchEnd, {passive:false});
+  }
+
+  function _touchMove(e) {
+    if (!_tGhost) return;
+    e.preventDefault();
+    const t = e.touches[0];
+    _tGhost.style.left = (t.clientX - _tGhost.offsetWidth/2) + 'px';
+    _tGhost.style.top  = (t.clientY - _tGhost.offsetHeight/2) + 'px';
+    // highlight target col
+    _tGhost.style.visibility = 'hidden';
+    const el = document.elementFromPoint(t.clientX, t.clientY);
+    _tGhost.style.visibility = '';
+    document.querySelectorAll('.kanban-col').forEach(c => c.classList.remove('drag-over'));
+    el?.closest('.kanban-col')?.classList.add('drag-over');
+  }
+
+  async function _touchEnd(e) {
+    document.removeEventListener('touchmove', _touchMove);
+    document.removeEventListener('touchend', _touchEnd);
+    if (!_tGhost) return;
+    const t = e.changedTouches[0];
+    _tGhost.style.visibility = 'hidden';
+    const el = document.elementFromPoint(t.clientX, t.clientY);
+    const col = el?.closest('.kanban-col');
+    const stage = col?.dataset?.stage;
+    _tGhost.remove(); _tGhost = null;
+    if (_tCard) _tCard.style.opacity = '1';
+    document.querySelectorAll('.kanban-col').forEach(c => c.classList.remove('drag-over'));
+    if (stage && _tDealId) {
+      try {
+        await api.patch(`/api/deals/${_tDealId}/status`, { status: stage });
+        toast(`ย้ายไป "${stage}" แล้ว`);
+        renderPipeline();
+      } catch(err) { toast('ย้ายไม่สำเร็จ', 'error'); }
+    }
+    _tDealId = null; _tCard = null;
+  }
+
+  // bind touch to all deal cards
+  document.querySelectorAll('.deal-card').forEach(c => {
+    c.addEventListener('touchstart', _touchStart, {passive:true});
+  });
 }
 
 async function showDealDetail(id) {
