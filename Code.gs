@@ -73,6 +73,7 @@ function doGet(e) {
     if (a === 'getOwners')          return ok(getAll(S.OWNERS));
     if (a === 'matchProperties')    return ok(matchProperties(e.parameter.customerId));
     if (a === 'getReportsCommissions') return ok(getReportsCommissions());
+    if (a === 'setup')                return ok(addMissingColumns());
     return err('unknown action: ' + a);
   } catch(ex) { return err(ex.message + '\n' + ex.stack); }
 }
