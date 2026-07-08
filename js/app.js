@@ -705,6 +705,8 @@ async function renderProperties() {
   ]);
 
   let activeZone = '';
+  let activeProvince = '';
+  const PROVINCES = ['ขอนแก่น', 'อุดรธานี'];
 
   $('main-content').innerHTML = `
     <div class="space-y-4">
@@ -724,6 +726,20 @@ async function renderProperties() {
             <option value="">สถานะทั้งหมด</option>
             ${['พร้อมขาย','จองแล้ว','ขายแล้ว','ระงับขาย'].map(s=>`<option>${s}</option>`).join('')}
           </select>
+        </div>
+      </div>
+
+      <!-- Province tabs -->
+      <div class="bg-white rounded-xl border p-3">
+        <div class="text-xs font-semibold text-gray-500 mb-2">จังหวัด</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap" id="province-chips-row">
+          <button class="zone-chip active" data-prov="" onclick="selectProvince('')">
+            ทั้งหมด <span class="zone-count">${allProps.length}</span>
+          </button>
+          ${PROVINCES.map(pv => `
+            <button class="zone-chip" data-prov="${esc(pv)}" onclick="selectProvince('${esc(pv)}')">
+              ${esc(pv)} <span class="zone-count">${allProps.filter(p=>p.province===pv).length}</span>
+            </button>`).join('')}
         </div>
       </div>
 
@@ -813,11 +829,20 @@ async function renderProperties() {
       (!t || p.property_type === t) &&
       (!s || p.status === s) &&
       (!activeZone || (p.zone||'').includes(activeZone)) &&
+      (!activeProvince || (p.province||'') === activeProvince) &&
       (!pMin || p.sale_price >= pMin) &&
       (!pMax || p.sale_price <= pMax)
     ));
   }
   window.applyFilters = applyFilters;
+
+  window.selectProvince = function(prov) {
+    activeProvince = prov;
+    document.querySelectorAll('[data-prov]').forEach(c => {
+      c.classList.toggle('active', c.dataset.prov === prov);
+    });
+    applyFilters();
+  };
 
   window.selectZone = function(zone) {
     activeZone = zone;
