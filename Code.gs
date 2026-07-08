@@ -74,6 +74,7 @@ function doGet(e) {
     if (a === 'matchProperties')    return ok(matchProperties(e.parameter.customerId));
     if (a === 'getReportsCommissions') return ok(getReportsCommissions());
     if (a === 'setup')                return ok(addMissingColumns());
+    if (a === 'seedUdonZones')        return ok(seedUdonZones());
     return err('unknown action: ' + a);
   } catch(ex) { return err(ex.message + '\n' + ex.stack); }
 }
@@ -590,6 +591,20 @@ function initSheets() {
 
   seedSampleData();
   Logger.log('✅ Sheets initialized');
+}
+
+// ── Seed Udon Thani zones ─────────────────────────────────────
+function seedUdonZones() {
+  const UDON_ZONES = [
+    'เมือง','กุมภวาปี','หนองหาน','บ้านดุง','เพ็ญ',
+    'บ้านผือ','กุดจับ','หนองวัวซอ','น้ำโสม','สร้างคอม'
+  ];
+  const existing = getAll(S.ZONES)
+    .filter(z => (z.province || '') === 'อุดรธานี')
+    .map(z => z.name);
+  const toAdd = UDON_ZONES.filter(n => !existing.includes(n));
+  toAdd.forEach(name => createRow(S.ZONES, { name, province: 'อุดรธานี' }));
+  return { added: toAdd.length, zones: toAdd };
 }
 
 // ── Sample data ───────────────────────────────────────────────
