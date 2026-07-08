@@ -1531,9 +1531,9 @@ async function renderPropertyDetail(params) {
           <div style="padding:14px 16px;border-top:0.5px solid #F8FAFC">
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
               <div style="font-size:10px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:0.6px">ที่ตั้ง</div>
-              ${p.map_url ? `<a href="${esc(p.map_url)}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:8px;background:#EFF6FF;border:0.5px solid #BFDBFE;color:#1D4ED8;font-size:11px;font-weight:500;text-decoration:none">
-                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                เปิด Google Maps
+              ${p.map_url ? `<a href="${esc(p.map_url)}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:7px;padding:7px 14px;border-radius:10px;background:#4285F4;color:#fff;font-size:12px;font-weight:600;text-decoration:none;box-shadow:0 2px 8px rgba(66,133,244,0.35);letter-spacing:0.1px">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                Google Maps
               </a>` : ''}
             </div>
             <div style="display:flex;flex-wrap:wrap;gap:6px">
