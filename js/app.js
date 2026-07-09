@@ -1223,10 +1223,12 @@ async function submitAddProperty(save = true) {
     marketing_data: { caption: getVal('ap-caption'), tiktok: getVal('ap-tiktok'), hashtag: getVal('ap-hashtag'), price_highlight: getVal('ap-pricesell') }
   };
 
+  toast('กำลังบันทึกทรัพย์...', 'info');
   const r = await api.post('/api/properties', data);
 
   // แนบรูปที่อัปโหลดไว้ก่อนบันทึก
   const pending = window._pendingImages || [];
+  if (pending.length) toast(`กำลังอัปโหลดรูป ${pending.length} รูป...`, 'info');
   for (const img of pending) {
     try {
       await api.post(`/api/properties/${r.id}/images`, { dataUrl: img.url, caption: img.caption });
@@ -1234,7 +1236,8 @@ async function submitAddProperty(save = true) {
   }
   window._pendingImages = [];
 
-  toast(save ? 'บันทึกทรัพย์สำเร็จ' : 'บันทึกร่างสำเร็จ');
+  toast(save ? 'บันทึกทรัพย์เรียบร้อย' : 'บันทึกร่างเรียบร้อย');
+  await new Promise(res => setTimeout(res, 1500));
   navigate('property-detail', { id: r.id });
 }
 
@@ -1447,10 +1450,12 @@ async function submitEditProperty(id) {
     marketing_data: { caption: getVal('ep-caption'), tiktok: getVal('ep-tiktok'), hashtag: getVal('ep-hashtag'), price_highlight: getVal('ep-pricesell') }
   };
 
+  toast('กำลังบันทึก...', 'info');
   await api.put('/api/properties/'+id, data);
   _memDel('prop/full/'+id);
   _lsDel('prop/full/'+id);
-  toast('บันทึกการแก้ไขสำเร็จ');
+  toast('บันทึกการแก้ไขเรียบร้อย');
+  await new Promise(res => setTimeout(res, 1500));
   navigate('property-detail', { id });
 }
 
