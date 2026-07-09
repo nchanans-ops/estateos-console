@@ -109,6 +109,7 @@ function doPost(e) {
     if (a === 'deleteCommission')     return ok(deleteRow(S.COMMISSIONS, body.id));
     // Zones
     if (a === 'createZone')           return ok(createRow(S.ZONES, body.data));
+    if (a === 'updateZone')           return ok(updateRow(S.ZONES, body.id, body.data));
     if (a === 'deleteZone')           return ok(deleteRow(S.ZONES, body.id));
     // Agents / Owners
     if (a === 'createAgent')          return ok(createRow(S.AGENTS, body.data));

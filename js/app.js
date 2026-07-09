@@ -139,6 +139,7 @@ const api = {
     if ((m=path.match(/^\/api\/deals\/(\w+)$/)))        return _gasPost('updateDeal', {id:m[1], data});
     if ((m=path.match(/^\/api\/appointments\/(\w+)$/))) return _gasPost('updateAppointment', {id:m[1], data});
     if ((m=path.match(/^\/api\/commissions\/(\w+)$/)))  return _gasPost('updateCommission', {id:m[1], data});
+    if ((m=path.match(/^\/api\/zones\/(\w+)$/)))        return _gasPost('updateZone', {id:m[1], data});
     throw new Error('Unknown PUT: '+url);
   },
   patch(url, data) {
@@ -2237,15 +2238,56 @@ async function renderSettings() {
   let zones = await api.get('/api/zones');
 
   function renderZoneList(list) {
-    $('zone-list').innerHTML = list.length ? list.map(z => `
-      <div class="flex items-center justify-between p-3 bg-white rounded-lg border mb-2">
+    const container = $('zone-list');
+    if (!list.length) { container.innerHTML = '<div class="text-xs text-gray-400 p-3">ยังไม่มีโซน</div>'; return; }
+    container.innerHTML = list.map(z => `
+      <div class="flex items-center justify-between p-3 bg-white rounded-lg border mb-2" id="zone-row-${z.id}">
         <div>
           <span class="font-medium text-sm">${esc(z.name)}</span>
-          <span class="text-xs text-gray-400 ml-2">${z.property_count} ทรัพย์</span>
+          <span class="text-xs text-gray-400 ml-2">${esc(z.province||'')} · ${z.property_count} ทรัพย์</span>
         </div>
-        <button onclick="deleteZone(${z.id},'${esc(z.name)}')" class="btn btn-danger btn-xs">ลบ</button>
-      </div>`).join('') : '<div class="text-xs text-gray-400 p-3">ยังไม่มีโซน</div>';
+        <div style="display:flex;gap:6px">
+          <button onclick="editZoneRow(${z.id},'${esc(z.name)}','${esc(z.province||'')}')" class="btn btn-outline btn-xs">แก้ไข</button>
+          <button onclick="deleteZone(${z.id},'${esc(z.name)}')" class="btn btn-danger btn-xs">ลบ</button>
+        </div>
+      </div>`).join('');
   }
+
+  window.editZoneRow = function(id, name, province) {
+    const row = document.getElementById('zone-row-' + id);
+    if (!row) return;
+    row.innerHTML = `
+      <div style="display:flex;gap:6px;flex:1;flex-wrap:wrap;align-items:center">
+        <select id="ez-prov-${id}" class="form-control" style="width:auto;padding:6px 10px;font-size:15px">
+          <option value="ขอนแก่น" ${province==='ขอนแก่น'?'selected':''}>ขอนแก่น</option>
+          <option value="อุดรธานี" ${province==='อุดรธานี'?'selected':''}>อุดรธานี</option>
+        </select>
+        <input id="ez-name-${id}" class="form-control" value="${esc(name)}" style="flex:1;min-width:120px;padding:6px 10px;font-size:15px">
+      </div>
+      <div style="display:flex;gap:6px;margin-left:8px">
+        <button onclick="saveZoneRow(${id})" class="btn btn-primary btn-xs">บันทึก</button>
+        <button onclick="cancelZoneRow()" class="btn btn-outline btn-xs">ยกเลิก</button>
+      </div>`;
+  };
+
+  window.saveZoneRow = async function(id) {
+    const nameEl = document.getElementById('ez-name-' + id);
+    const provEl = document.getElementById('ez-prov-' + id);
+    if (!nameEl) return;
+    const name = nameEl.value.trim();
+    const province = provEl ? provEl.value : 'ขอนแก่น';
+    if (!name) { toast('กรุณากรอกชื่อโซน', 'error'); return; }
+    try {
+      await api.put('/api/zones/' + id, { name, province });
+      zones = await api.get('/api/zones');
+      renderZoneList(zones);
+      toast('แก้ไขโซนสำเร็จ');
+    } catch(e) { toast(e.message || 'เกิดข้อผิดพลาด', 'error'); }
+  };
+
+  window.cancelZoneRow = function() {
+    renderZoneList(zones);
+  };
 
   $('main-content').innerHTML = `
     <div class="max-w-2xl space-y-6">
