@@ -1562,7 +1562,7 @@ async function renderPropertyDetail(params) {
     </div>
 
     <!-- 2-column layout -->
-    <div style="display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:14px;align-items:start">
+    <div style="display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:14px;align-items:start">
 
       <!-- LEFT -->
       <div style="display:flex;flex-direction:column;gap:12px">
@@ -1768,7 +1768,7 @@ async function renderPropertyDetail(params) {
         ${p.internal_note?`
         <div style="background:#FFFBEB;border-radius:14px;border:0.5px solid #FDE68A;padding:20px">
           <div style="font-size:18px;font-weight:700;color:#92400E;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px">หมายเหตุภายใน</div>
-          <div style="font-size:19px;color:#374151;line-height:1.65">${esc(p.internal_note)}</div>
+          <div style="font-size:14px;color:#374151;line-height:1.65">${esc(p.internal_note)}</div>
         </div>` : ''}
 
         <!-- Marketing -->
