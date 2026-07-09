@@ -1172,6 +1172,19 @@ function updateDynForm() {
 }
 window.updateDynForm = updateDynForm;
 
+function updateDynFormEdit() {
+  const type = $('ep-type')?.value;
+  if (!type || !$('edit-dynamic-form-content')) return;
+  $('edit-dynamic-form-content').innerHTML = DYN_FORMS[type] ? DYN_FORMS[type]() : '';
+  // pre-fill values from saved property_details
+  const d = window._editPropDetails || {};
+  Object.entries(d).forEach(([k, v]) => {
+    const el = document.getElementById('df-' + k);
+    if (el && v !== null && v !== undefined) el.value = v;
+  });
+}
+window.updateDynFormEdit = updateDynFormEdit;
+
 function calcCommission() {
   const price = parseFloat($('ap-price')?.value || 0);
   const rate = parseFloat($('ap-commrate')?.value || 3);
@@ -1233,6 +1246,7 @@ async function renderEditProperty(params) {
     api.get('/api/zones'),
   ]);
   window._cachedZones = zones;
+  window._editPropDetails = p.property_details || {};
   const d = p.property_details || {};
   const m = p.marketing_data || {};
 
@@ -1258,7 +1272,7 @@ async function renderEditProperty(params) {
             <div class="form-group col-span-2"><label class="form-label">ชื่อทรัพย์ / ชื่อประกาศ *</label><input id="ep-title" class="form-control" value="${esc(p.title||'')}"></div>
             <div class="form-group">
               <label class="form-label">ประเภทหลัก *</label>
-              <select id="ep-type" class="form-control">
+              <select id="ep-type" class="form-control" onchange="updateDynFormEdit()">
                 ${['บ้าน','คอนโด','ที่ดิน','อาคารพาณิชย์','อสังหาริมทรัพย์เพื่อธุรกิจ','ทรัพย์ให้เช่า'].map(s=>`<option${p.property_type===s?' selected':''}>${s}</option>`).join('')}
               </select>
             </div>
@@ -1302,16 +1316,9 @@ async function renderEditProperty(params) {
           </div>
         </div>
 
-        <!-- Tab: Details -->
+        <!-- Tab: Details (Dynamic) -->
         <div id="tab-ep-details" class="tab-content pt-5 hidden">
-          <div class="grid grid-cols-2 gap-4">
-            <div class="form-group"><label class="form-label">ห้องนอน</label><input id="ep-bedrooms" type="number" class="form-control" value="${d.bedrooms||0}"></div>
-            <div class="form-group"><label class="form-label">ห้องน้ำ</label><input id="ep-bathrooms" type="number" class="form-control" value="${d.bathrooms||0}"></div>
-            <div class="form-group"><label class="form-label">ขนาดที่ดิน (ตร.ว.)</label><input id="ep-land_sqw" type="number" class="form-control" value="${d.land_sqw||0}"></div>
-            <div class="form-group"><label class="form-label">พื้นที่ใช้สอย (ตร.ม.)</label><input id="ep-usable_area" type="number" class="form-control" value="${d.usable_area||0}"></div>
-            <div class="form-group"><label class="form-label">จำนวนชั้น</label><input id="ep-floor" type="number" class="form-control" value="${d.floor||0}"></div>
-            <div class="form-group"><label class="form-label">ที่จอดรถ</label><input id="ep-parking" type="number" class="form-control" value="${d.parking||0}"></div>
-          </div>
+          <div id="edit-dynamic-form-content"></div>
         </div>
 
         <!-- Tab: Owner -->
@@ -1379,6 +1386,7 @@ async function renderEditProperty(params) {
       $('tab-'+btn.dataset.tab).classList.remove('hidden');
     });
   });
+  updateDynFormEdit();
 }
 
 window.uploadPropImagesEdit = async function(propId, input) {
@@ -1434,7 +1442,7 @@ async function submitEditProperty(id) {
     commission_rate: getNum('ep-commrate'), transfer_fee_condition: getVal('ep-transfer'),
     highlights: getVal('ep-highlights'), drawbacks: getVal('ep-drawbacks'), structure: getVal('ep-structure'),
     internal_note: getVal('ep-note'),
-    property_details: { bedrooms: getNum('ep-bedrooms'), bathrooms: getNum('ep-bathrooms'), land_sqw: getNum('ep-land_sqw'), usable_area: getNum('ep-usable_area'), floor: getNum('ep-floor'), parking: getNum('ep-parking') },
+    property_details: (() => { const det = {}; document.querySelectorAll('[id^="df-"]').forEach(el => { const k = el.id.replace('df-',''); det[k] = el.type==='number' ? parseFloat(el.value||0) : el.value; }); return det; })(),
     marketing_data: { caption: getVal('ep-caption'), tiktok: getVal('ep-tiktok'), hashtag: getVal('ep-hashtag'), price_highlight: getVal('ep-pricesell') }
   };
 
