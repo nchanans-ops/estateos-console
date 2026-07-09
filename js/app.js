@@ -1768,7 +1768,7 @@ async function renderPropertyDetail(params) {
         ${p.internal_note?`
         <div style="background:#FFFBEB;border-radius:14px;border:0.5px solid #FDE68A;padding:20px">
           <div style="font-size:18px;font-weight:700;color:#92400E;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px">หมายเหตุภายใน</div>
-          <div style="font-size:15px;color:#374151;line-height:1.65">${esc(p.internal_note)}</div>
+          <div style="font-size:14px;color:#374151;line-height:1.6;max-height:160px;overflow-y:auto;white-space:pre-wrap;word-break:break-word">${esc(p.internal_note)}</div>
         </div>` : ''}
 
         <!-- Marketing -->
