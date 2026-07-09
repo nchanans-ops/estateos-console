@@ -1249,6 +1249,7 @@ async function renderEditProperty(params) {
           <button class="tab-btn" data-tab="ep-details">รายละเอียด</button>
           <button class="tab-btn" data-tab="ep-owner">เจ้าของทรัพย์</button>
           <button class="tab-btn" data-tab="ep-marketing">การตลาด</button>
+          <button class="tab-btn" data-tab="ep-images">รูปภาพ</button>
         </div>
 
         <!-- Tab: General -->
@@ -1343,6 +1344,25 @@ async function renderEditProperty(params) {
           </div>
         </div>
 
+        <!-- Tab: Images -->
+        <div id="tab-ep-images" class="tab-content pt-5 hidden">
+          <div class="flex items-center justify-between mb-3">
+            <div class="text-sm text-gray-500">อัปโหลดรูปก่อนบันทึก — รูปจะบันทึกทันที</div>
+            <label class="btn btn-primary btn-sm" style="cursor:pointer">
+              + เพิ่มรูป
+              <input type="file" accept="image/*" multiple style="display:none" onchange="uploadPropImagesEdit(${p.id},this)">
+            </label>
+          </div>
+          <div id="ep-img-gallery" class="img-gallery">
+            ${(p.images||[]).map((img,i)=>{const src=esc(img.url||img||'');return `
+            <div class="img-thumb" id="ep-img-${i}">
+              <img src="${src}" onclick="previewImg('${src}',${JSON.stringify((p.images||[]).map(x=>x.url||x))},${i})" style="cursor:pointer">
+              <button class="img-del" onclick="deletePropImageEdit(${p.id},${i})" title="ลบ">&times;</button>
+            </div>`;}).join('')}
+          </div>
+          <div id="ep-img-count" class="text-xs text-gray-400 mt-2">${(p.images||[]).length} รูป</div>
+        </div>
+
         <!-- Actions -->
         <div class="flex justify-between items-center mt-6 pt-4 border-t">
           <button onclick="navigate('property-detail',{id:${p.id}})" class="btn btn-outline">ยกเลิก</button>
@@ -1360,6 +1380,43 @@ async function renderEditProperty(params) {
     });
   });
 }
+
+window.uploadPropImagesEdit = async function(propId, input) {
+  const files = Array.from(input.files);
+  if (!files.length) return;
+  for (const file of files) {
+    try {
+      toast('กำลังอัปโหลด ' + file.name + '...', 'info');
+      const base64 = await _compressImage(file);
+      const url = await _uploadToCloudinary(base64, file.name);
+      await api.post('/api/properties/' + propId + '/images', { dataUrl: url, caption: file.name });
+      toast('อัปโหลดสำเร็จ');
+      // refresh gallery
+      const updated = await api.get('/api/properties/' + propId);
+      const imgs = updated.images || [];
+      $('ep-img-gallery').innerHTML = imgs.map((img,i)=>{const src=esc(img.url||img||'');return `
+        <div class="img-thumb" id="ep-img-${i}">
+          <img src="${src}" onclick="previewImg('${src}',${JSON.stringify(imgs.map(x=>x.url||x))},${i})" style="cursor:pointer">
+          <button class="img-del" onclick="deletePropImageEdit(${propId},${i})" title="ลบ">&times;</button>
+        </div>`;}).join('');
+      $('ep-img-count').textContent = imgs.length + ' รูป';
+    } catch(e) { toast('อัปโหลดล้มเหลว: ' + e.message, 'error'); }
+  }
+};
+
+window.deletePropImageEdit = async function(propId, idx) {
+  if (!confirm('ยืนยันลบรูปนี้?')) return;
+  await api.delete('/api/properties/' + propId + '/images/' + idx);
+  toast('ลบรูปแล้ว');
+  const updated = await api.get('/api/properties/' + propId);
+  const imgs = updated.images || [];
+  $('ep-img-gallery').innerHTML = imgs.map((img,i)=>{const src=esc(img.url||img||'');return `
+    <div class="img-thumb" id="ep-img-${i}">
+      <img src="${src}" onclick="previewImg('${src}',${JSON.stringify(imgs.map(x=>x.url||x))},${i})" style="cursor:pointer">
+      <button class="img-del" onclick="deletePropImageEdit(${propId},${i})" title="ลบ">&times;</button>
+    </div>`;}).join('');
+  $('ep-img-count').textContent = imgs.length + ' รูป';
+};
 
 async function submitEditProperty(id) {
   const title = $('ep-title').value;
