@@ -9,6 +9,19 @@ const fmtDate = d => d ? new Date(d).toLocaleDateString('th-TH', { year:'numeric
 const fmtDateTime = d => d ? new Date(d).toLocaleString('th-TH', { year:'numeric', month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' }) : '-';
 const esc = s => String(s||'').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 
+// กรอง zone dropdown ตาม province ที่เลือก
+function filterZoneSelect(provId, zoneId, currentZone) {
+  const provEl = document.getElementById(provId);
+  const zoneEl = document.getElementById(zoneId);
+  if (!provEl || !zoneEl) return;
+  const prov = provEl.value;
+  const allZones = window._cachedZones || [];
+  const filtered = allZones.filter(z => (z.province || '') === prov);
+  const prev = currentZone || zoneEl.value;
+  zoneEl.innerHTML = '<option value="">-- เลือกโซน --</option>' +
+    filtered.map(z => `<option value="${esc(z.name)}"${z.name === prev ? ' selected' : ''}>${esc(z.name)}</option>`).join('');
+}
+
 // ─── Cache Layer (L1: memory, L2: localStorage, L3: GAS) ─────────────────────
 // L1 memory: เร็วสุด หายเมื่อ refresh
 // L2 localStorage: คงอยู่ข้าม refresh, stale หลัง 5 นาที แต่ยังใช้แสดงผลได้
@@ -895,6 +908,7 @@ async function renderAddProperty() {
     api.get('/api/users'),
     api.get('/api/zones'),
   ]);
+  window._cachedZones = zones;
 
   $('main-content').innerHTML = `
     <div class="max-w-4xl">
@@ -923,13 +937,13 @@ async function renderAddProperty() {
               </select>
             </div>
             <div class="form-group"><label class="form-label">ประเภทย่อย</label><select id="ap-subtype" class="form-control"></select></div>
-            <div class="form-group"><label class="form-label">จังหวัด</label><select id="ap-province" class="form-control"><option value="ขอนแก่น">ขอนแก่น</option><option value="อุดรธานี">อุดรธานี</option></select></div>
+            <div class="form-group"><label class="form-label">จังหวัด</label><select id="ap-province" class="form-control" onchange="filterZoneSelect('ap-province','ap-zone')"><option value="ขอนแก่น">ขอนแก่น</option><option value="อุดรธานี">อุดรธานี</option></select></div>
             <div class="form-group"><label class="form-label">อำเภอ</label><input id="ap-district" class="form-control"></div>
             <div class="form-group col-span-2"><label class="form-label">หมู่บ้าน / โครงการ</label><input id="ap-village" class="form-control"></div>
             <div class="form-group col-span-2"><label class="form-label">โซนพื้นที่</label>
               <select id="ap-zone" class="form-control">
                 <option value="">-- เลือกโซน --</option>
-                ${zones.map(z=>`<option value="${esc(z.name)}">${esc(z.name)}</option>`).join('')}
+                ${zones.filter(z=>(z.province||'')==='ขอนแก่น').map(z=>`<option value="${esc(z.name)}">${esc(z.name)}</option>`).join('')}
               </select>
             </div>
             <div class="form-group col-span-2"><label class="form-label">สถานที่ใกล้เคียง</label><input id="ap-nearby" class="form-control" placeholder="เช่น ห้างสรรพสินค้า, โรงพยาบาล, BIG C"></div>
@@ -1213,6 +1227,7 @@ async function renderEditProperty(params) {
     api.get('/api/users'),
     api.get('/api/zones'),
   ]);
+  window._cachedZones = zones;
   const d = p.property_details || {};
   const m = p.marketing_data || {};
 
@@ -1242,13 +1257,13 @@ async function renderEditProperty(params) {
               </select>
             </div>
             <div class="form-group"><label class="form-label">ประเภทย่อย</label><input id="ep-subtype" class="form-control" value="${esc(p.property_subtype||'')}"></div>
-            <div class="form-group"><label class="form-label">จังหวัด</label><select id="ep-province" class="form-control"><option value="ขอนแก่น" ${(p.province||'')==='ขอนแก่น'?'selected':''}>ขอนแก่น</option><option value="อุดรธานี" ${(p.province||'')==='อุดรธานี'?'selected':''}>อุดรธานี</option></select></div>
+            <div class="form-group"><label class="form-label">จังหวัด</label><select id="ep-province" class="form-control" onchange="filterZoneSelect('ep-province','ep-zone')"><option value="ขอนแก่น" ${(p.province||'')==='ขอนแก่น'?'selected':''}>ขอนแก่น</option><option value="อุดรธานี" ${(p.province||'')==='อุดรธานี'?'selected':''}>อุดรธานี</option></select></div>
             <div class="form-group"><label class="form-label">อำเภอ</label><input id="ep-district" class="form-control" value="${esc(p.district||'')}"></div>
             <div class="form-group col-span-2"><label class="form-label">หมู่บ้าน / โครงการ</label><input id="ep-village" class="form-control" value="${esc(p.village_project||'')}"></div>
             <div class="form-group col-span-2"><label class="form-label">โซนพื้นที่</label>
               <select id="ep-zone" class="form-control">
                 <option value="">-- เลือกโซน --</option>
-                ${zones.map(z=>`<option value="${esc(z.name)}"${p.zone===z.name?' selected':''}>${esc(z.name)}</option>`).join('')}
+                ${zones.filter(z=>(z.province||'')===(p.province||'ขอนแก่น')).map(z=>`<option value="${esc(z.name)}"${p.zone===z.name?' selected':''}>${esc(z.name)}</option>`).join('')}
               </select>
             </div>
             <div class="form-group col-span-2"><label class="form-label">สถานที่ใกล้เคียง</label><input id="ep-nearby" class="form-control" value="${esc(p.nearby_places||'')}"></div>
