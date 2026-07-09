@@ -165,13 +165,18 @@ const api = {
   },
   delete(url) {
     const [path] = url.split('?'); let m;
-    _invalidateLists();
-    if ((m=path.match(/^\/api\/customers\/(\w+)$/)))    return _gasPost('deleteCustomer', {id:m[1]});
-    if ((m=path.match(/^\/api\/properties\/(\w+)$/)))   return _gasPost('deleteProperty', {id:m[1]});
-    if ((m=path.match(/^\/api\/deals\/(\w+)$/)))        return _gasPost('deleteDeal', {id:m[1]});
-    if ((m=path.match(/^\/api\/appointments\/(\w+)$/))) return _gasPost('deleteAppointment', {id:m[1]});
-    if ((m=path.match(/^\/api\/commissions\/(\w+)$/)))  return _gasPost('deleteCommission', {id:m[1]});
-    if ((m=path.match(/^\/api\/zones\/(\w+)$/)))        return _gasPost('deleteZone', {id:m[1]});
+    // helper: remove deleted id from a list cache key
+    function _removeFromCache(cacheKey, id) {
+      const ls = _lsGet(cacheKey);
+      if (ls) { const upd = ls.data.filter(r => String(r.id) !== String(id)); _lsPut(cacheKey, upd); _memPut(cacheKey, upd); }
+      else { _memDel(cacheKey); _lsDel(cacheKey); }
+    }
+    if ((m=path.match(/^\/api\/customers\/(\w+)$/)))    { const id=m[1]; _removeFromCache('customers',id); return _gasPost('deleteCustomer', {id}); }
+    if ((m=path.match(/^\/api\/properties\/(\w+)$/)))   { const id=m[1]; _removeFromCache('properties',id); return _gasPost('deleteProperty', {id}); }
+    if ((m=path.match(/^\/api\/deals\/(\w+)$/)))        { const id=m[1]; _removeFromCache('deals',id); return _gasPost('deleteDeal', {id}); }
+    if ((m=path.match(/^\/api\/appointments\/(\w+)$/))) { const id=m[1]; _removeFromCache('appointments',id); return _gasPost('deleteAppointment', {id}); }
+    if ((m=path.match(/^\/api\/commissions\/(\w+)$/)))  { const id=m[1]; _removeFromCache('commissions',id); return _gasPost('deleteCommission', {id}); }
+    if ((m=path.match(/^\/api\/zones\/(\w+)$/)))        { const id=m[1]; _removeFromCache('zones',id); return _gasPost('deleteZone', {id}); }
     if ((m=path.match(/^\/api\/properties\/(\w+)\/images\/(\d+)$/))) return _gasPost('deletePropertyImage', {propId:m[1], idx:parseInt(m[2])});
     throw new Error('Unknown DELETE: '+url);
   }
