@@ -1562,7 +1562,7 @@ async function renderPropertyDetail(params) {
     </div>
 
     <!-- 2-column layout -->
-    <div style="display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:14px;align-items:start">
+    <div style="display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:14px;align-items:start">
 
       <!-- LEFT -->
       <div style="display:flex;flex-direction:column;gap:12px">
@@ -1719,7 +1719,7 @@ async function renderPropertyDetail(params) {
       <div style="display:flex;flex-direction:column;gap:12px">
 
         <!-- เจ้าของ -->
-        <div style="background:#fff;border-radius:14px;border:0.5px solid #E2E8F0;padding:16px">
+        <div style="background:#fff;border-radius:14px;border:0.5px solid #E2E8F0;padding:20px">
           <div style="font-size:18px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:12px">เจ้าของทรัพย์</div>
           <div style="display:flex;align-items:center;gap:11px;margin-bottom:12px">
             <div style="width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#2B5219,#1E3A12);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:16px;flex-shrink:0">
@@ -1751,7 +1751,7 @@ async function renderPropertyDetail(params) {
         </div>
 
         <!-- เปลี่ยนสถานะ + actions -->
-        <div style="background:#fff;border-radius:14px;border:0.5px solid #E2E8F0;padding:14px 16px">
+        <div style="background:#fff;border-radius:14px;border:0.5px solid #E2E8F0;padding:20px">
           <div style="font-size:18px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:10px">การดำเนินการ</div>
           ${btnP('<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>', 'สร้างดีล / นัดหมาย', `showCreateDealModal(${p.id})`)}
           ${btnO('<path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>', 'แก้ไขข้อมูล', `navigate('edit-property',{id:${p.id}})`)}
@@ -1766,14 +1766,14 @@ async function renderPropertyDetail(params) {
 
         <!-- หมายเหตุ -->
         ${p.internal_note?`
-        <div style="background:#FFFBEB;border-radius:14px;border:0.5px solid #FDE68A;padding:14px 16px">
+        <div style="background:#FFFBEB;border-radius:14px;border:0.5px solid #FDE68A;padding:20px">
           <div style="font-size:18px;font-weight:700;color:#92400E;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px">หมายเหตุภายใน</div>
           <div style="font-size:19px;color:#374151;line-height:1.65">${esc(p.internal_note)}</div>
         </div>` : ''}
 
         <!-- Marketing -->
         ${p.marketing_data?.caption||p.marketing_data?.hashtag||p.marketing_data?.tiktok ? `
-        <div style="background:#fff;border-radius:14px;border:0.5px solid #E2E8F0;padding:14px 16px">
+        <div style="background:#fff;border-radius:14px;border:0.5px solid #E2E8F0;padding:20px">
           <div style="font-size:18px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:10px">ข้อมูลการตลาด</div>
           ${p.marketing_data?.caption?`<div style="margin-bottom:10px"><div style="font-size:17px;color:#94A3B8;margin-bottom:4px">Caption</div><div style="font-size:18px;color:#374151;line-height:1.65;background:#F8FAFC;border-radius:8px;padding:8px 10px">${esc(p.marketing_data.caption)}</div></div>`:''}
           ${p.marketing_data?.hashtag?`<div style="margin-bottom:10px"><div style="font-size:17px;color:#94A3B8;margin-bottom:4px">Hashtag</div><div style="font-size:18px;color:#5B21B6">${esc(p.marketing_data.hashtag)}</div></div>`:''}
