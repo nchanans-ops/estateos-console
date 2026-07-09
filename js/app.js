@@ -476,6 +476,7 @@ function showAddCustomerModal() {
           <div class="form-group"><label class="form-label">ผู้ดูแล</label>
             <select id="fc-agent" class="form-control"><option value="">-- เลือก --</option>${users.map(u=>`<option value="${u.id}">${u.name}</option>`).join('')}</select></div>
           <div class="form-group"><label class="form-label">นัดติดตามวันที่</label><input id="fc-followup" type="date" class="form-control"></div>
+          <div class="form-group col-span-2"><label class="form-label">เหตุผลที่ตัดสินใจซื้อ</label><textarea id="fc-buyreason" class="form-control" rows="2" placeholder="เช่น ย้ายมาทำงาน ต้องการขยายครอบครัว ลงทุนปล่อยเช่า"></textarea></div>
           <div class="form-group col-span-2"><label class="form-label">หมายเหตุ</label><textarea id="fc-note" class="form-control" rows="2" placeholder="หมายเหตุภายในทีม"></textarea></div>
         </div>
         <div class="flex justify-end gap-3 mt-4">
@@ -487,7 +488,7 @@ function showAddCustomerModal() {
 }
 
 async function submitAddCustomer() {
-  const data = { full_name:$('fc-name').value, phone:$('fc-phone').value, line_id:$('fc-line').value, source:$('fc-source').value, property_type_interest:$('fc-type').value, budget_min:$('fc-bmin').value, budget_max:$('fc-bmax').value, preferred_location:$('fc-loc').value, purchase_purpose:$('fc-purpose').value, urgency:$('fc-urgency').value, assigned_agent_id:$('fc-agent').value||null, next_followup_date:$('fc-followup').value, internal_note:$('fc-note').value };
+  const data = { full_name:$('fc-name').value, phone:$('fc-phone').value, line_id:$('fc-line').value, source:$('fc-source').value, property_type_interest:$('fc-type').value, budget_min:$('fc-bmin').value, budget_max:$('fc-bmax').value, preferred_location:$('fc-loc').value, purchase_purpose:$('fc-purpose').value, urgency:$('fc-urgency').value, buy_reason:$('fc-buyreason')?.value||'', assigned_agent_id:$('fc-agent').value||null, next_followup_date:$('fc-followup').value, internal_note:$('fc-note').value };
   if (!data.full_name) { toast('กรุณากรอกชื่อลูกค้า','error'); return; }
   await api.post('/api/customers', data);
   hideModal(); toast('เพิ่มลูกค้าสำเร็จ'); navigate('customers');
