@@ -1971,7 +1971,10 @@ async function submitCreateDeal(propId) {
 const PIPELINE_STAGES = ['เสนอทรัพย์','นัดชมทรัพย์','ชมทรัพย์แล้ว','ต่อรองราคา','วางมัดจำ','ยื่นสินเชื่อ','สินเชื่อผ่าน','นัดวันโอน','โอนกรรมสิทธิ์','รับค่านายหน้า','ปิดการขายสำเร็จ','ปิดการขายไม่สำเร็จ'];
 
 async function renderPipeline() {
-  const deals = await api.get('/api/deals');
+  const [allDeals, customers] = await Promise.all([api.get('/api/deals'), api.get('/api/customers')]);
+  const custIds = new Set((customers||[]).map(c => String(c.id)));
+  // กรองดีลที่ลูกค้าถูกลบไปแล้วออก (orphan deals)
+  const deals = allDeals.filter(d => !d.customer_id || custIds.has(String(d.customer_id)));
   const byStage = {};
   PIPELINE_STAGES.forEach(s => byStage[s] = []);
   deals.forEach(d => { if (!byStage[d.status]) byStage[d.status] = []; byStage[d.status].push(d); });
