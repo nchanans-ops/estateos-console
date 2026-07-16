@@ -495,9 +495,20 @@ async function submitAddCustomer() {
 }
 
 async function deleteCustomer(id) {
-  if (!confirm('ยืนยันลบลูกค้านี้?')) return;
+  if (!confirm('ยืนยันลบลูกค้านี้? (ดีลและนัดหมายที่เกี่ยวข้องจะถูกลบด้วย)')) return;
+  // cascade: ลบดีลและนัดหมายที่ผูกกับลูกค้านี้ก่อน
+  const [allDeals, allAppts] = await Promise.all([
+    api.get('/api/deals'),
+    api.get('/api/appointments')
+  ]);
+  const custDeals = (allDeals||[]).filter(d => String(d.customer_id) === String(id));
+  const custAppts = (allAppts||[]).filter(a => String(a.customer_id) === String(id));
+  await Promise.all([
+    ...custDeals.map(d => api.delete('/api/deals/'+d.id)),
+    ...custAppts.map(a => api.delete('/api/appointments/'+a.id))
+  ]);
   await api.delete('/api/customers/'+id);
-  toast('ลบลูกค้าแล้ว'); navigate('customers');
+  toast('ลบลูกค้าและดีลที่เกี่ยวข้องแล้ว'); navigate('customers');
 }
 
 // ─── CUSTOMER DETAIL ──────────────────────────────────────────────────────────
